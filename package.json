@@ -17,7 +17,7 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
     "type-check": "tsc --noEmit",
-    "test": "jest --testPathIgnorePatterns='./frontend/cli' --testPathIgnorePatterns='./tools'",
+    "test": "jest --testPathIgnorePatterns='./frontend/cli' --testPathIgnorePatterns='./tools'"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
