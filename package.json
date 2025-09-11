@@ -5,11 +5,10 @@
   "repository": "https://github.com/Londelo/control_center.git",
   "author": "londelo",
   "license": "MIT",
-  "dependencies": {
-    "@radix-ui/react-slot": "^1.2.3",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.544.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
@@ -17,6 +16,12 @@
     "test": "jest --watch",
     "test:ci": "jest --ci --coverage --watchAll=false",
     "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.8.0",
