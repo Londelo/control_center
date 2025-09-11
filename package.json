@@ -1,18 +1,8 @@
 {
   "name": "control_center",
   "version": "1.0.0",
-  "description": "Take Control",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/londelo/control_center.git"
-  },
-  "author": "Brodie Balser",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/londelo/control_center/issues"
-  },
-  "homepage": "https://github.com/londelo/control_center#readme",
-  "scripts": {},
-  "devDependencies": {}
+  "repository": "https://github.com/Londelo/control_center.git",
+  "author": "londelo",
+  "license": "MIT"
 }
