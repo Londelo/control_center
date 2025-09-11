@@ -1,27 +1,40 @@
-# Control Center
+# PowerList - Win Every Day
 
-A production-ready Next.js application built with TypeScript, ShadCN UI, and modern development tools.
+A minimal, grayscale-styled productivity web app implementing Andy Frisella's Power List concept. Built with clean architecture principles using Next.js, TypeScript, TailwindCSS, and ShadCN UI.
 
 ## 🚀 Features
 
-- **Next.js 14** with App Router
-- **TypeScript** with strict mode enabled
-- **ShadCN UI** components with Radix UI primitives
-- **TailwindCSS** for styling with dark mode support
-- **Jest** and React Testing Library for testing
-- **ESLint** and **Prettier** for code quality
-- **Responsive design** with mobile-first approach
-- **Theme switching** (light/dark mode)
+### 📋 Daily Power List
+- Clean, minimal interface with 5 task cards
+- Auto-generates lists from your most recent tasks
+- Save/Edit functionality with input validation
+- Task completion tracking with visual feedback
+
+### 📆 Smart Daily Rollover
+- Automatically creates new lists each day
+- Tracks missed days as losses
+- Maintains task history and patterns
+
+### 📊 Performance Tracking
+- Win/Loss tracking per day
+- Current and longest win streaks
+- Win rate percentage
+- Individual task success rates
+
+### 🏗️ Clean Architecture
+- **UI Layer** (`/components/`) - Pure presentational components
+- **Service Layer** (`/services/`) - Coordination between UI and backend
+- **Business Logic** (`/logic/`) - Pure functions for app rules
+- **Backend Layer** (`/backend/`) - Abstracted localStorage access
+- **Types** (`/types/`) - Strong TypeScript interfaces
 
 ## 🛠️ Tech Stack
 
 - [Next.js](https://nextjs.org/) - React framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [ShadCN UI](https://ui.shadcn.com/) - UI components
-- [TailwindCSS](https://tailwindcss.com/) - Styling
+- [TailwindCSS](https://tailwindcss.com/) - Grayscale styling
 - [Radix UI](https://www.radix-ui.com/) - Headless UI primitives
-- [Jest](https://jestjs.io/) - Testing framework
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) - Testing utilities
 - [ESLint](https://eslint.org/) - Code linting
 - [Prettier](https://prettier.io/) - Code formatting
 
@@ -29,7 +42,7 @@ A production-ready Next.js application built with TypeScript, ShadCN UI, and mod
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Londelo/control_center.git
+git clone <your-repo-url>
 cd control_center
 ```
 
@@ -45,22 +58,13 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-## 🧪 Testing
+## 🎯 How to Use
 
-Run tests in watch mode:
-```bash
-npm test
-```
-
-Run tests with coverage:
-```bash
-npm run test:coverage
-```
-
-Run tests in CI mode:
-```bash
-npm run test:ci
-```
+1. **Daily Setup**: Each day, enter 5 critical tasks you must complete
+2. **Save Your List**: Click "Save List" when all 5 tasks are filled
+3. **Track Progress**: Click tasks to mark them complete/incomplete
+4. **Win the Day**: Complete all 5 tasks to win the day
+5. **Monitor Stats**: View your wins, losses, and streaks over time
 
 ## 🎨 Code Quality
 
@@ -98,22 +102,29 @@ npm start
 
 ## 📁 Project Structure
 
+Following Clean Architecture principles:
+
 ```
 src/
-├── app/                    # Next.js app directory
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── ui/               # ShadCN UI components
-│   │   ├── button.tsx
-│   │   └── card.tsx
-│   ├── theme-provider.tsx
-│   ├── theme-toggle.tsx
-│   └── __tests__/        # Component tests
-├── lib/                  # Utility functions
-│   └── utils.ts
-└── hooks/               # Custom React hooks (add as needed)
+├── app/                     # Next.js app directory
+│   ├── globals.css         # Global styles
+│   ├── layout.tsx          # Root layout
+│   └── page.tsx            # Main PowerList page
+├── components/             # UI Layer - Pure presentational
+│   ├── ui/                # ShadCN UI components
+│   ├── TaskCard.tsx       # Individual task component
+│   ├── TaskList.tsx       # Task list container
+│   └── StatsPanel.tsx     # Statistics display
+├── services/              # Service Layer - UI coordination
+│   └── powerListService.ts # Main app service hook
+├── logic/                 # Business Logic Layer - Pure functions
+│   └── powerListLogic.ts  # Core business rules
+├── backend/               # Backend Layer - Data access
+│   └── localStorage.ts    # LocalStorage abstraction
+├── types/                 # TypeScript definitions
+│   └── index.ts          # App-wide type definitions
+└── lib/                   # Utilities
+    └── utils.ts          # Helper functions
 ```
 
 ## 🎯 Available Scripts
@@ -121,39 +132,29 @@ src/
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm start` - Start production server
-- `npm test` - Run tests in watch mode
-- `npm run test:ci` - Run tests in CI mode
-- `npm run test:coverage` - Run tests with coverage
 - `npm run lint` - Lint code
 - `npm run lint:fix` - Fix linting issues
 - `npm run format` - Format code
 - `npm run format:check` - Check code formatting
 
-## 🌙 Dark Mode
+## 🧠 Architecture Principles
 
-The application includes built-in dark mode support using `next-themes`. Users can toggle between light and dark themes using the theme toggle button in the header.
+This app follows Clean Architecture principles:
 
-## 🧩 Adding New Components
+1. **Separation of Concerns**: Each layer has a single responsibility
+2. **Dependency Inversion**: Inner layers don't depend on outer layers
+3. **Testability**: Pure functions and clear interfaces enable easy testing
+4. **Maintainability**: Modular structure allows for easy modifications
+5. **Scalability**: Backend abstraction allows easy migration to real databases
 
-To add new ShadCN UI components:
+## 💡 The Power List Concept
 
-```bash
-npx shadcn-ui@latest add [component-name]
-```
-
-For example, to add a dialog component:
-```bash
-npx shadcn-ui@latest add dialog
-```
-
-## 📝 Environment Variables
-
-Create a `.env.local` file in the root directory for environment-specific variables:
-
-```env
-# Add your environment variables here
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
+Based on Andy Frisella's Power List methodology:
+- Choose 5 critical tasks each day
+- Complete all 5 to "win the day"
+- Track your wins and losses over time
+- Build momentum through consistent daily victories
+- Focus on what truly matters most
 
 ## 🚀 Deployment
 
@@ -183,7 +184,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [ShadCN](https://twitter.com/shadcn) for the amazing UI components
-- [Vercel](https://vercel.com) for Next.js
-- [Tailwind Labs](https://tailwindlabs.com) for TailwindCSS
-- [Radix UI](https://www.radix-ui.com) for accessible primitives
+- [Andy Frisella](https://andyfrisella.com) for the Power List concept
+- [Robert C. Martin](https://blog.cleancoder.com) for Clean Architecture principles
+- [ShadCN](https://twitter.com/shadcn) for the beautiful UI components
