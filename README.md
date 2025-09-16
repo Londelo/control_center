@@ -35,8 +35,6 @@ A minimal, grayscale-styled productivity web app implementing Andy Frisella's Po
 - [ShadCN UI](https://ui.shadcn.com/) - UI components
 - [TailwindCSS](https://tailwindcss.com/) - Grayscale styling
 - [Radix UI](https://www.radix-ui.com/) - Headless UI primitives
-- [ESLint](https://eslint.org/) - Code linting
-- [Prettier](https://prettier.io/) - Code formatting
 
 ## 📦 Installation
 
@@ -68,7 +66,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 ## 🎨 Code Quality
 
-Format code with Prettier:
 ```bash
 npm run format
 ```
@@ -78,7 +75,6 @@ Check code formatting:
 npm run format:check
 ```
 
-Lint code with ESLint:
 ```bash
 npm run lint
 ```
