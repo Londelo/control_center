@@ -44,7 +44,6 @@ export default function Home() {
         {/* Header */}
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">PowerList</h1>
-          <p className="text-gray-600">Complete all 5 tasks to win the day</p>
         </header>
 
         {/* Win Message */}
@@ -58,13 +57,15 @@ export default function Home() {
         )}
 
         {/* Main Task List */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <TaskList
-            taskList={currentTaskList}
-            isEditing={isEditing}
-            onTaskUpdate={updateTask}
-            onTaskToggle={toggleTaskCompletion}
-          />
+        <div className="flex flex-col items-center mb-12">
+          <div className="w-full max-w-2xl">
+            <TaskList
+              taskList={currentTaskList}
+              isEditing={isEditing}
+              onTaskUpdate={updateTask}
+              onTaskToggle={toggleTaskCompletion}
+            />
+          </div>
 
           {/* Action Buttons */}
           <div className="flex justify-center gap-4 mt-8">
@@ -87,6 +88,7 @@ export default function Home() {
               </Button>
             )}
           </div>
+        </div>
         </div>
 
         {/* Stats Panel */}
