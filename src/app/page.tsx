@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { TaskList } from "@/components/TaskList";
 import { StatsPanel } from "@/components/StatsPanel";
 import { usePowerListService } from "@/hooks/usePowerListService";
@@ -70,22 +69,21 @@ export default function Home() {
           {/* Action Buttons */}
           <div className="flex justify-center gap-4 mt-8">
             {isEditing ? (
-              <Button
+              <button
                 onClick={saveTaskList}
                 disabled={!canSave}
-                className="bg-gray-800 hover:bg-gray-700 text-white px-8"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 text-white hover:bg-gray-700 h-10 px-8"
               >
                 Save List
-              </Button>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={toggleEditMode}
-                variant="outline"
-                className="border-gray-300 text-gray-700 hover:bg-gray-100 px-8"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 h-10 px-8"
               >
                 <Edit3 className="w-4 h-4 mr-2" />
                 Edit Tasks
-              </Button>
+              </button>
             )}
           </div>
         </div>

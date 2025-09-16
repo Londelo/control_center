@@ -1,7 +1,5 @@
 import { Task } from '@/types/powerList';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Check, X } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface TaskCardProps {
   task: Task;
@@ -12,7 +10,7 @@ interface TaskCardProps {
 
 export function TaskCard({ task, isEditing, onTextChange, onToggleComplete }: TaskCardProps) {
   return (
-    <Card className="p-4 bg-gray-50 border-gray-200 hover:bg-gray-100 transition-colors">
+    <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
       <div className="flex items-center gap-3">
         {!isEditing && (
           <button
@@ -30,11 +28,12 @@ export function TaskCard({ task, isEditing, onTextChange, onToggleComplete }: Ta
         )}
 
         {isEditing ? (
-          <Input
+          <input
+            type="text"
             value={task.text}
             onChange={(e) => onTextChange(e.target.value)}
             placeholder="Enter your task"
-            className="border-gray-300 focus:border-gray-500 focus:ring-gray-500"
+            className="flex-1 h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           />
         ) : (
           <span
@@ -46,6 +45,6 @@ export function TaskCard({ task, isEditing, onTextChange, onToggleComplete }: Ta
           </span>
         )}
       </div>
-    </Card>
+    </div>
   );
 }
