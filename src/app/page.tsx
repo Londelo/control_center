@@ -56,35 +56,35 @@ export default function Home() {
         )}
 
         {/* Main Task List */}
-        <div className="flex flex-col items-center mb-12">
-          <div className="w-full max-w-2xl">
+        <div className="flex justify-center mb-12">
+          <div className="w-full max-w-md">
             <TaskList
               taskList={currentTaskList}
               isEditing={isEditing}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
             />
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex justify-center gap-4 mt-8">
-            {isEditing ? (
-              <button
-                onClick={saveTaskList}
-                disabled={!canSave}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 text-white hover:bg-gray-700 h-10 px-8"
-              >
-                Save List
-              </button>
-            ) : (
-              <button
-                onClick={toggleEditMode}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 h-10 px-8"
-              >
-                <Edit3 className="w-4 h-4 mr-2" />
-                Edit Tasks
-              </button>
-            )}
+            
+            {/* Action Buttons */}
+            <div className="flex justify-center gap-4 mt-8">
+              {isEditing ? (
+                <button
+                  onClick={saveTaskList}
+                  disabled={!canSave}
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-gray-800 text-white hover:bg-gray-700 h-10 px-8"
+                >
+                  Save List
+                </button>
+              ) : (
+                <button
+                  onClick={toggleEditMode}
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2 border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 h-10 px-8"
+                >
+                  <Edit3 className="w-4 h-4 mr-2" />
+                  Edit Tasks
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
