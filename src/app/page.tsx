@@ -38,7 +38,7 @@ export default function Home() {
   const stats = getStats();
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-blue-500">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <header className="text-center mb-12">
