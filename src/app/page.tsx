@@ -38,7 +38,7 @@ export default function Home() {
   const stats = getStats();
 
   return (
-    <main>
+    <main className="bg-blue-500">
       <div>
         {/* Header */}
         <header>
