@@ -89,7 +89,6 @@ export default function Home() {
             )}
           </div>
         </div>
-        </div>
 
         {/* Stats Panel */}
         <div className="max-w-4xl mx-auto">
