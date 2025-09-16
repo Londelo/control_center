@@ -1,4 +1,4 @@
-import { AppStats } from '@/types';
+import { AppStats } from '@/types/powerList';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface StatsPanelProps {
@@ -16,7 +16,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
           <div className="text-2xl font-bold text-gray-900">{stats.totalWins}</div>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-gray-50 border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-600">Losses</CardTitle>
@@ -25,7 +25,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
           <div className="text-2xl font-bold text-gray-900">{stats.totalLosses}</div>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-gray-50 border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-600">Win Rate</CardTitle>
@@ -34,7 +34,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
           <div className="text-2xl font-bold text-gray-900">{stats.winRate}%</div>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-gray-50 border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-600">Current Streak</CardTitle>
@@ -43,7 +43,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
           <div className="text-2xl font-bold text-gray-900">{stats.currentStreak}</div>
         </CardContent>
       </Card>
-      
+
       <Card className="bg-gray-50 border-gray-200">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-gray-600">Best Streak</CardTitle>

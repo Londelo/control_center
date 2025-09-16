@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { TaskList } from "@/components/TaskList";
 import { StatsPanel } from "@/components/StatsPanel";
-import { usePowerListService } from "@/services/powerListService";
+import { usePowerListService } from "@/hooks/usePowerListService";
 import { Trophy, Edit3 } from "lucide-react";
 
 export default function Home() {

@@ -1,4 +1,4 @@
-import { Task } from '@/types';
+import { Task } from '@/types/powerList';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Check, X } from 'lucide-react';
@@ -28,7 +28,7 @@ export function TaskCard({ task, isEditing, onTextChange, onToggleComplete }: Ta
             ) : null}
           </button>
         )}
-        
+
         {isEditing ? (
           <Input
             value={task.text}

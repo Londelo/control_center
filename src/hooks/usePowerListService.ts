@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { TaskList, Task } from '@/types';
-import { localStorageBackend } from '@/backend/localStorage';
+import { TaskList, Task } from '@/types/powerList';
+import powerList from '@/middleware/powerList';
 import {
   createTaskList,
   updateTaskListStatus,
@@ -19,34 +19,34 @@ export function usePowerListService() {
 
   const initializeApp = useCallback(async () => {
     setIsLoading(true);
-    
+
     try {
       // Get today's task list
-      let todaysList = localStorageBackend.getTasksByDate(today);
-      
+      let todaysList = powerList.getTasksByDate(today);
+
       if (!todaysList) {
         // Check for missed days
-        const lastAccessDate = localStorageBackend.getLastAccessDate();
-        const allHistory = localStorageBackend.getAllTaskHistory();
-        
+        const lastAccessDate = powerList.getLastAccessDate();
+        const allHistory = powerList.getAllTaskHistory();
+
         if (lastAccessDate && lastAccessDate !== today) {
           // Generate missed days as losses
           const missedDays = generateMissedDays(lastAccessDate, today);
-          
+
           for (const missedDay of missedDays) {
             const missedList = createTaskList(missedDay);
             missedList.isLoss = true;
             missedList.isComplete = false;
-            localStorageBackend.saveTasksForDate(missedDay, missedList);
+            powerList.saveTasksForDate(missedDay, missedList);
           }
         }
-        
+
         // Create today's list from most recent tasks
         const recentTasks = getMostRecentTasks(allHistory);
         todaysList = createTaskList(today, recentTasks);
-        localStorageBackend.saveTasksForDate(today, todaysList);
+        powerList.saveTasksForDate(today, todaysList);
       }
-      
+
       setCurrentTaskList(todaysList);
       setIsEditing(!isTaskListComplete(todaysList));
     } catch (error) {
@@ -82,10 +82,10 @@ export function usePowerListService() {
     if (!task) return;
 
     const newCompletedStatus = !task.completed;
-    
+
     // Update in backend
-    localStorageBackend.updateTaskStatus(today, taskId, newCompletedStatus);
-    
+    powerList.updateTaskStatus(today, taskId, newCompletedStatus);
+
     // Update local state
     const updatedTasks = currentTaskList.tasks.map(t =>
       t.id === taskId ? { ...t, completed: newCompletedStatus } : t
@@ -97,7 +97,7 @@ export function usePowerListService() {
     });
 
     setCurrentTaskList(updatedList);
-    localStorageBackend.saveTasksForDate(today, updatedList);
+    powerList.saveTasksForDate(today, updatedList);
   }, [currentTaskList, isEditing, today]);
 
   const saveTaskList = useCallback(() => {
@@ -105,7 +105,7 @@ export function usePowerListService() {
 
     const updatedList = updateTaskListStatus(currentTaskList);
     setCurrentTaskList(updatedList);
-    localStorageBackend.saveTasksForDate(today, updatedList);
+    powerList.saveTasksForDate(today, updatedList);
     setIsEditing(false);
   }, [currentTaskList, today]);
 
@@ -114,7 +114,7 @@ export function usePowerListService() {
   }, [isEditing]);
 
   const getStats = useCallback(() => {
-    const allHistory = localStorageBackend.getAllTaskHistory();
+    const allHistory = powerList.getAllTaskHistory();
     return calculateAppStats(allHistory);
   }, []);
 

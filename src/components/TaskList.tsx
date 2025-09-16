@@ -1,4 +1,4 @@
-import { TaskList as TaskListType } from '@/types';
+import { TaskList as TaskListType } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
 
 interface TaskListProps {
