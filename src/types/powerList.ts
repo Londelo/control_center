@@ -9,6 +9,7 @@ export interface TaskList {
   id: string;
   date: string;
   tasks: Task[];
+  sideTasks: Task[];
   isWin: boolean;
   isLoss: boolean;
   isComplete: boolean;

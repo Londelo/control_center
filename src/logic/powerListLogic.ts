@@ -9,13 +9,15 @@ export function createEmptyTask(index: number): Task {
   };
 }
 
-export function createTaskList(date: string, tasks?: Task[]): TaskList {
+export function createTaskList(date: string, tasks?: Task[], sideTasks?: Task[]): TaskList {
   const defaultTasks = tasks || Array.from({ length: 5 }, (_, i) => createEmptyTask(i));
+  const defaultSideTasks = sideTasks || [];
 
   return {
     id: `list-${date}`,
     date,
     tasks: defaultTasks,
+    sideTasks: defaultSideTasks,
     isWin: false,
     isLoss: false,
     isComplete: false,
@@ -67,20 +69,28 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
   return missed;
 }
 
-export function getMostRecentTasks(taskHistory: Record<string, TaskList>): Task[] {
+export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tasks: Task[], sideTasks: Task[] } {
   const dates = Object.keys(taskHistory).sort().reverse();
 
   for (const date of dates) {
     const taskList = taskHistory[date];
     if (taskList && isTaskListComplete(taskList)) {
-      return taskList.tasks.map((task, index) => ({
+      const tasks = taskList.tasks.map((task, index) => ({
         ...createEmptyTask(index),
         text: task.text,
       }));
+      const sideTasks = taskList.sideTasks.map((task, index) => ({
+        ...createEmptyTask(index),
+        text: task.text,
+      }));
+      return { tasks, sideTasks };
     }
   }
 
-  return Array.from({ length: 5 }, (_, i) => createEmptyTask(i));
+  return {
+    tasks: Array.from({ length: 5 }, (_, i) => createEmptyTask(i)),
+    sideTasks: []
+  };
 }
 
 export function calculateAppStats(taskHistory: Record<string, TaskList>): AppStats {

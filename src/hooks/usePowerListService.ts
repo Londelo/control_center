@@ -42,8 +42,8 @@ export function usePowerListService() {
         }
 
         // Create today's list from most recent tasks
-        const recentTasks = getMostRecentTasks(allHistory);
-        todaysList = createTaskList(today, recentTasks);
+        const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
+        todaysList = createTaskList(today, recentTasks, recentSideTasks);
         powerList.saveTasksForDate(today, todaysList);
       }
 
@@ -75,10 +75,53 @@ export function usePowerListService() {
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
 
+  const updateSideTask = useCallback((taskId: string, text: string) => {
+    if (!currentTaskList) return;
+
+    const updatedSideTasks = currentTaskList.sideTasks.map(task =>
+      task.id === taskId ? { ...task, text } : task
+    );
+
+    const updatedList = updateTaskListStatus({
+      ...currentTaskList,
+      sideTasks: updatedSideTasks,
+    });
+
+    setCurrentTaskList(updatedList);
+  }, [currentTaskList]);
+
+  const addSideTask = useCallback(() => {
+    if (!currentTaskList) return;
+
+    const newTask = createEmptyTask(currentTaskList.sideTasks.length);
+    const updatedSideTasks = [...currentTaskList.sideTasks, newTask];
+
+    const updatedList = updateTaskListStatus({
+      ...currentTaskList,
+      sideTasks: updatedSideTasks,
+    });
+
+    setCurrentTaskList(updatedList);
+  }, [currentTaskList]);
+
+  const removeSideTask = useCallback((taskId: string) => {
+    if (!currentTaskList) return;
+
+    const updatedSideTasks = currentTaskList.sideTasks.filter(task => task.id !== taskId);
+
+    const updatedList = updateTaskListStatus({
+      ...currentTaskList,
+      sideTasks: updatedSideTasks,
+    });
+
+    setCurrentTaskList(updatedList);
+  }, [currentTaskList]);
   const toggleTaskCompletion = useCallback((taskId: string) => {
     if (!currentTaskList || isEditing) return;
 
-    const task = currentTaskList.tasks.find(t => t.id === taskId);
+    // Check both main tasks and side tasks
+    const task = currentTaskList.tasks.find(t => t.id === taskId) || 
+                 currentTaskList.sideTasks.find(t => t.id === taskId);
     if (!task) return;
 
     const newCompletedStatus = !task.completed;
@@ -86,14 +129,19 @@ export function usePowerListService() {
     // Update in backend
     powerList.updateTaskStatus(today, taskId, newCompletedStatus);
 
-    // Update local state
+    // Update local state for both task lists
     const updatedTasks = currentTaskList.tasks.map(t =>
+      t.id === taskId ? { ...t, completed: newCompletedStatus } : t
+    );
+    
+    const updatedSideTasks = currentTaskList.sideTasks.map(t =>
       t.id === taskId ? { ...t, completed: newCompletedStatus } : t
     );
 
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       tasks: updatedTasks,
+      sideTasks: updatedSideTasks,
     });
 
     setCurrentTaskList(updatedList);
@@ -127,6 +175,9 @@ export function usePowerListService() {
     isEditing,
     isLoading,
     updateTask,
+    updateSideTask,
+    addSideTask,
+    removeSideTask,
     toggleTaskCompletion,
     saveTaskList,
     toggleEditMode,
