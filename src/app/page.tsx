@@ -64,6 +64,7 @@ export default function Home() {
           <TaskList
             taskList={currentTaskList}
             isEditing={isEditing}
+            showCheckboxes={!isEditing && currentTaskList.isComplete}
             onTaskUpdate={updateTask}
             onTaskToggle={toggleTaskCompletion}
           />
