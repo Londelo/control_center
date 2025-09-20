@@ -15,6 +15,7 @@ import {
 
 export function usePowerListService() {
   const [currentTaskList, setCurrentTaskList] = useState<TaskList | null>(null);
+  const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -35,51 +36,71 @@ export function usePowerListService() {
 
   const today = new Date().toISOString().split('T')[0];
 
-  const initializeApp = useCallback(async () => {
+  const loadTaskListForDate = useCallback(async (date: string) => {
     setIsLoading(true);
 
     try {
-      // Get today's task list
-      let todaysList = powerList.getTasksByDate(today);
+      // Get task list for the specified date
+      let taskList = powerList.getTasksByDate(date);
 
-      if (!todaysList) {
-        // Check for missed days
-        const lastAccessDate = powerList.getLastAccessDate();
-        const allHistory = powerList.getAllTaskHistory();
+      if (!taskList) {
+        // If it's today and no list exists, handle missed days
+        if (date === today) {
+          const lastAccessDate = powerList.getLastAccessDate();
+          const allHistory = powerList.getAllTaskHistory();
 
-        if (lastAccessDate && lastAccessDate !== today) {
-          // Generate missed days as losses
-          const missedDays = generateMissedDays(lastAccessDate, today);
+          if (lastAccessDate && lastAccessDate !== today) {
+            // Generate missed days as losses
+            const missedDays = generateMissedDays(lastAccessDate, today);
 
-          for (const missedDay of missedDays) {
-            const missedList = createTaskList(missedDay);
-            missedList.isLoss = true;
-            missedList.isComplete = false;
-            powerList.saveTasksForDate(missedDay, missedList);
+            for (const missedDay of missedDays) {
+              const missedList = createTaskList(missedDay);
+              missedList.isLoss = true;
+              missedList.isComplete = false;
+              powerList.saveTasksForDate(missedDay, missedList);
+            }
           }
-        }
 
-        // Create today's list from most recent tasks
-        const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
-        todaysList = createTaskList(today, recentTasks, recentSideTasks);
-        powerList.saveTasksForDate(today, todaysList);
+          // Create today's list from most recent tasks
+          const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
+          taskList = createTaskList(date, recentTasks, recentSideTasks);
+          powerList.saveTasksForDate(date, taskList);
+        } else {
+          // For other dates, create empty list
+          taskList = createTaskList(date);
+        }
       } else {
-        // Normalize existing task list to ensure sideTasks exists
-        todaysList = normalizeTaskList(todaysList);
+        // Normalize existing task list
+        taskList = normalizeTaskList(taskList);
       }
 
-      setCurrentTaskList(todaysList);
-      setIsEditing(!isTaskListComplete(todaysList));
+      setCurrentTaskList(taskList);
+      setIsEditing(!isTaskListComplete(taskList));
     } catch (error) {
       console.error('Error initializing app:', error);
       // Fallback: create empty list
-      const fallbackList = createTaskList(today);
+      const fallbackList = createTaskList(date);
       setCurrentTaskList(fallbackList);
       setIsEditing(true);
     } finally {
       setIsLoading(false);
     }
   }, [today]);
+
+  const initializeApp = useCallback(async () => {
+    await loadTaskListForDate(currentDate);
+  }, [loadTaskListForDate, currentDate]);
+
+  const navigateToDate = useCallback((direction: 'prev' | 'next') => {
+    const currentDateObj = new Date(currentDate);
+    if (direction === 'prev') {
+      currentDateObj.setDate(currentDateObj.getDate() - 1);
+    } else {
+      currentDateObj.setDate(currentDateObj.getDate() + 1);
+    }
+    const newDate = currentDateObj.toISOString().split('T')[0];
+    setCurrentDate(newDate);
+  }, [currentDate]);
 
   const updateTask = useCallback((taskId: string, text: string) => {
     if (!currentTaskList) return;
@@ -148,7 +169,7 @@ export function usePowerListService() {
     const newCompletedStatus = !task.completed;
 
     // Update in backend
-    powerList.updateTaskStatus(today, taskId, newCompletedStatus);
+    powerList.updateTaskStatus(currentDate, taskId, newCompletedStatus);
 
     // Update local state for both task lists
     const updatedTasks = currentTaskList.tasks.map(t =>
@@ -166,17 +187,17 @@ export function usePowerListService() {
     });
 
     setCurrentTaskList(updatedList);
-    powerList.saveTasksForDate(today, updatedList);
-  }, [currentTaskList, isEditing, today]);
+    powerList.saveTasksForDate(currentDate, updatedList);
+  }, [currentTaskList, isEditing, currentDate]);
 
   const saveTaskList = useCallback(() => {
     if (!currentTaskList) return;
 
     const updatedList = updateTaskListStatus(currentTaskList);
     setCurrentTaskList(updatedList);
-    powerList.saveTasksForDate(today, updatedList);
+    powerList.saveTasksForDate(currentDate, updatedList);
     setIsEditing(false);
-  }, [currentTaskList, today]);
+  }, [currentTaskList, currentDate]);
 
   const toggleEditMode = useCallback(() => {
     setIsEditing(!isEditing);
@@ -228,6 +249,7 @@ export function usePowerListService() {
 
   return {
     currentTaskList,
+    currentDate,
     isEditing,
     isLoading,
     updateTask,
@@ -238,6 +260,7 @@ export function usePowerListService() {
     saveTaskList,
     toggleEditMode,
     getStats,
+    navigateToDate,
     powerListRefs: powerListRefs.current,
     sideTaskRefs: sideTaskRefs.current,
     handleKeyDown,

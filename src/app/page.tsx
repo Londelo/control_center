@@ -3,12 +3,13 @@
 import { TaskList } from "@/components/TaskList";
 import { SideTaskList } from "@/components/SideTaskList";
 import { usePowerListService } from "@/hooks/usePowerListService";
-import { Trophy, Edit3, BarChart3 } from "lucide-react";
+import { Trophy, Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
   const {
     currentTaskList,
+    currentDate,
     isEditing,
     isLoading,
     updateTask,
@@ -18,6 +19,7 @@ export default function Home() {
     toggleTaskCompletion,
     saveTaskList,
     toggleEditMode,
+    navigateToDate,
     powerListRefs,
     sideTaskRefs,
     handleKeyDown,
@@ -44,14 +46,30 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="text-center py-8 border-b border-gray-200">
+      <header className="relative text-center py-8 border-b border-gray-200">
+        {/* Left Arrow */}
+        <button
+          onClick={() => navigateToDate('prev')}
+          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        
         <div className="text-lg font-mono mb-2">
-          {new Date().toLocaleDateString('en-US', {
+          {new Date(currentDate).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric',
             year: 'numeric',
           }).toUpperCase()} - {isWin ? 'WIN' : 'WORKING'}
         </div>
+        
+        {/* Right Arrow */}
+        <button
+          onClick={() => navigateToDate('next')}
+          className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
+        >
+          <ChevronRight size={24} />
+        </button>
         
         {/* Win Message */}
         {isWin && !isEditing && (
