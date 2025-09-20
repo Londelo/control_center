@@ -54,15 +54,11 @@ export default function Home() {
         >
           <ChevronLeft size={24} />
         </button>
-        
+
         <div className="text-lg font-mono mb-2">
-          {new Date(currentDate).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          }).toUpperCase()} - {isWin ? 'WIN' : 'WORKING'}
+          {currentDate} - {isWin ? 'WIN' : 'WORKING'}
         </div>
-        
+
         {/* Right Arrow */}
         <button
           onClick={() => navigateToDate('next')}
@@ -70,7 +66,7 @@ export default function Home() {
         >
           <ChevronRight size={24} />
         </button>
-        
+
         {/* Win Message */}
         {isWin && !isEditing && (
           <div className="inline-flex items-center gap-2 text-green-600 font-mono">
@@ -86,7 +82,7 @@ export default function Home() {
         <div className="flex-1 p-8 border-r border-gray-200">
           <div className="max-w-md mx-auto">
             <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
-            
+
             <TaskList
               taskList={currentTaskList}
               isEditing={isEditing}
@@ -103,7 +99,7 @@ export default function Home() {
         <div className="flex-1 p-8">
           <div className="max-w-md mx-auto">
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
-            
+
             <SideTaskList
               tasks={currentTaskList.sideTasks}
               isEditing={isEditing}
@@ -138,7 +134,7 @@ export default function Home() {
             Edit Tasks
           </button>
         )}
-        
+
         {/* Stats Button */}
         <div>
           <Link href="/stats">

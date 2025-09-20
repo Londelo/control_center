@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import React from 'react';
-import { TaskList, Task } from '@/types/powerList';
+import { TaskList } from '@/types/powerList';
 import powerList from '@/middleware/powerList';
 import {
   createTaskList,
@@ -18,7 +18,7 @@ export function usePowerListService() {
   const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Create refs for all inputs
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
@@ -35,7 +35,7 @@ export function usePowerListService() {
   }, [currentTaskList?.sideTasks.length]);
 
   const today = new Date().toISOString().split('T')[0];
-
+  console.log(today)
   const loadTaskListForDate = useCallback(async (date: string) => {
     setIsLoading(true);
 
@@ -92,6 +92,7 @@ export function usePowerListService() {
   }, [loadTaskListForDate, currentDate]);
 
   const navigateToDate = useCallback((direction: 'prev' | 'next') => {
+    console.log(direction)
     const currentDateObj = new Date(currentDate);
     if (direction === 'prev') {
       currentDateObj.setDate(currentDateObj.getDate() - 1);
@@ -158,11 +159,12 @@ export function usePowerListService() {
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
+
   const toggleTaskCompletion = useCallback((taskId: string) => {
     if (!currentTaskList || isEditing) return;
 
     // Check both main tasks and side tasks
-    const task = currentTaskList.tasks.find(t => t.id === taskId) || 
+    const task = currentTaskList.tasks.find(t => t.id === taskId) ||
                  currentTaskList.sideTasks.find(t => t.id === taskId);
     if (!task) return;
 
@@ -175,7 +177,7 @@ export function usePowerListService() {
     const updatedTasks = currentTaskList.tasks.map(t =>
       t.id === taskId ? { ...t, completed: newCompletedStatus } : t
     );
-    
+
     const updatedSideTasks = currentTaskList.sideTasks.map(t =>
       t.id === taskId ? { ...t, completed: newCompletedStatus } : t
     );
@@ -211,27 +213,27 @@ export function usePowerListService() {
   const handleKeyDown = useCallback((listType: 'power' | 'side', index: number, e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      
+
       const powerListLength = 5;
       const sideTaskLength = currentTaskList?.sideTasks.length || 0;
       const totalInputs = powerListLength + sideTaskLength;
-      
+
       let currentGlobalIndex: number;
-      
+
       if (listType === 'power') {
         currentGlobalIndex = index;
       } else {
         currentGlobalIndex = powerListLength + index;
       }
-      
+
       let nextGlobalIndex: number;
-      
+
       if (e.key === 'ArrowDown') {
         nextGlobalIndex = (currentGlobalIndex + 1) % totalInputs;
       } else {
         nextGlobalIndex = (currentGlobalIndex - 1 + totalInputs) % totalInputs;
       }
-      
+
       // Focus the next input
       if (nextGlobalIndex < powerListLength) {
         // Focus power list input
