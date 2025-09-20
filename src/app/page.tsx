@@ -38,8 +38,8 @@ export default function Home() {
   const stats = getStats();
 
   return (
-    <main className="bg-blue-500">
-      <div>
+    <main>
+      <div className="hot bg-red-300">
         {/* Header */}
         <header>
           <h1>PowerList</h1>
@@ -64,7 +64,7 @@ export default function Home() {
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
             />
-            
+
             {/* Action Buttons */}
             <div>
               {isEditing ? (
