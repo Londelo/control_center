@@ -10,7 +10,7 @@ interface TaskListProps {
 
 export function TaskList({ taskList, isEditing, onTaskUpdate, onTaskToggle }: TaskListProps) {
   return (
-    <div>
+    <div className="space-y-3">
       {taskList.tasks.map((task) => (
         <TaskCard
           key={task.id}

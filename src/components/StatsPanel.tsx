@@ -6,50 +6,38 @@ interface StatsPanelProps {
 
 export function StatsPanel({ stats }: StatsPanelProps) {
   return (
-    <div>
-      <div>
-        <div>
-          <h3>Wins</h3>
+    <div className="space-y-3 font-mono text-base">
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Check className="w-3 h-3" />
         </div>
-        <div>
-          <div>{stats.totalWins}</div>
-        </div>
+        <span>Wins: {stats.totalWins}</span>
       </div>
-
-      <div>
-        <div>
-          <h3>Losses</h3>
+      
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Check className="w-3 h-3" />
         </div>
-        <div>
-          <div>{stats.totalLosses}</div>
-        </div>
+        <span>Current Streak: {stats.currentStreak}</span>
       </div>
-
-      <div>
-        <div>
-          <h3>Win Rate</h3>
-        </div>
-        <div>
-          <div>{stats.winRate}%</div>
-        </div>
+      
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 border-2 border-black flex-shrink-0 mt-0.5"></div>
+        <span>Win Rate: {stats.winRate}%</span>
       </div>
-
-      <div>
-        <div>
-          <h3>Current Streak</h3>
+      
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Check className="w-3 h-3" />
         </div>
-        <div>
-          <div>{stats.currentStreak}</div>
-        </div>
+        <span>Best Streak: {stats.longestStreak}</span>
       </div>
-
-      <div>
-        <div>
-          <h3>Best Streak</h3>
+      
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Check className="w-3 h-3" />
         </div>
-        <div>
-          <div>{stats.longestStreak}</div>
-        </div>
+        <span>Total Losses: {stats.totalLosses}</span>
       </div>
     </div>
   );
