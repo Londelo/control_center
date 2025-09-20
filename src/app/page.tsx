@@ -79,7 +79,7 @@ export default function Home() {
         {/* Right Column - Side Tasks */}
         <div className="flex-1 p-8">
           <div className="max-w-md mx-auto">
-            <h2 className="text-lg font-mono font-bold mb-6 text-center">ADDITIONAL TASKS:</h2>
+            <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
             
             <SideTaskList
               tasks={currentTaskList.sideTasks}
