@@ -16,10 +16,10 @@ const formatTaskText = (text: string) => {
   if (commaIndex === -1) {
     return <span>{text}</span>;
   }
-  
+
   const beforeComma = text.substring(0, commaIndex);
   const afterComma = text.substring(commaIndex);
-  
+
   return (
     <span>
       <strong>{beforeComma}</strong>
@@ -35,7 +35,7 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         <button
           onClick={onToggleComplete}
           disabled={isEditing}
-          className="w-4 h-4 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5 disabled:cursor-not-allowed rounded opacity-10"
+          className="w-4 h-4 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5 disabled:cursor-not-allowed rounded opacity-50"
         >
           {task.completed ? (
             <Check className="w-2.5 h-2.5" />
