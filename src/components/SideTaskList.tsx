@@ -10,6 +10,8 @@ interface SideTaskListProps {
   onTaskToggle: (taskId: string) => void;
   onAddTask: () => void;
   onRemoveTask: (taskId: string) => void;
+  taskRefs: React.RefObject<HTMLInputElement>[];
+  onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
 export function SideTaskList({ 
@@ -19,11 +21,13 @@ export function SideTaskList({
   onTaskUpdate, 
   onTaskToggle,
   onAddTask,
-  onRemoveTask
+  onRemoveTask,
+  taskRefs,
+  onKeyDown
 }: SideTaskListProps) {
   return (
     <div className="space-y-3">
-      {tasks.map((task) => (
+      {tasks.map((task, index) => (
         <div key={task.id} className="flex items-start gap-2">
           <TaskCard
             task={task}
@@ -31,6 +35,8 @@ export function SideTaskList({
             showCheckbox={showCheckboxes}
             onTextChange={(text) => onTaskUpdate(task.id, text)}
             onToggleComplete={() => onTaskToggle(task.id)}
+            inputRef={taskRefs[index]}
+            onKeyDown={(e) => onKeyDown(index, e)}
           />
           {isEditing && (
             <button

@@ -18,6 +18,9 @@ export default function Home() {
     toggleTaskCompletion,
     saveTaskList,
     toggleEditMode,
+    powerListRefs,
+    sideTaskRefs,
+    handleKeyDown,
     canSave,
     isWin,
   } = usePowerListService();
@@ -72,6 +75,8 @@ export default function Home() {
               showCheckboxes={!isEditing && currentTaskList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
+              taskRefs={powerListRefs}
+              onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
         </div>
@@ -89,6 +94,8 @@ export default function Home() {
               onTaskToggle={toggleTaskCompletion}
               onAddTask={addSideTask}
               onRemoveTask={removeSideTask}
+              taskRefs={sideTaskRefs}
+              onKeyDown={(index, e) => handleKeyDown('side', index, e)}
             />
           </div>
         </div>

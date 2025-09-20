@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { TaskList, Task } from '@/types/powerList';
 import powerList from '@/middleware/powerList';
 import {
@@ -16,6 +16,21 @@ export function usePowerListService() {
   const [currentTaskList, setCurrentTaskList] = useState<TaskList | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Create refs for all inputs
+  const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
+  const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
+
+  // Initialize refs
+  useEffect(() => {
+    powerListRefs.current = Array.from({ length: 5 }, () => useRef<HTMLInputElement>(null));
+  }, []);
+
+  useEffect(() => {
+    if (currentTaskList) {
+      sideTaskRefs.current = Array.from({ length: currentTaskList.sideTasks.length }, () => useRef<HTMLInputElement>(null));
+    }
+  }, [currentTaskList?.sideTasks.length]);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -171,6 +186,41 @@ export function usePowerListService() {
     return calculateAppStats(allHistory);
   }, []);
 
+  const handleKeyDown = useCallback((listType: 'power' | 'side', index: number, e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      
+      const powerListLength = 5;
+      const sideTaskLength = currentTaskList?.sideTasks.length || 0;
+      const totalInputs = powerListLength + sideTaskLength;
+      
+      let currentGlobalIndex: number;
+      
+      if (listType === 'power') {
+        currentGlobalIndex = index;
+      } else {
+        currentGlobalIndex = powerListLength + index;
+      }
+      
+      let nextGlobalIndex: number;
+      
+      if (e.key === 'ArrowDown') {
+        nextGlobalIndex = (currentGlobalIndex + 1) % totalInputs;
+      } else {
+        nextGlobalIndex = (currentGlobalIndex - 1 + totalInputs) % totalInputs;
+      }
+      
+      // Focus the next input
+      if (nextGlobalIndex < powerListLength) {
+        // Focus power list input
+        powerListRefs.current[nextGlobalIndex]?.current?.focus();
+      } else {
+        // Focus side task input
+        const sideIndex = nextGlobalIndex - powerListLength;
+        sideTaskRefs.current[sideIndex]?.current?.focus();
+      }
+    }
+  }, [currentTaskList?.sideTasks.length]);
   useEffect(() => {
     initializeApp();
   }, [initializeApp]);
@@ -187,6 +237,9 @@ export function usePowerListService() {
     saveTaskList,
     toggleEditMode,
     getStats,
+    powerListRefs: powerListRefs.current,
+    sideTaskRefs: sideTaskRefs.current,
+    handleKeyDown,
     canSave: currentTaskList ? isTaskListComplete(currentTaskList) : false,
     isWin: currentTaskList?.isWin || false,
   };

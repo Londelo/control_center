@@ -7,9 +7,11 @@ interface TaskCardProps {
   showCheckbox: boolean;
   onTextChange: (text: string) => void;
   onToggleComplete: () => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  inputRef?: React.RefObject<HTMLInputElement>;
 }
 
-export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete }: TaskCardProps) {
+export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onKeyDown, inputRef }: TaskCardProps) {
   return (
     <div className="flex items-start gap-3 font-mono text-base text-left">
       {showCheckbox && (
@@ -26,9 +28,11 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
 
       {isEditing ? (
         <input
+          ref={inputRef}
           type="text"
           value={task.text}
           onChange={(e) => onTextChange(e.target.value)}
+          onKeyDown={onKeyDown}
           placeholder="Enter your task"
           className="flex-1 bg-transparent border-none outline-none font-mono text-base placeholder-gray-400"
         />
