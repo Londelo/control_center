@@ -35,7 +35,7 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         <button
           onClick={onToggleComplete}
           disabled={isEditing}
-          className="w-4 h-4 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5 disabled:cursor-not-allowed rounded"
+          className="w-4 h-4 border-2 border-black flex items-center justify-center flex-shrink-0 mt-0.5 disabled:cursor-not-allowed rounded opacity-20"
         >
           {task.completed ? (
             <Check className="w-2.5 h-2.5" />
