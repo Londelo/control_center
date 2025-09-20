@@ -1,5 +1,13 @@
 import { Task, TaskList, DayStats, TaskStats, AppStats } from '@/types/powerList';
 
+export function normalizeTaskList(taskList: TaskList): TaskList {
+  return {
+    ...taskList,
+    sideTasks: taskList.sideTasks || [],
+    tasks: taskList.tasks || Array.from({ length: 5 }, (_, i) => createEmptyTask(i)),
+  };
+}
+
 export function createEmptyTask(index: number): Task {
   return {
     id: `task-${Date.now()}-${index}`,
@@ -73,7 +81,7 @@ export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tas
   const dates = Object.keys(taskHistory).sort().reverse();
 
   for (const date of dates) {
-    const taskList = taskHistory[date];
+    const taskList = normalizeTaskList(taskHistory[date]);
     if (taskList && isTaskListComplete(taskList)) {
       const tasks = taskList.tasks.map((task, index) => ({
         ...createEmptyTask(index),

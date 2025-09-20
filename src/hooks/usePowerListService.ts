@@ -8,6 +8,7 @@ import {
   getMostRecentTasks,
   isTaskListComplete,
   calculateAppStats,
+  normalizeTaskList,
 } from '@/logic/powerListLogic';
 
 export function usePowerListService() {
@@ -45,6 +46,9 @@ export function usePowerListService() {
         const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
         todaysList = createTaskList(today, recentTasks, recentSideTasks);
         powerList.saveTasksForDate(today, todaysList);
+      } else {
+        // Normalize existing task list to ensure sideTasks exists
+        todaysList = normalizeTaskList(todaysList);
       }
 
       setCurrentTaskList(todaysList);
