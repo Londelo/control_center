@@ -11,6 +11,23 @@ interface TaskCardProps {
   inputRef?: React.RefObject<HTMLInputElement>;
 }
 
+const formatTaskText = (text: string) => {
+  const commaIndex = text.indexOf(',');
+  if (commaIndex === -1) {
+    return <span>{text}</span>;
+  }
+  
+  const beforeComma = text.substring(0, commaIndex);
+  const afterComma = text.substring(commaIndex);
+  
+  return (
+    <span>
+      <strong>{beforeComma}</strong>
+      {afterComma}
+    </span>
+  );
+};
+
 export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onKeyDown, inputRef }: TaskCardProps) {
   return (
     <div className="flex items-start gap-3 font-mono text-base text-left">
@@ -40,7 +57,7 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         <span
           className={`flex-1 ${task.completed ? 'line-through text-gray-500' : 'text-black'}`}
         >
-          {task.text || 'Enter your task'}
+          {task.text ? formatTaskText(task.text) : 'Enter your task'}
         </span>
       )}
     </div>
