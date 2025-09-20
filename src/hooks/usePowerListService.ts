@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import React from 'react';
 import { TaskList, Task } from '@/types/powerList';
 import powerList from '@/middleware/powerList';
 import {
@@ -23,12 +24,12 @@ export function usePowerListService() {
 
   // Initialize refs
   useEffect(() => {
-    powerListRefs.current = Array.from({ length: 5 }, () => useRef<HTMLInputElement>(null));
+    powerListRefs.current = Array.from({ length: 5 }, () => React.createRef<HTMLInputElement>());
   }, []);
 
   useEffect(() => {
     if (currentTaskList) {
-      sideTaskRefs.current = Array.from({ length: currentTaskList.sideTasks.length }, () => useRef<HTMLInputElement>(null));
+      sideTaskRefs.current = Array.from({ length: currentTaskList.sideTasks.length }, () => React.createRef<HTMLInputElement>());
     }
   }, [currentTaskList?.sideTasks.length]);
 
