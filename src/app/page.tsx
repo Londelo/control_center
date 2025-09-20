@@ -1,9 +1,9 @@
 "use client";
 
 import { TaskList } from "@/components/TaskList";
-import { StatsPanel } from "@/components/StatsPanel";
 import { usePowerListService } from "@/hooks/usePowerListService";
-import { Trophy, Edit3 } from "lucide-react";
+import { Trophy, Edit3, BarChart3 } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   const {
@@ -14,34 +14,31 @@ export default function Home() {
     toggleTaskCompletion,
     saveTaskList,
     toggleEditMode,
-    getStats,
     canSave,
     isWin,
   } = usePowerListService();
 
   if (isLoading) {
     return (
-      <div>
-        <div>Loading your PowerList...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="font-mono">Loading your PowerList...</div>
       </div>
     );
   }
 
   if (!currentTaskList) {
     return (
-      <div>
-        <div>Error loading PowerList</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="font-mono">Error loading PowerList</div>
       </div>
     );
   }
 
-  const stats = getStats();
-
   return (
     <main className="min-h-screen bg-white flex items-center justify-center p-8">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl text-center">
         {/* Header */}
-        <header className="text-center mb-8">
+        <header className="mb-8">
           <div className="text-lg font-mono mb-2">
             {new Date().toLocaleDateString('en-US', {
               month: 'short',
@@ -54,7 +51,7 @@ export default function Home() {
 
         {/* Win Message */}
         {isWin && !isEditing && (
-          <div className="text-center mb-6">
+          <div className="mb-6">
             <div className="inline-flex items-center gap-2 text-green-600 font-mono">
               <Trophy />
               <span>You Won the Day!</span>
@@ -64,41 +61,43 @@ export default function Home() {
 
         {/* Main Task List */}
         <div className="mb-12">
-          <div>
-            <TaskList
-              taskList={currentTaskList}
-              isEditing={isEditing}
-              onTaskUpdate={updateTask}
-              onTaskToggle={toggleTaskCompletion}
-            />
+          <TaskList
+            taskList={currentTaskList}
+            isEditing={isEditing}
+            onTaskUpdate={updateTask}
+            onTaskToggle={toggleTaskCompletion}
+          />
 
-            {/* Action Buttons */}
-            <div className="text-center mt-8">
-              {isEditing ? (
-                <button
-                  onClick={saveTaskList}
-                  disabled={!canSave}
-                  className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
-                >
-                  Save List
+          {/* Action Buttons */}
+          <div className="mt-8 space-y-4">
+            {isEditing ? (
+              <button
+                onClick={saveTaskList}
+                disabled={!canSave}
+                className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
+              >
+                Save List
+              </button>
+            ) : (
+              <button
+                onClick={toggleEditMode}
+                className="inline-flex items-center gap-2 px-6 py-2 bg-black text-white font-mono"
+              >
+                <Edit3 size={16} />
+                Edit Tasks
+              </button>
+            )}
+            
+            {/* Stats Button */}
+            <div>
+              <Link href="/stats">
+                <button className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors">
+                  <BarChart3 size={16} />
+                  View Standards
                 </button>
-              ) : (
-                <button
-                  onClick={toggleEditMode}
-                  className="inline-flex items-center gap-2 px-6 py-2 bg-black text-white font-mono"
-                >
-                  <Edit3 />
-                  Edit Tasks
-                </button>
-              )}
+              </Link>
             </div>
           </div>
-        </div>
-
-        {/* Stats Panel */}
-        <div className="text-center">
-          <h2 className="text-lg font-mono font-bold mb-4">STANDARDS:</h2>
-          <StatsPanel stats={stats} />
         </div>
       </div>
     </main>
