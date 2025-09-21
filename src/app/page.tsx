@@ -25,6 +25,7 @@ export default function Home() {
     handleKeyDown,
     canSave,
     isWin,
+    canNavigateNext,
   } = usePowerListService();
 
   if (isLoading) {
@@ -62,7 +63,8 @@ export default function Home() {
         {/* Right Arrow */}
         <button
           onClick={() => navigateToDate('next')}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
+          disabled={!canNavigateNext}
+          className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         >
           <ChevronRight size={24} />
         </button>

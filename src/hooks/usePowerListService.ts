@@ -36,6 +36,8 @@ export function usePowerListService() {
 
   const today = new Date().toISOString().split('T')[0];
   console.log(today)
+  const canNavigateNext = currentDate < today;
+
   const loadTaskListForDate = useCallback(async (date: string) => {
     setIsLoading(true);
 
@@ -93,6 +95,11 @@ export function usePowerListService() {
 
   const navigateToDate = useCallback((direction: 'prev' | 'next') => {
     console.log(direction)
+    // Prevent navigating to future dates
+    if (direction === 'next' && currentDate >= today) {
+      return;
+    }
+
     const currentDateObj = new Date(currentDate);
     if (direction === 'prev') {
       currentDateObj.setDate(currentDateObj.getDate() - 1);
@@ -101,7 +108,7 @@ export function usePowerListService() {
     }
     const newDate = currentDateObj.toISOString().split('T')[0];
     setCurrentDate(newDate);
-  }, [currentDate]);
+  }, [currentDate, today]);
 
   const updateTask = useCallback((taskId: string, text: string) => {
     if (!currentTaskList) return;
@@ -268,5 +275,6 @@ export function usePowerListService() {
     handleKeyDown,
     canSave: currentTaskList ? isTaskListComplete(currentTaskList) : false,
     isWin: currentTaskList?.isWin || false,
+    canNavigateNext,
   };
 }
