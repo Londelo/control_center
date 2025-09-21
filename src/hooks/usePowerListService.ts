@@ -25,12 +25,17 @@ export function usePowerListService() {
 
   // Initialize refs
   useEffect(() => {
-    powerListRefs.current = Array.from({ length: 5 }, () => React.createRef<HTMLInputElement>());
+    const powerListInputCount = 5;
+    const createPowerListRefs = Array.from({ length: powerListInputCount }, () => React.createRef<HTMLInputElement>());
+    powerListRefs.current = createPowerListRefs as React.RefObject<HTMLInputElement>[];
   }, []);
 
   useEffect(() => {
-    if (currentTaskList) {
-      sideTaskRefs.current = Array.from({ length: currentTaskList.sideTasks.length }, () => React.createRef<HTMLInputElement>());
+    const hasCurrentTaskList = Boolean(currentTaskList);
+    const sideTaskInputCount = currentTaskList?.sideTasks.length || 0;
+    if (hasCurrentTaskList) {
+      const createSideTaskRefs = Array.from({ length: sideTaskInputCount }, () => React.createRef<HTMLInputElement>());
+      sideTaskRefs.current = createSideTaskRefs as React.RefObject<HTMLInputElement>[];
     }
   }, [currentTaskList?.sideTasks.length]);
 

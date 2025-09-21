@@ -1,4 +1,4 @@
-import { Task, TaskList, DayStats, TaskStats, AppStats } from '@/types/powerList';
+import { Task, TaskList, AppStats } from '@/types/powerList';
 
 export function normalizeTaskList(taskList: TaskList): TaskList {
   return {
