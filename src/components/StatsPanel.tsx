@@ -1,5 +1,4 @@
 import { AppStats } from '@/types/powerList';
-import { Check } from 'lucide-react';
 
 interface StatsPanelProps {
   stats: AppStats;
