@@ -1,4 +1,5 @@
 import { Task, TaskList, AppStats } from '@/types/powerList';
+import { v4 } from 'uuid'
 
 export function normalizeTaskList(taskList: TaskList): TaskList {
   return {
@@ -10,7 +11,7 @@ export function normalizeTaskList(taskList: TaskList): TaskList {
 
 export function createEmptyTask(index: number): Task {
   return {
-    id: `task-${Date.now()}-${index}`,
+    id: v4(),
     text: '',
     completed: false,
     createdAt: new Date().toISOString(),
@@ -22,7 +23,7 @@ export function createTaskList(date: string, tasks?: Task[], sideTasks?: Task[])
   const defaultSideTasks = sideTasks || [];
 
   return {
-    id: `list-${date}`,
+    id: v4(),
     date,
     tasks: defaultTasks,
     sideTasks: defaultSideTasks,

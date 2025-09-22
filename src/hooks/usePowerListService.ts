@@ -42,7 +42,6 @@ export function usePowerListService() {
   }, [currentTaskList?.sideTasks.length]);
 
   const today = new Date().toISOString().split('T')[0];
-  console.log(today)
   const canNavigateNext = currentDate < today;
 
   const loadTaskListForDate = useCallback(async (date: string) => {
@@ -259,6 +258,7 @@ export function usePowerListService() {
       }
     }
   }, [currentTaskList?.sideTasks.length]);
+
   useEffect(() => {
     initializeApp();
   }, [initializeApp]);
