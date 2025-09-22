@@ -39,10 +39,15 @@ export function isTaskListComplete(taskList: TaskList): boolean {
   return taskList.tasks.every(task => task.text.trim() !== '');
 }
 
-export function calculateWinLoss(taskList: TaskList): { isWin: boolean; isLoss: boolean } {
-  // If task list is not complete, it's neither a win nor a loss (in progress)
+export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
+  // If task list is not complete
   if (!isTaskListComplete(taskList)) {
-    return { isWin: false, isLoss: false };
+    // Only today can be "in progress", other dates are losses if incomplete
+    if (isToday) {
+      return { isWin: false, isLoss: false };
+    } else {
+      return { isWin: false, isLoss: true };
+    }
   }
 
   const completedTasks = taskList.tasks.filter(task => task.completed).length;
@@ -52,8 +57,8 @@ export function calculateWinLoss(taskList: TaskList): { isWin: boolean; isLoss: 
   return { isWin, isLoss };
 }
 
-export function updateTaskListStatus(taskList: TaskList): TaskList {
-  const { isWin, isLoss } = calculateWinLoss(taskList);
+export function updateTaskListStatus(taskList: TaskList, isToday: boolean = false): TaskList {
+  const { isWin, isLoss } = calculateWinLoss(taskList, isToday);
 
   return {
     ...taskList,

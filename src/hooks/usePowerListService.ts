@@ -138,7 +138,7 @@ export function usePowerListService() {
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       tasks: updatedTasks,
-    });
+    }, currentDate === today);
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
