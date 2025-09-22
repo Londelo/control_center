@@ -153,7 +153,7 @@ export function usePowerListService() {
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       sideTasks: updatedSideTasks,
-    });
+    }, currentDate === today);
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
@@ -167,7 +167,7 @@ export function usePowerListService() {
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       sideTasks: updatedSideTasks,
-    });
+    }, currentDate === today);
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
