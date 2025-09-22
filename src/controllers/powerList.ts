@@ -7,11 +7,11 @@ const STORAGE_KEY = 'power_list';
 
 type StorageData = {
   taskLists: Record<string, TaskList>;
-  lastAccessDate: string;
+  lastSaveDate: string;
 };
 
 const getStorageData = (): StorageData => {
-  const defaultData = { taskLists: {}, lastAccessDate: '' };
+  const defaultData = { taskLists: {}, lastSaveDate: '' };
   const data = LocalStore.get<StorageData>(STORAGE_KEY);
   const hasData = data !== undefined;
   return hasData ? data : defaultData;
@@ -30,7 +30,7 @@ const getTasksByDate = (date: string): TaskList | null => {
 const saveTasksForDate = (date: string, taskList: TaskList): void => {
   const storageData = getStorageData();
   storageData.taskLists[date] = taskList;
-  storageData.lastAccessDate = date;
+  storageData.lastSaveDate = date;
   upsertStorageData(storageData);
 };
 
@@ -53,21 +53,30 @@ const updateTaskStatus = (date: string, taskId: string, completed: boolean): voi
   }
 };
 
-const getLastAccessDate = (): string => {
+const getLastSaveDate = (): string => {
   const storageData = getStorageData();
-  return storageData.lastAccessDate;
+  return storageData.lastSaveDate;
 };
 
 const clearAllData = (): void => {
   LocalStore.remove(STORAGE_KEY);
 };
 
+export type PowerListType = {
+    getTasksByDate: (date: string) => TaskList | null;
+    saveTasksForDate: (date: string, taskList: TaskList) => void;
+    getAllTaskHistory: () => Record<string, TaskList>;
+    updateTaskStatus: (date: string, taskId: string, completed: boolean) => void;
+    getLastSaveDate: () => string;
+    clearAllData: () => void;
+}
+
 const PowerList = {
   getTasksByDate,
   saveTasksForDate,
   getAllTaskHistory,
   updateTaskStatus,
-  getLastAccessDate,
+  getLastSaveDate,
   clearAllData
 };
 

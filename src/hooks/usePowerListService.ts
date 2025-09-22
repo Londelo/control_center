@@ -3,30 +3,22 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TaskList } from '@/types/powerList';
-import powerList from '@/middleware/powerList';
+import powerList from '@/controllers/powerList';
+import { GetStats, isTaskListComplete } from '@/logic/powerList';
 import {
-  AddSideTask,
-  GetStats,
-  HandleKeyDown,
-  InitializeApp,
+  HandleMissedDays,
   LoadTaskListForDate,
   NavigateToDate,
+  AddSideTask,
   RemoveSideTask,
-  SaveTaskList,
-  ToggleEditMode,
-  ToggleTaskCompletion,
   UpdateSideTask,
   UpdateTask,
-} from '@/logic/powerList';
-import {
-  createTaskList,
-  updateTaskListStatus,
-  generateMissedDays,
-  getMostRecentTasks,
-  isTaskListComplete,
-  normalizeTaskList,
-  createEmptyTask,
-} from '@/logic/powerList/powerListLogic';
+  ToggleTaskCompletion,
+  SaveTaskList,
+  HandleKeyDown,
+  ToggleEditMode
+} from '../useCases/powerList';
+
 
 export function usePowerListService() {
   const today = new Date().toLocaleDateString();
@@ -40,6 +32,24 @@ export function usePowerListService() {
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
   const canNavigateNext = currentDate < today;
+
+  const handleMissedDays = useCallback(HandleMissedDays(), [])
+
+  const loadTaskListForDate = useCallback(
+    LoadTaskListForDate({
+      setIsLoading,
+      setCurrentTaskList,
+      setIsEditing,
+      today
+    }),
+    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate, powerList]
+  );
+
+  //ON INIT
+  useEffect(() => {
+    handleMissedDays(today);
+    loadTaskListForDate(today);
+  }, [handleMissedDays, loadTaskListForDate]);
 
   // Initialize refs
   useEffect(() => {
@@ -57,31 +67,6 @@ export function usePowerListService() {
     }
   }, [currentTaskList?.sideTasks.length]);
 
-  const loadTaskListForDate = useCallback(
-    LoadTaskListForDate({
-      setIsLoading,
-      setCurrentTaskList,
-      setIsEditing,
-      today,
-      currentDate,
-      powerList,
-      generateMissedDays,
-      createTaskList,
-      getMostRecentTasks,
-      normalizeTaskList,
-      isTaskListComplete,
-    }),
-    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate, powerList]
-  );
-
-  const initializeApp = useCallback(
-    InitializeApp({
-      loadTaskListForDate,
-      currentDate,
-    }),
-    [loadTaskListForDate, currentDate]
-  );
-
   const navigateToDate = useCallback(
     NavigateToDate({
       currentDate,
@@ -95,40 +80,32 @@ export function usePowerListService() {
     UpdateTask({
       currentTaskList,
       setCurrentTaskList,
-      updateTaskListStatus,
     }),
-    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+    [currentTaskList, setCurrentTaskList]
   );
 
   const updateSideTask = useCallback(
     UpdateSideTask({
       currentTaskList,
-      setCurrentTaskList,
-      updateTaskListStatus,
+      setCurrentTaskList
     }),
-    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+    [currentTaskList, setCurrentTaskList]
   );
-
-  // updateSideTask logic is similar to updateTask, can be refactored similarly if needed
-  // For now, keep as is or refactor to its own HOF if required
 
   const addSideTask = useCallback(
     AddSideTask({
       currentTaskList,
-      setCurrentTaskList,
-      updateTaskListStatus,
-      createEmptyTask,
+      setCurrentTaskList
     }),
-    [currentTaskList, setCurrentTaskList, updateTaskListStatus, createEmptyTask]
+    [currentTaskList, setCurrentTaskList]
   );
 
   const removeSideTask = useCallback(
     RemoveSideTask({
       currentTaskList,
-      setCurrentTaskList,
-      updateTaskListStatus,
+      setCurrentTaskList
     }),
-    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+    [currentTaskList, setCurrentTaskList]
   );
 
   const toggleTaskCompletion = useCallback(
@@ -136,11 +113,9 @@ export function usePowerListService() {
       currentTaskList,
       isEditing,
       currentDate,
-      setCurrentTaskList,
-      updateTaskStatus: powerList.updateTaskStatus,
-      updateTaskListStatus,
+      setCurrentTaskList
     }),
-    [currentTaskList, isEditing, currentDate, setCurrentTaskList, powerList.updateTaskStatus, updateTaskListStatus]
+    [currentTaskList, isEditing, currentDate, setCurrentTaskList]
   );
 
   const saveTaskList = useCallback(
@@ -149,11 +124,9 @@ export function usePowerListService() {
       currentDate,
       today,
       setCurrentTaskList,
-      updateTaskListStatus,
-      saveTasksForDate: powerList.saveTasksForDate,
-      setIsEditing,
+      setIsEditing
     }),
-    [currentTaskList, currentDate, today, setCurrentTaskList, updateTaskListStatus, powerList.saveTasksForDate, setIsEditing]
+    [currentTaskList, currentDate, today, setCurrentTaskList, setIsEditing]
   );
 
   const toggleEditMode = useCallback(
@@ -164,12 +137,7 @@ export function usePowerListService() {
     [isEditing, setIsEditing]
   );
 
-  const getStats = useCallback(
-    GetStats({
-      getAllTaskHistory: powerList.getAllTaskHistory,
-    }),
-    [powerList.getAllTaskHistory]
-  );
+  const getStats = useCallback(GetStats(), []);
 
   const handleKeyDown = useCallback(
     HandleKeyDown({
@@ -179,10 +147,6 @@ export function usePowerListService() {
     }),
     [currentTaskList, powerListRefs, sideTaskRefs]
   );
-
-  useEffect(() => {
-    initializeApp();
-  }, [initializeApp]);
 
   return {
     state: {

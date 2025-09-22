@@ -1,3 +1,5 @@
+import { updateTaskListStatus } from '@/logic/powerList';
+import powerList from '@/controllers/powerList';
 import { TaskList } from '@/types/powerList';
 
 type SaveTaskListArgs = {
@@ -5,8 +7,6 @@ type SaveTaskListArgs = {
   currentDate: string;
   today: string;
   setCurrentTaskList: (taskList: TaskList) => void;
-  updateTaskListStatus: (taskList: TaskList, isToday: boolean) => TaskList;
-  saveTasksForDate: (date: string, taskList: TaskList) => void;
   setIsEditing: (isEditing: boolean) => void;
 };
 
@@ -15,15 +15,13 @@ const SaveTaskList = ({
   currentDate,
   today,
   setCurrentTaskList,
-  updateTaskListStatus,
-  saveTasksForDate,
   setIsEditing,
 }: SaveTaskListArgs) => () => {
   if (!currentTaskList) return;
 
   const updatedList = updateTaskListStatus(currentTaskList, currentDate === today);
   setCurrentTaskList(updatedList);
-  saveTasksForDate(currentDate, updatedList);
+  powerList.saveTasksForDate(currentDate, updatedList);
   setIsEditing(false);
 };
 

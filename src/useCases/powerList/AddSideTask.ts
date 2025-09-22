@@ -1,16 +1,15 @@
-import { Task, TaskList } from '@/types/powerList';
+import { createEmptyTask, updateTaskListStatus } from '@/logic/powerList';
+import { TaskList } from '@/types/powerList';
 
 type AddSideTaskArgs = {
   currentTaskList: TaskList | null;
   setCurrentTaskList: (taskList: TaskList) => void;
-  createEmptyTask: (index: number) => Task;
-  updateTaskListStatus: (taskList: TaskList) => TaskList;
 };
 
-const AddSideTask = ({ currentTaskList, setCurrentTaskList, createEmptyTask, updateTaskListStatus }: AddSideTaskArgs) => () => {
+const AddSideTask = ({ currentTaskList, setCurrentTaskList }: AddSideTaskArgs) => () => {
   if (!currentTaskList) return;
 
-  const newTask = createEmptyTask(currentTaskList.sideTasks.length);
+  const newTask = createEmptyTask();
   const updatedSideTasks = [...currentTaskList.sideTasks, newTask];
 
   const updatedList = updateTaskListStatus({

@@ -1,12 +1,12 @@
+import { updateTaskListStatus } from '@/logic/powerList';
 import { TaskList } from '@/types/powerList';
 
 type RemoveSideTaskArgs = {
   currentTaskList: TaskList | null;
   setCurrentTaskList: (taskList: TaskList) => void;
-  updateTaskListStatus: (taskList: TaskList) => TaskList;
 };
 
-const RemoveSideTask = ({ currentTaskList, setCurrentTaskList, updateTaskListStatus }: RemoveSideTaskArgs) =>
+const RemoveSideTask = ({ currentTaskList, setCurrentTaskList }: RemoveSideTaskArgs) =>
   (taskId: string) => {
     if (!currentTaskList) return;
 

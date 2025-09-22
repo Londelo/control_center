@@ -1,21 +1,19 @@
 import { TaskList } from '@/types/powerList';
+import { updateTaskListStatus } from '@/logic/powerList';
+import powerList from '@/controllers/powerList';
 
 type ToggleTaskCompletionArgs = {
   currentTaskList: TaskList | null;
   isEditing: boolean;
   currentDate: string;
   setCurrentTaskList: (taskList: TaskList) => void;
-  updateTaskStatus: (date: string, taskId: string, completed: boolean) => void;
-  updateTaskListStatus: (taskList: TaskList) => TaskList;
 };
 
 const ToggleTaskCompletion = ({
   currentTaskList,
   isEditing,
   currentDate,
-  setCurrentTaskList,
-  updateTaskStatus,
-  updateTaskListStatus,
+  setCurrentTaskList
 }: ToggleTaskCompletionArgs) => (taskId: string) => {
   if (!currentTaskList || isEditing) return;
 
@@ -27,7 +25,7 @@ const ToggleTaskCompletion = ({
   const newCompletedStatus = !task.completed;
 
   // Update in backend
-  updateTaskStatus(currentDate, taskId, newCompletedStatus);
+  powerList.updateTaskStatus(currentDate, taskId, newCompletedStatus);
 
   // Update local state for both task lists
   const updatedTasks = currentTaskList.tasks.map(t =>

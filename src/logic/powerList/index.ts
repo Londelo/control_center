@@ -1,12 +1,148 @@
-export { default as AddSideTask } from './AddSideTask';
-export { default as GetStats } from './GetStats';
-export { default as HandleKeyDown } from './HandleKeyDown';
-export { default as InitializeApp } from './InitializeApp';
-export { default as LoadTaskListForDate } from './LoadTaskListForDate';
-export { default as NavigateToDate } from './NavigateToDate';
-export { default as RemoveSideTask } from './RemoveSideTask';
-export { default as SaveTaskList } from './SaveTaskList';
-export { default as ToggleEditMode } from './ToggleEditMode';
-export { default as ToggleTaskCompletion } from './ToggleTaskCompletion';
-export { default as UpdateSideTask } from './UpdateSideTask';
-export { default as UpdateTask } from './UpdateTask';
+import powerList from '@/controllers/powerList';
+import { Task, TaskList, AppStats } from '@/types/powerList';
+import { v4 } from 'uuid'
+
+export function normalizeTaskList(taskList: TaskList): TaskList {
+  return {
+    ...taskList,
+    sideTasks: taskList.sideTasks || [],
+    tasks: taskList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
+  };
+}
+
+export function createEmptyTask(): Task {
+  return {
+    id: v4(),
+    text: '',
+    completed: false,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export function createTaskList(date: string, tasks?: Task[], sideTasks?: Task[]): TaskList {
+  const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
+  const defaultSideTasks = sideTasks || [];
+
+  return {
+    id: v4(),
+    date,
+    tasks: defaultTasks,
+    sideTasks: defaultSideTasks,
+    isWin: false,
+    isLoss: false,
+    isComplete: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export function isTaskListComplete(taskList: TaskList): boolean {
+  return taskList.tasks.every(task => task.text.trim() !== '');
+}
+
+export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
+  // If task list is not complete
+  if (!isTaskListComplete(taskList)) {
+    // Only today can be "in progress", other dates are losses if incomplete
+    if (isToday) {
+      return { isWin: false, isLoss: false };
+    } else {
+      return { isWin: false, isLoss: true };
+    }
+  }
+
+  const completedTasks = taskList.tasks.filter(task => task.completed).length;
+  const isWin = completedTasks === 5;
+  const isLoss = !isWin;
+
+  return { isWin, isLoss };
+}
+
+export function updateTaskListStatus(taskList: TaskList, isToday: boolean = false): TaskList {
+  const { isWin, isLoss } = calculateWinLoss(taskList, isToday);
+
+  return {
+    ...taskList,
+    isWin,
+    isLoss,
+    isComplete: isTaskListComplete(taskList),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tasks: Task[], sideTasks: Task[] } {
+  const dates = Object.keys(taskHistory).sort().reverse();
+
+  for (const date of dates) {
+    const taskList = normalizeTaskList(taskHistory[date]);
+    if (taskList && isTaskListComplete(taskList)) {
+      const tasks = taskList.tasks.map((task) => ({
+        ...createEmptyTask(),
+        text: task.text,
+      }));
+      const sideTasks = taskList.sideTasks.map((task) => ({
+        ...createEmptyTask(),
+        text: task.text,
+      }));
+      return { tasks, sideTasks };
+    }
+  }
+
+  return {
+    tasks: Array.from({ length: 5 }, () => createEmptyTask()),
+    sideTasks: []
+  };
+}
+
+export function calculateAppStats(taskHistory: Record<string, TaskList>): AppStats {
+  const taskLists = Object.values(taskHistory);
+  // Only count completed lists for stats
+  const completeLists = taskLists.filter(list => isTaskListComplete(list));
+
+  const totalWins = completeLists.filter(list => list.isWin).length;
+  const totalLosses = completeLists.filter(list => list.isLoss).length;
+  const winRate = completeLists.length > 0 ? (totalWins / completeLists.length) * 100 : 0;
+
+  // Calculate current streak
+  const sortedDates = Object.keys(taskHistory).sort().reverse();
+  let currentStreak = 0;
+
+  for (const date of sortedDates) {
+    const taskList = taskHistory[date];
+    // Only count completed lists for streak calculation
+    if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
+      currentStreak++;
+    } else if (taskList && isTaskListComplete(taskList)) {
+      // Break streak only on completed losses, not in-progress days
+      break;
+    }
+  }
+
+  // Calculate longest streak
+  let longestStreak = 0;
+  let tempStreak = 0;
+
+  for (const date of sortedDates.reverse()) {
+    const taskList = taskHistory[date];
+    if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
+      tempStreak++;
+      longestStreak = Math.max(longestStreak, tempStreak);
+    } else if (taskList && isTaskListComplete(taskList)) {
+      // Reset streak only on completed losses, not in-progress days
+      tempStreak = 0;
+    }
+  }
+
+  return {
+    totalWins,
+    totalLosses,
+    currentStreak,
+    longestStreak,
+    winRate: Math.round(winRate),
+  };
+}
+
+export const GetStats = () => () => {
+  const allHistory = powerList.getAllTaskHistory();
+  return calculateAppStats(allHistory);
+};
