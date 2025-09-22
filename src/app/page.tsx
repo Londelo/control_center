@@ -119,26 +119,26 @@ export default function Home() {
 
       {/* Footer - Action Buttons */}
       <footer className="text-center py-8 border-t border-gray-200 space-y-4">
-        {isEditing ? (
-          <button
-            onClick={saveTaskList}
-            disabled={!canSave}
-            className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
-          >
-            Save Lists
-          </button>
-        ) : (
-          <button
-            onClick={toggleEditMode}
-            className="inline-flex items-center gap-2 px-6 py-2 bg-black text-white font-mono"
-          >
-            <Edit3 size={16} />
-            Edit Tasks
-          </button>
-        )}
+        <div className="flex justify-center gap-4">
+          {isEditing ? (
+            <button
+              onClick={saveTaskList}
+              disabled={!canSave}
+              className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
+            >
+              Save Lists
+            </button>
+          ) : (
+            <button
+              onClick={toggleEditMode}
+              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors"
+            >
+              <Edit3 size={16} />
+              Edit Tasks
+            </button>
+          )}
 
-        {/* Stats Button */}
-        <div>
+          {/* Stats Button */}
           <Link href="/stats">
             <button className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors">
               <BarChart3 size={16} />
