@@ -142,7 +142,7 @@ export default function Home() {
           <Link href="/stats">
             <button className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors">
               <BarChart3 size={16} />
-              View Standards
+              View Stats
             </button>
           </Link>
         </div>
