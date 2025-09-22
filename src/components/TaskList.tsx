@@ -1,3 +1,5 @@
+"use client"
+
 import { TaskList as TaskListType } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
 

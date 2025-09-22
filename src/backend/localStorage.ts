@@ -1,3 +1,5 @@
+"use client"
+
 const upsert = <T>(key: string, value: T): void =>
   localStorage.setItem(key, JSON.stringify(value));
 

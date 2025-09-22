@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import React from 'react';
 import { TaskList } from '@/types/powerList';

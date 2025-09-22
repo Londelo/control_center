@@ -1,3 +1,5 @@
+"use client"
+
 import { Task } from '@/types/powerList';
 import { Check } from 'lucide-react';
 

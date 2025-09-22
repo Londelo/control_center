@@ -1,3 +1,5 @@
+"use client"
+
 import { Task } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
 import { Plus, X } from 'lucide-react';
@@ -14,11 +16,11 @@ interface SideTaskListProps {
   onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
-export function SideTaskList({ 
-  tasks, 
-  isEditing, 
-  showCheckboxes, 
-  onTaskUpdate, 
+export function SideTaskList({
+  tasks,
+  isEditing,
+  showCheckboxes,
+  onTaskUpdate,
   onTaskToggle,
   onAddTask,
   onRemoveTask,
@@ -48,7 +50,7 @@ export function SideTaskList({
           )}
         </div>
       ))}
-      
+
       {isEditing && (
         <button
           onClick={onAddTask}

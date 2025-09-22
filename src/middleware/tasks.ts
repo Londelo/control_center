@@ -1,3 +1,5 @@
+"use client"
+
 import { TaskList } from '@/types/powerList';
 import LocalStore from '../backend/localStorage';
 
