@@ -40,8 +40,9 @@ export function isTaskListComplete(taskList: TaskList): boolean {
 }
 
 export function calculateWinLoss(taskList: TaskList): { isWin: boolean; isLoss: boolean } {
+  // If task list is not complete, it's neither a win nor a loss (in progress)
   if (!isTaskListComplete(taskList)) {
-    return { isWin: false, isLoss: true };
+    return { isWin: false, isLoss: false };
   }
 
   const completedTasks = taskList.tasks.filter(task => task.completed).length;
@@ -104,6 +105,7 @@ export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tas
 
 export function calculateAppStats(taskHistory: Record<string, TaskList>): AppStats {
   const taskLists = Object.values(taskHistory);
+  // Only count completed lists for stats
   const completeLists = taskLists.filter(list => isTaskListComplete(list));
 
   const totalWins = completeLists.filter(list => list.isWin).length;
@@ -116,9 +118,11 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
 
   for (const date of sortedDates) {
     const taskList = taskHistory[date];
+    // Only count completed lists for streak calculation
     if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
       currentStreak++;
-    } else {
+    } else if (taskList && isTaskListComplete(taskList)) {
+      // Break streak only on completed losses, not in-progress days
       break;
     }
   }
@@ -132,7 +136,8 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
     if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
       tempStreak++;
       longestStreak = Math.max(longestStreak, tempStreak);
-    } else {
+    } else if (taskList && isTaskListComplete(taskList)) {
+      // Reset streak only on completed losses, not in-progress days
       tempStreak = 0;
     }
   }

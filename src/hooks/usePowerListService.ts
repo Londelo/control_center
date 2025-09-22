@@ -63,8 +63,20 @@ export function usePowerListService() {
 
             for (const missedDay of missedDays) {
               const missedList = createTaskList(missedDay);
-              missedList.isLoss = true;
-              missedList.isComplete = false;
+              // Missed days are losses only if they had tasks defined
+              const { tasks: recentTasks } = getMostRecentTasks(allHistory);
+              const hadTasks = recentTasks.some(task => task.text.trim() !== '');
+              
+              if (hadTasks) {
+                // If there were tasks to do, missing the day is a loss
+                missedList.tasks = recentTasks;
+                missedList.isLoss = true;
+                missedList.isComplete = true;
+              } else {
+                // If no tasks were defined, it's neither win nor loss
+                missedList.isLoss = false;
+                missedList.isComplete = false;
+              }
               powerList.saveTasksForDate(missedDay, missedList);
             }
           }

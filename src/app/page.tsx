@@ -61,9 +61,9 @@ export default function Home() {
           <span className={`${
             currentTaskList.isWin ? 'text-green-600' : 
             currentTaskList.isLoss ? 'text-red-600' : 
-            'text-black'
+            'text-blue-600'
           }`}>
-            {currentTaskList.isWin ? 'WIN' : currentTaskList.isLoss ? 'LOSE' : 'WORKING'}
+            {currentTaskList.isWin ? 'WIN' : currentTaskList.isLoss ? 'LOSE' : 'IN PROGRESS'}
           </span>
         </div>
 
