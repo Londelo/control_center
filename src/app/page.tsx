@@ -18,13 +18,10 @@ const getListStatus = (currentTaskList: TaskListType, currentDate: string, today
 
   return purpose === 'text' ? 'LOSE' : 'text-red-600'
 }
+
 export default function Home() {
   const {
-    today,
-    currentTaskList,
-    currentDate,
-    isEditing,
-    isLoading,
+    state,
     updateTask,
     updateSideTask,
     addSideTask,
@@ -33,14 +30,10 @@ export default function Home() {
     saveTaskList,
     toggleEditMode,
     navigateToDate,
-    powerListRefs,
-    sideTaskRefs,
-    handleKeyDown,
-    canSave,
-    canNavigateNext,
+    handleKeyDown
   } = usePowerListService();
 
-  if (isLoading) {
+  if (state.isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="font-mono">Loading your PowerList...</div>
@@ -48,7 +41,7 @@ export default function Home() {
     );
   }
 
-  if (!currentTaskList) {
+  if (!state.currentTaskList) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="font-mono">Error loading PowerList</div>
@@ -69,16 +62,16 @@ export default function Home() {
         </button>
 
         <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
-          <span>{currentDate} -</span>
-          <span className={getListStatus(currentTaskList, currentDate, today, 'color')}>
-            {getListStatus(currentTaskList, currentDate, today)}
+          <span>{state.currentDate} -</span>
+          <span className={getListStatus(state.currentTaskList, state.currentDate, state.today, 'color')}>
+            {getListStatus(state.currentTaskList, state.currentDate, state.today)}
           </span>
         </div>
 
         {/* Right Arrow */}
         <button
           onClick={() => navigateToDate('next')}
-          disabled={!canNavigateNext}
+          disabled={!state.canNavigateNext}
           className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         >
           <ChevronRight size={24} />
@@ -94,12 +87,12 @@ export default function Home() {
             <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
 
             <TaskList
-              taskList={currentTaskList}
-              isEditing={isEditing}
-              showCheckboxes={!isEditing && currentTaskList.isComplete}
+              taskList={state.currentTaskList}
+              isEditing={state.isEditing}
+              showCheckboxes={!state.isEditing && state.currentTaskList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
-              taskRefs={powerListRefs}
+              taskRefs={state.powerListRefs}
               onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
@@ -111,14 +104,14 @@ export default function Home() {
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
             <SideTaskList
-              tasks={currentTaskList.sideTasks}
-              isEditing={isEditing}
-              showCheckboxes={!isEditing && currentTaskList.isComplete}
+              tasks={state.currentTaskList.sideTasks}
+              isEditing={state.isEditing}
+              showCheckboxes={!state.isEditing && state.currentTaskList.isComplete}
               onTaskUpdate={updateSideTask}
               onTaskToggle={toggleTaskCompletion}
               onAddTask={addSideTask}
               onRemoveTask={removeSideTask}
-              taskRefs={sideTaskRefs}
+              taskRefs={state.sideTaskRefs}
               onKeyDown={(index, e) => handleKeyDown('side', index, e)}
             />
           </div>
@@ -128,10 +121,10 @@ export default function Home() {
       {/* Footer - Action Buttons */}
       <footer className="text-center py-8 border-t border-gray-200 space-y-4">
         <div className="flex justify-center gap-4">
-          {isEditing ? (
+          {state.isEditing ? (
             <button
               onClick={saveTaskList}
-              disabled={!canSave}
+              disabled={!state.canSave}
               className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
             >
               Save Lists

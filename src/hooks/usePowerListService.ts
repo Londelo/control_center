@@ -1,29 +1,45 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TaskList } from '@/types/powerList';
 import powerList from '@/middleware/powerList';
+import {
+  AddSideTask,
+  GetStats,
+  HandleKeyDown,
+  InitializeApp,
+  LoadTaskListForDate,
+  NavigateToDate,
+  RemoveSideTask,
+  SaveTaskList,
+  ToggleEditMode,
+  ToggleTaskCompletion,
+  UpdateSideTask,
+  UpdateTask,
+} from '@/logic/powerList';
 import {
   createTaskList,
   updateTaskListStatus,
   generateMissedDays,
   getMostRecentTasks,
   isTaskListComplete,
-  calculateAppStats,
   normalizeTaskList,
   createEmptyTask,
-} from '@/logic/powerListLogic';
+} from '@/logic/powerList/powerListLogic';
 
 export function usePowerListService() {
+  const today = new Date().toLocaleDateString();
   const [currentTaskList, setCurrentTaskList] = useState<TaskList | null>(null);
-  const [currentDate, setCurrentDate] = useState<string>(new Date().toLocaleDateString());
+  const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Create refs for all inputs
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
+
+  const canNavigateNext = currentDate < today;
 
   // Initialize refs
   useEffect(() => {
@@ -41,246 +57,146 @@ export function usePowerListService() {
     }
   }, [currentTaskList?.sideTasks.length]);
 
-  const today = new Date().toLocaleDateString();
+  const loadTaskListForDate = useCallback(
+    LoadTaskListForDate({
+      setIsLoading,
+      setCurrentTaskList,
+      setIsEditing,
+      today,
+      currentDate,
+      powerList,
+      generateMissedDays,
+      createTaskList,
+      getMostRecentTasks,
+      normalizeTaskList,
+      isTaskListComplete,
+    }),
+    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate, powerList]
+  );
 
-  const canNavigateNext = currentDate < today;
+  const initializeApp = useCallback(
+    InitializeApp({
+      loadTaskListForDate,
+      currentDate,
+    }),
+    [loadTaskListForDate, currentDate]
+  );
 
-  const loadTaskListForDate = useCallback(async (date: string) => {
-    setIsLoading(true);
+  const navigateToDate = useCallback(
+    NavigateToDate({
+      currentDate,
+      today,
+      setCurrentDate,
+    }),
+    [currentDate, today, setCurrentDate]
+  );
 
-    try {
-      // Get task list for the specified date
-      let taskList = powerList.getTasksByDate(date);
+  const updateTask = useCallback(
+    UpdateTask({
+      currentTaskList,
+      setCurrentTaskList,
+      updateTaskListStatus,
+    }),
+    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+  );
 
-      if (!taskList) {
-        // If it's today and no list exists, handle missed days
-        if (date === today) {
-          const lastAccessDate = powerList.getLastAccessDate();
-          const allHistory = powerList.getAllTaskHistory();
+  const updateSideTask = useCallback(
+    UpdateSideTask({
+      currentTaskList,
+      setCurrentTaskList,
+      updateTaskListStatus,
+    }),
+    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+  );
 
-          if (lastAccessDate && lastAccessDate !== today) {
-            // Generate missed days as losses
-            const missedDays = generateMissedDays(lastAccessDate, today);
+  // updateSideTask logic is similar to updateTask, can be refactored similarly if needed
+  // For now, keep as is or refactor to its own HOF if required
 
-            for (const missedDay of missedDays) {
-              const missedList = createTaskList(missedDay);
-              // Missed days are losses only if they had tasks defined
-              const { tasks: recentTasks } = getMostRecentTasks(allHistory);
-              const hadTasks = recentTasks.some(task => task.text.trim() !== '');
+  const addSideTask = useCallback(
+    AddSideTask({
+      currentTaskList,
+      setCurrentTaskList,
+      updateTaskListStatus,
+      createEmptyTask,
+    }),
+    [currentTaskList, setCurrentTaskList, updateTaskListStatus, createEmptyTask]
+  );
 
-              if (hadTasks) {
-                // If there were tasks to do, missing the day is a loss
-                missedList.tasks = recentTasks;
-                missedList.isLoss = true;
-                missedList.isComplete = true;
-              } else {
-                // If no tasks were defined, it's neither win nor loss
-                missedList.isLoss = false;
-                missedList.isComplete = false;
-              }
-              powerList.saveTasksForDate(missedDay, missedList);
-            }
-          }
+  const removeSideTask = useCallback(
+    RemoveSideTask({
+      currentTaskList,
+      setCurrentTaskList,
+      updateTaskListStatus,
+    }),
+    [currentTaskList, setCurrentTaskList, updateTaskListStatus]
+  );
 
-          // Create today's list from most recent tasks
-          const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
-          taskList = createTaskList(date, recentTasks, recentSideTasks);
-          powerList.saveTasksForDate(date, taskList);
-        } else {
-          // For other dates, create empty list
-          taskList = createTaskList(date);
-        }
-      } else {
-        // Normalize existing task list
-        taskList = normalizeTaskList(taskList);
-      }
+  const toggleTaskCompletion = useCallback(
+    ToggleTaskCompletion({
+      currentTaskList,
+      isEditing,
+      currentDate,
+      setCurrentTaskList,
+      updateTaskStatus: powerList.updateTaskStatus,
+      updateTaskListStatus,
+    }),
+    [currentTaskList, isEditing, currentDate, setCurrentTaskList, powerList.updateTaskStatus, updateTaskListStatus]
+  );
 
-      setCurrentTaskList(taskList);
-      setIsEditing(!isTaskListComplete(taskList));
-    } catch (error) {
-      console.error('Error initializing app:', error);
-      // Fallback: create empty list
-      const fallbackList = createTaskList(date);
-      setCurrentTaskList(fallbackList);
-      setIsEditing(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [today]);
+  const saveTaskList = useCallback(
+    SaveTaskList({
+      currentTaskList,
+      currentDate,
+      today,
+      setCurrentTaskList,
+      updateTaskListStatus,
+      saveTasksForDate: powerList.saveTasksForDate,
+      setIsEditing,
+    }),
+    [currentTaskList, currentDate, today, setCurrentTaskList, updateTaskListStatus, powerList.saveTasksForDate, setIsEditing]
+  );
 
-  const initializeApp = useCallback(async () => {
-    await loadTaskListForDate(currentDate);
-  }, [loadTaskListForDate, currentDate]);
+  const toggleEditMode = useCallback(
+    ToggleEditMode({
+      isEditing,
+      setIsEditing,
+    }),
+    [isEditing, setIsEditing]
+  );
 
-  const navigateToDate = useCallback((direction: 'prev' | 'next') => {
-    // Prevent navigating to future dates
-    if (direction === 'next' && currentDate >= today) {
-      return;
-    }
+  const getStats = useCallback(
+    GetStats({
+      getAllTaskHistory: powerList.getAllTaskHistory,
+    }),
+    [powerList.getAllTaskHistory]
+  );
 
-    const currentDateObj = new Date(currentDate);
-    if (direction === 'prev') {
-      currentDateObj.setDate(currentDateObj.getDate() - 1);
-    } else {
-      currentDateObj.setDate(currentDateObj.getDate() + 1);
-    }
-    const newDate = currentDateObj.toLocaleDateString();
-    setCurrentDate(newDate);
-  }, [currentDate, today]);
-
-  const updateTask = useCallback((taskId: string, text: string) => {
-    if (!currentTaskList) return;
-
-    const updatedTasks = currentTaskList.tasks.map(task =>
-      task.id === taskId ? { ...task, text } : task
-    );
-
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
-      tasks: updatedTasks,
-    }, currentDate === today);
-
-    setCurrentTaskList(updatedList);
-  }, [currentTaskList]);
-
-  const updateSideTask = useCallback((taskId: string, text: string) => {
-    if (!currentTaskList) return;
-
-    const updatedSideTasks = currentTaskList.sideTasks.map(task =>
-      task.id === taskId ? { ...task, text } : task
-    );
-
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
-      sideTasks: updatedSideTasks,
-    });
-
-    setCurrentTaskList(updatedList);
-  }, [currentTaskList]);
-
-  const addSideTask = useCallback(() => {
-    if (!currentTaskList) return;
-
-    const newTask = createEmptyTask(currentTaskList.sideTasks.length);
-    const updatedSideTasks = [...currentTaskList.sideTasks, newTask];
-
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
-      sideTasks: updatedSideTasks,
-    });
-
-    setCurrentTaskList(updatedList);
-  }, [currentTaskList]);
-
-  const removeSideTask = useCallback((taskId: string) => {
-    if (!currentTaskList) return;
-
-    const updatedSideTasks = currentTaskList.sideTasks.filter(task => task.id !== taskId);
-
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
-      sideTasks: updatedSideTasks,
-    });
-
-    setCurrentTaskList(updatedList);
-  }, [currentTaskList]);
-
-  const toggleTaskCompletion = useCallback((taskId: string) => {
-    if (!currentTaskList || isEditing) return;
-
-    // Check both main tasks and side tasks
-    const task = currentTaskList.tasks.find(t => t.id === taskId) ||
-                 currentTaskList.sideTasks.find(t => t.id === taskId);
-    if (!task) return;
-
-    const newCompletedStatus = !task.completed;
-
-    // Update in backend
-    powerList.updateTaskStatus(currentDate, taskId, newCompletedStatus);
-
-    // Update local state for both task lists
-    const updatedTasks = currentTaskList.tasks.map(t =>
-      t.id === taskId ? { ...t, completed: newCompletedStatus } : t
-    );
-
-    const updatedSideTasks = currentTaskList.sideTasks.map(t =>
-      t.id === taskId ? { ...t, completed: newCompletedStatus } : t
-    );
-
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
-      tasks: updatedTasks,
-      sideTasks: updatedSideTasks,
-    });
-
-    setCurrentTaskList(updatedList);
-    powerList.saveTasksForDate(currentDate, updatedList);
-  }, [currentTaskList, isEditing, currentDate]);
-
-  const saveTaskList = useCallback(() => {
-    if (!currentTaskList) return;
-
-    const updatedList = updateTaskListStatus(currentTaskList, currentDate === today);
-    setCurrentTaskList(updatedList);
-    powerList.saveTasksForDate(currentDate, updatedList);
-    setIsEditing(false);
-  }, [currentTaskList, currentDate]);
-
-  const toggleEditMode = useCallback(() => {
-    setIsEditing(!isEditing);
-  }, [isEditing]);
-
-  const getStats = useCallback(() => {
-    const allHistory = powerList.getAllTaskHistory();
-    return calculateAppStats(allHistory);
-  }, []);
-
-  const handleKeyDown = useCallback((listType: 'power' | 'side', index: number, e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-
-      const powerListLength = 5;
-      const sideTaskLength = currentTaskList?.sideTasks.length || 0;
-      const totalInputs = powerListLength + sideTaskLength;
-
-      let currentGlobalIndex: number;
-
-      if (listType === 'power') {
-        currentGlobalIndex = index;
-      } else {
-        currentGlobalIndex = powerListLength + index;
-      }
-
-      let nextGlobalIndex: number;
-
-      if (e.key === 'ArrowDown') {
-        nextGlobalIndex = (currentGlobalIndex + 1) % totalInputs;
-      } else {
-        nextGlobalIndex = (currentGlobalIndex - 1 + totalInputs) % totalInputs;
-      }
-
-      // Focus the next input
-      if (nextGlobalIndex < powerListLength) {
-        // Focus power list input
-        powerListRefs.current[nextGlobalIndex]?.current?.focus();
-      } else {
-        // Focus side task input
-        const sideIndex = nextGlobalIndex - powerListLength;
-        sideTaskRefs.current[sideIndex]?.current?.focus();
-      }
-    }
-  }, [currentTaskList?.sideTasks.length]);
+  const handleKeyDown = useCallback(
+    HandleKeyDown({
+      currentTaskList,
+      powerListRefs: powerListRefs.current,
+      sideTaskRefs: sideTaskRefs.current,
+    }),
+    [currentTaskList, powerListRefs, sideTaskRefs]
+  );
 
   useEffect(() => {
     initializeApp();
   }, [initializeApp]);
 
   return {
-    today,
-    currentTaskList,
-    currentDate,
-    isEditing,
-    isLoading,
+    state: {
+      today,
+      currentTaskList,
+      currentDate,
+      isEditing,
+      isLoading,
+      powerListRefs: powerListRefs.current,
+      sideTaskRefs: sideTaskRefs.current,
+      isWin: currentTaskList?.isWin || false,
+      canSave: currentTaskList ? isTaskListComplete(currentTaskList) : false,
+      canNavigateNext
+    },
     updateTask,
     updateSideTask,
     addSideTask,
@@ -290,11 +206,6 @@ export function usePowerListService() {
     toggleEditMode,
     getStats,
     navigateToDate,
-    powerListRefs: powerListRefs.current,
-    sideTaskRefs: sideTaskRefs.current,
     handleKeyDown,
-    canSave: currentTaskList ? isTaskListComplete(currentTaskList) : false,
-    isWin: currentTaskList?.isWin || false,
-    canNavigateNext,
   };
 }
