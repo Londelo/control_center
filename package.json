@@ -1,7 +1,8 @@
 {
   "name": "control_center",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": ["dist"],
   "repository": "https://github.com/Londelo/control_center.git",
   "author": "londelo",
   "license": "MIT",
