@@ -17,7 +17,7 @@ import {
 
 export function usePowerListService() {
   const [currentTaskList, setCurrentTaskList] = useState<TaskList | null>(null);
-  const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [currentDate, setCurrentDate] = useState<string>(new Date().toLocaleDateString());
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,7 +41,8 @@ export function usePowerListService() {
     }
   }, [currentTaskList?.sideTasks.length]);
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toLocaleDateString();
+
   const canNavigateNext = currentDate < today;
 
   const loadTaskListForDate = useCallback(async (date: string) => {
@@ -66,7 +67,7 @@ export function usePowerListService() {
               // Missed days are losses only if they had tasks defined
               const { tasks: recentTasks } = getMostRecentTasks(allHistory);
               const hadTasks = recentTasks.some(task => task.text.trim() !== '');
-              
+
               if (hadTasks) {
                 // If there were tasks to do, missing the day is a loss
                 missedList.tasks = recentTasks;
@@ -112,7 +113,6 @@ export function usePowerListService() {
   }, [loadTaskListForDate, currentDate]);
 
   const navigateToDate = useCallback((direction: 'prev' | 'next') => {
-    console.log(direction)
     // Prevent navigating to future dates
     if (direction === 'next' && currentDate >= today) {
       return;
@@ -124,7 +124,7 @@ export function usePowerListService() {
     } else {
       currentDateObj.setDate(currentDateObj.getDate() + 1);
     }
-    const newDate = currentDateObj.toISOString().split('T')[0];
+    const newDate = currentDateObj.toLocaleDateString();
     setCurrentDate(newDate);
   }, [currentDate, today]);
 
@@ -276,6 +276,7 @@ export function usePowerListService() {
   }, [initializeApp]);
 
   return {
+    today,
     currentTaskList,
     currentDate,
     isEditing,

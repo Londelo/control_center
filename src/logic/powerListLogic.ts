@@ -77,7 +77,7 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
   start.setDate(start.getDate() + 1); // Start from day after last date
 
   while (start < end) {
-    missed.push(start.toISOString().split('T')[0]);
+    missed.push(start.toLocaleDateString());
     start.setDate(start.getDate() + 1);
   }
 

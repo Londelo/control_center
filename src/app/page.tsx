@@ -3,11 +3,24 @@
 import { TaskList } from "@/components/TaskList";
 import { SideTaskList } from "@/components/SideTaskList";
 import { usePowerListService } from "@/hooks/usePowerListService";
-import { Trophy, Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { TaskList as TaskListType } from "@/types/powerList";
 
+const getListStatus = (currentTaskList: TaskListType, currentDate: string, today: string, purpose = 'text') => {
+  if (currentTaskList.isWin) {
+    return purpose === 'text' ? 'WIN' : 'text-green-600'
+  }
+
+  if(currentDate === today) {
+    return purpose === 'text' ? 'IN PROGRESS' : 'text-blue-600'
+  }
+
+  return purpose === 'text' ? 'LOSE' : 'text-red-600'
+}
 export default function Home() {
   const {
+    today,
     currentTaskList,
     currentDate,
     isEditing,
@@ -24,7 +37,6 @@ export default function Home() {
     sideTaskRefs,
     handleKeyDown,
     canSave,
-    isWin,
     canNavigateNext,
   } = usePowerListService();
 
@@ -58,12 +70,8 @@ export default function Home() {
 
         <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
           <span>{currentDate} -</span>
-          <span className={`${
-            currentTaskList.isWin ? 'text-green-600' : 
-            currentTaskList.isLoss ? 'text-red-600' : 
-            'text-blue-600'
-          }`}>
-            {currentTaskList.isWin ? 'WIN' : currentTaskList.isLoss ? 'LOSE' : 'IN PROGRESS'}
+          <span className={getListStatus(currentTaskList, currentDate, today, 'color')}>
+            {getListStatus(currentTaskList, currentDate, today)}
           </span>
         </div>
 
