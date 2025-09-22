@@ -56,8 +56,15 @@ export default function Home() {
           <ChevronLeft size={24} />
         </button>
 
-        <div className="text-lg font-mono mb-2">
-          {currentDate} - {isWin ? 'WIN' : 'WORKING'}
+        <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
+          <span>{currentDate} -</span>
+          <span className={`${
+            currentTaskList.isWin ? 'text-green-600' : 
+            currentTaskList.isLoss ? 'text-red-600' : 
+            'text-black'
+          }`}>
+            {currentTaskList.isWin ? 'WIN' : currentTaskList.isLoss ? 'LOSE' : 'WORKING'}
+          </span>
         </div>
 
         {/* Right Arrow */}
@@ -69,13 +76,6 @@ export default function Home() {
           <ChevronRight size={24} />
         </button>
 
-        {/* Win Message */}
-        {isWin && !isEditing && (
-          <div className="inline-flex items-center gap-2 text-green-600 font-mono">
-            <Trophy />
-            <span>You Won the Day!</span>
-          </div>
-        )}
       </header>
 
       {/* Main Content - Two Columns */}
