@@ -153,7 +153,7 @@ export function usePowerListService() {
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       sideTasks: updatedSideTasks,
-    }, currentDate === today);
+    });
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
@@ -167,7 +167,7 @@ export function usePowerListService() {
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       sideTasks: updatedSideTasks,
-    }, currentDate === today);
+    });
 
     setCurrentTaskList(updatedList);
   }, [currentTaskList]);
@@ -220,7 +220,7 @@ export function usePowerListService() {
   const saveTaskList = useCallback(() => {
     if (!currentTaskList) return;
 
-    const updatedList = updateTaskListStatus(currentTaskList);
+    const updatedList = updateTaskListStatus(currentTaskList, currentDate === today);
     setCurrentTaskList(updatedList);
     powerList.saveTasksForDate(currentDate, updatedList);
     setIsEditing(false);
