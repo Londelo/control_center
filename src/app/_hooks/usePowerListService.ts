@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { PowerList, PowerLists } from '@/types/powerList';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
+import createMockPowerLists from '@/tools/createMockPowerLists';
 import {
   HandleMissedDays,
   LoadPowerListForDate,
@@ -54,6 +55,7 @@ export function usePowerListService() {
 
   //ON INIT
   useEffect(() => {
+    createMockPowerLists(today);
     handleMissedDays(today);
     loadPowerListForDate(today);
   }, []);
