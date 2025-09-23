@@ -8,7 +8,7 @@ const createMockPowerLists = (today: string) => {
   // Create 5 PowerLists starting from today
   for (let i = 0; i < 5; i++) {
     const date = new Date(today);
-    date.setDate(date.getDate() + i);
+    date.setDate(date.getDate() - i);
     const dateString = date.toLocaleDateString();
 
     // Create tasks with "power list item" text
