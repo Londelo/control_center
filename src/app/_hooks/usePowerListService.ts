@@ -30,7 +30,7 @@ export function usePowerListService() {
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
-  const canNavigateNext = currentDate < today;
+  const canNavigateForward = currentDate < today;
 
   const handleMissedDays = useCallback(HandleMissedDays(), [])
 
@@ -41,14 +41,14 @@ export function usePowerListService() {
       setIsEditing,
       today
     }),
-    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate]
+    [setIsLoading, setCurrentTaskList, setIsEditing, today]
   );
 
   //ON INIT
   useEffect(() => {
     handleMissedDays(today);
     loadTaskListForDate(today);
-  }, [handleMissedDays, loadTaskListForDate]);
+  }, []);
 
   // Initialize refs
   useEffect(() => {
@@ -156,9 +156,8 @@ export function usePowerListService() {
       isLoading,
       powerListRefs: powerListRefs.current,
       sideTaskRefs: sideTaskRefs.current,
-      isWin: currentTaskList?.isWin || false,
       canSave: currentTaskList ? isTaskListComplete(currentTaskList) : false,
-      canNavigateNext
+      canNavigateForward
     },
     updateTask,
     updateSideTask,

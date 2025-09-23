@@ -41,8 +41,11 @@ export function isTaskListComplete(taskList: TaskList): boolean {
 }
 
 export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
-  // If task list is not complete
-  if (!isTaskListComplete(taskList)) {
+
+  const completedTasks = taskList.tasks.filter(task => task.completed).length;
+  const isWin = completedTasks === 5;
+
+  if (!isWin) {
     // Only today can be "in progress", other dates are losses if incomplete
     if (isToday) {
       return { isWin: false, isLoss: false };
@@ -51,10 +54,7 @@ export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): 
     }
   }
 
-  const completedTasks = taskList.tasks.filter(task => task.completed).length;
-  const isWin = completedTasks === 5;
   const isLoss = !isWin;
-
   return { isWin, isLoss };
 }
 

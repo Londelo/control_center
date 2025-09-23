@@ -9,3 +9,7 @@ CC-1 TODO:
     - navigating doesnt change the list
     - the list status is incorrect on init for a win
     - total lost count is off
+    - lastSavedDate should be lastVisitedDate and it should be updated on init
+    - data from the db needs to be saved on init in the state so I dont have to constantly call the db
+
+

@@ -8,6 +8,7 @@ type RemoveSideTaskArgs = {
 
 const RemoveSideTask = ({ currentTaskList, setCurrentTaskList }: RemoveSideTaskArgs) =>
   (taskId: string) => {
+
     if (!currentTaskList) return;
 
     const updatedSideTasks = currentTaskList.sideTasks.filter(task => task.id !== taskId);

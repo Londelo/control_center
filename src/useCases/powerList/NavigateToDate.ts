@@ -1,7 +1,8 @@
+
 type NavigateToDateArgs = {
   currentDate: string;
   today: string;
-  setCurrentDate: (date: string) => void;
+  setCurrentDate: (date: string) => void
 };
 
 const NavigateToDate = ({ currentDate, today, setCurrentDate }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
@@ -11,7 +12,6 @@ const NavigateToDate = ({ currentDate, today, setCurrentDate }: NavigateToDateAr
   const currentDateObject = new Date(currentDate);
   const isPreviousDirection = direction === 'prev';
   currentDateObject.setDate(currentDateObject.getDate() + (isPreviousDirection ? -1 : 1));
-
   const newDate = currentDateObject.toLocaleDateString();
   setCurrentDate(newDate);
 };

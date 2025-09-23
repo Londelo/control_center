@@ -14,6 +14,7 @@ const UpdateTask = ({ currentTaskList, setCurrentTaskList }: UpdateTaskArgs) =>
       task.id === taskId ? { ...task, text } : task
     );
 
+    //TODO: Broken params???
     const updatedList = updateTaskListStatus({
       ...currentTaskList,
       tasks: updatedTasks,

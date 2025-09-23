@@ -23,8 +23,8 @@ const upsertStorageData = (data: StorageData): void => {
 
 const getTasksByDate = (date: string): TaskList | null => {
   const storageData = getStorageData();
-  const hasTaskList = Object.prototype.hasOwnProperty.call(storageData.taskLists, date);
-  return hasTaskList ? storageData.taskLists[date] : null;
+  const taskList = storageData.taskLists[date]
+  return taskList ? taskList : null;
 };
 
 const saveTasksForDate = (date: string, taskList: TaskList): void => {
