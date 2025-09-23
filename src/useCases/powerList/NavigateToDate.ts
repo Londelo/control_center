@@ -1,14 +1,15 @@
 
 type NavigateToDateArgs = {
   currentDate: string;
-  today: string;
-  setCurrentDate: (date: string) => void
+  setCurrentDate: (date: string) => void;
+  canNavigateForward: boolean;
   canNavigateBackward: boolean;
 };
 
-const NavigateToDate = ({ currentDate, today, setCurrentDate, canNavigateBackward }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
-  const isFutureNavigation = direction === 'next' && currentDate >= today;
-  if (isFutureNavigation) return;
+const NavigateToDate = ({ currentDate, setCurrentDate, canNavigateForward, canNavigateBackward }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
+  if (direction === 'next' && !canNavigateForward) {
+    return;
+  }
 
   if (direction === 'prev' && !canNavigateBackward) {
     return;

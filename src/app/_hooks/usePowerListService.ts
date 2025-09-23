@@ -18,26 +18,26 @@ import {
   ToggleEditMode
 } from '@/useCases/powerList';
 
+const today = new Date().toLocaleDateString();
+
+const getCanNavigateBackward = (date: string, lists: PowerLists) => {
+  const previousDateObject = new Date(date);
+  previousDateObject.setDate(previousDateObject.getDate() - 1);
+  const previousDateString = previousDateObject.toLocaleDateString();
+  return Boolean(lists[previousDateString]);
+};
+
 export function usePowerListService() {
-  const today = new Date().toLocaleDateString();
   const [powerLists, setPowerLists] = useState<PowerLists>({});
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
   const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Create refs for all inputs
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
-  // Calculate navigation states
   const canNavigateForward = currentDate < today;
-  
-  const previousDateObject = new Date(currentDate);
-  previousDateObject.setDate(previousDateObject.getDate() - 1);
-  const previousDateString = previousDateObject.toLocaleDateString();
-
-  const canNavigateBackward = Boolean(powerLists[previousDateString]);
+  const canNavigateBackward = getCanNavigateBackward(currentDate, powerLists);
 
   const handleMissedDays = useCallback(HandleMissedDays(), [])
 
@@ -91,11 +91,11 @@ export function usePowerListService() {
   const navigateToDate = useCallback(
     NavigateToDate({
       currentDate,
-      today,
       setCurrentDate,
+      canNavigateForward,
       canNavigateBackward,
     }),
-    [currentDate, today, setCurrentDate, canNavigateBackward]
+    [currentDate, today, setCurrentDate, canNavigateForward, canNavigateBackward]
   );
 
   const updateTask = useCallback(
