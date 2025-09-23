@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
-import { PowerList } from '@/types/powerList';
-import { GetStats, isPowerListComplete } from '@/logic/powerList';
+import { PowerList, PowerLists } from '@/types/powerList';
+import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import {
   HandleMissedDays,
   LoadPowerListForDate,
@@ -18,9 +18,9 @@ import {
   ToggleEditMode
 } from '@/useCases/powerList';
 
-
 export function usePowerListService() {
   const today = new Date().toLocaleDateString();
+  const [powerLists, setPowerLists] = useState<PowerLists>({});
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
   const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
@@ -39,9 +39,10 @@ export function usePowerListService() {
       setIsLoading,
       setCurrentPowerList,
       setIsEditing,
+      setPowerLists,
       today
     }),
-    [setIsLoading, setCurrentPowerList, setIsEditing, today]
+    [setIsLoading, setCurrentPowerList, setIsEditing, setPowerLists, today]
   );
 
   //ON INIT
@@ -65,6 +66,20 @@ export function usePowerListService() {
       sideTaskRefs.current = createSideTaskRefs as React.RefObject<HTMLInputElement>[];
     }
   }, [currentPowerList?.sideTasks.length]);
+
+  const getStats = useCallback(() => {
+    return calculatePowerListStats(powerLists);
+  }, [powerLists]);
+
+  const updatePowerListsItem = useCallback(
+    (date:string, powerList: PowerList) => {
+      setPowerLists({
+        ...powerLists,
+        [date]: powerList,
+      });
+    },
+    [setPowerLists, powerLists]
+  );
 
   const navigateToDate = useCallback(
     NavigateToDate({
@@ -112,9 +127,10 @@ export function usePowerListService() {
       currentPowerList,
       isEditing,
       currentDate,
-      setCurrentPowerList
+      setCurrentPowerList,
+      updatePowerListsItem
     }),
-    [currentPowerList, isEditing, currentDate, setCurrentPowerList]
+    [currentPowerList, isEditing, currentDate, setCurrentPowerList, updatePowerListsItem]
   );
 
   const savePowerList = useCallback(
@@ -123,9 +139,10 @@ export function usePowerListService() {
       currentDate,
       today,
       setCurrentPowerList,
-      setIsEditing
+      setIsEditing,
+      updatePowerListsItem
     }),
-    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing]
+    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem]
   );
 
   const toggleEditMode = useCallback(
@@ -135,8 +152,6 @@ export function usePowerListService() {
     }),
     [isEditing, setIsEditing]
   );
-
-  const getStats = useCallback(GetStats(), []);
 
   const handleKeyDown = useCallback(
     HandleKeyDown({
@@ -169,5 +184,6 @@ export function usePowerListService() {
     getStats,
     navigateToDate,
     handleKeyDown,
+    updatePowerListsItem,
   };
 }

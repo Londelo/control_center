@@ -1,17 +1,17 @@
 "use client"
 
-import { PowerList } from '@/types/powerList';
+import { PowerList, PowerLists } from '@/types/powerList';
 import LocalStore from '../../backend/localStorage';
 
 const STORAGE_KEY = 'power_list';
 
 type StorageData = {
-  powerLists: Record<string, PowerList>;
-  lastSaveDate: string;
+  powerLists: PowerLists;
+  lastViewedDate: string;
 };
 
 const getStorageData = (): StorageData => {
-  const defaultData = { powerLists: {}, lastSaveDate: '' };
+  const defaultData = { powerLists: {}, lastViewedDate: '' };
   const data = LocalStore.get<StorageData>(STORAGE_KEY);
   const hasData = data !== undefined;
   return hasData ? data : defaultData;
@@ -30,11 +30,11 @@ const getTasksByDate = (date: string): PowerList | null => {
 const saveTasksForDate = (date: string, powerList: PowerList): void => {
   const storageData = getStorageData();
   storageData.powerLists[date] = powerList;
-  storageData.lastSaveDate = date;
+  storageData.lastViewedDate = date;
   upsertStorageData(storageData);
 };
 
-const getAllTaskHistory = (): Record<string, PowerList> => {
+const getAllPowerLists = (): PowerLists => {
   const storageData = getStorageData();
   return storageData.powerLists;
 };
@@ -53,9 +53,15 @@ const updateTaskStatus = (date: string, taskId: string, completed: boolean): voi
   }
 };
 
-const getLastSaveDate = (): string => {
+const getLastViewedDate = (): string => {
   const storageData = getStorageData();
-  return storageData.lastSaveDate;
+  return storageData.lastViewedDate;
+};
+
+const updateLastViewedDate = (date: string): void => {
+  const storageData = getStorageData();
+  storageData.lastViewedDate = date;
+  upsertStorageData(storageData);
 };
 
 const clearAllData = (): void => {
@@ -65,18 +71,19 @@ const clearAllData = (): void => {
 export type PowerListType = {
     getTasksByDate: (date: string) => PowerList | null;
     saveTasksForDate: (date: string, powerList: PowerList) => void;
-    getAllTaskHistory: () => Record<string, PowerList>;
+    getAllPowerLists: () => Record<string, PowerList>;
     updateTaskStatus: (date: string, taskId: string, completed: boolean) => void;
-    getLastSaveDate: () => string;
+    getLastViewedDate: () => string;
     clearAllData: () => void;
 }
 
 const PowerListDB = {
   getTasksByDate,
   saveTasksForDate,
-  getAllTaskHistory,
+  getAllPowerLists,
   updateTaskStatus,
-  getLastSaveDate,
+  getLastViewedDate,
+  updateLastViewedDate,
   clearAllData
 };
 

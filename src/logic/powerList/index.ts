@@ -141,8 +141,3 @@ export function calculatePowerListStats(taskHistory: Record<string, PowerList>):
     winRate: Math.round(winRate),
   };
 }
-
-export const GetStats = () => () => {
-  const allHistory = db.getAllTaskHistory();
-  return calculatePowerListStats(allHistory);
-};

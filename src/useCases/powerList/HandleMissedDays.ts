@@ -17,18 +17,19 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
 }
 
 const HandleMissedDays = () => (today: string) => {
-  const lastSaveDate = db.getLastSaveDate();
-  const allHistory = db.getAllTaskHistory();
-  if (lastSaveDate && lastSaveDate !== today) {
-    const missedDays = generateMissedDays(lastSaveDate, today)
+  const lastViewedDate = db.getLastViewedDate();
+  const allPowerLists = db.getAllPowerLists();
+  if (lastViewedDate && lastViewedDate !== today) {
+    const missedDays = generateMissedDays(lastViewedDate, today)
     for (const missedDay of missedDays) {
-      const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allHistory);
+      const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allPowerLists);
       const missedList = createPowerList(missedDay, recentTasks, recentSideTasks);
       missedList.isLoss = true;
       missedList.isComplete = true;
       db.saveTasksForDate(missedDay, missedList);
     }
   }
+  db.updateLastViewedDate(today)
 };
 
 export default HandleMissedDays

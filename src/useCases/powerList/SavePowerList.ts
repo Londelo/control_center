@@ -6,8 +6,9 @@ type SavePowerListArgs = {
   currentPowerList: PowerList | null;
   currentDate: string;
   today: string;
-  setCurrentPowerList: (PowerList: PowerList) => void;
+  setCurrentPowerList: (powerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
+  updatePowerListsItem: (date: string, powerList: PowerList) => void;
 };
 
 const SavePowerList = ({
@@ -16,12 +17,14 @@ const SavePowerList = ({
   today,
   setCurrentPowerList,
   setIsEditing,
+  updatePowerListsItem,
 }: SavePowerListArgs) => () => {
   if (!currentPowerList) return;
 
   const updatedList = updatePowerListStatus(currentPowerList, currentDate === today);
   setCurrentPowerList(updatedList);
   db.saveTasksForDate(currentDate, updatedList);
+  updatePowerListsItem(currentDate, updatedList);
   setIsEditing(false);
 };
 

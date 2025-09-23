@@ -17,6 +17,10 @@ export interface PowerList {
   updatedAt: string;
 }
 
+export interface PowerLists {
+  [date: string]: PowerList
+}
+
 export interface DayStats {
   date: string;
   isWin: boolean;
