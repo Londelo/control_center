@@ -58,6 +58,7 @@ export default function Home() {
         {/* Left Arrow */}
         <button
           onClick={() => navigateToDate('prev')}
+          disabled={!state.canNavigateBackward}
           className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
         >
           <ChevronLeft size={24} />

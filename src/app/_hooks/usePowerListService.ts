@@ -31,6 +31,12 @@ export function usePowerListService() {
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
   const canNavigateForward = currentDate < today;
+  
+  const previousDateObject = new Date(currentDate);
+  previousDateObject.setDate(previousDateObject.getDate() - 1);
+  const previousDateString = previousDateObject.toLocaleDateString();
+
+  const canNavigateBackward = Boolean(powerLists[previousDateString]);
 
   const handleMissedDays = useCallback(HandleMissedDays(), [])
 
@@ -86,8 +92,9 @@ export function usePowerListService() {
       currentDate,
       today,
       setCurrentDate,
+      canNavigateBackward,
     }),
-    [currentDate, today, setCurrentDate]
+    [currentDate, today, setCurrentDate, canNavigateBackward]
   );
 
   const updateTask = useCallback(
@@ -174,6 +181,7 @@ export function usePowerListService() {
       sideTaskRefs: sideTaskRefs.current,
       canSave: currentPowerList ? isPowerListComplete(currentPowerList) : false,
       canNavigateForward
+      canNavigateBackward,
     },
     updateTask,
     updateSideTask,
