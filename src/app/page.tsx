@@ -59,7 +59,7 @@ export default function Home() {
         <button
           onClick={() => navigateToDate('prev')}
           disabled={!state.canNavigateBackward}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
+          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         >
           <ChevronLeft size={24} />
         </button>

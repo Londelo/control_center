@@ -30,6 +30,7 @@ export function usePowerListService() {
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
+  // Calculate navigation states
   const canNavigateForward = currentDate < today;
   
   const previousDateObject = new Date(currentDate);
@@ -180,7 +181,7 @@ export function usePowerListService() {
       powerListRefs: powerListRefs.current,
       sideTaskRefs: sideTaskRefs.current,
       canSave: currentPowerList ? isPowerListComplete(currentPowerList) : false,
-      canNavigateForward
+      canNavigateForward,
       canNavigateBackward,
     },
     updateTask,
