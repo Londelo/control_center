@@ -1,12 +1,12 @@
-import { Task, TaskList, AppStats } from '@/types/powerList';
+import { Task, PowerList, PowerListStats } from '@/types/powerList';
 import { v4 } from 'uuid'
 import db from '@/logic/powerList/db';
 
-export function normalizeTaskList(taskList: TaskList): TaskList {
+export function normalizePowerList(powerList: PowerList): PowerList {
   return {
-    ...taskList,
-    sideTasks: taskList.sideTasks || [],
-    tasks: taskList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
+    ...powerList,
+    sideTasks: powerList.sideTasks || [],
+    tasks: powerList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
   };
 }
 
@@ -19,7 +19,7 @@ export function createEmptyTask(): Task {
   };
 }
 
-export function createTaskList(date: string, tasks?: Task[], sideTasks?: Task[]): TaskList {
+export function createPowerList(date: string, tasks?: Task[], sideTasks?: Task[]): PowerList {
   const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
   const defaultSideTasks = sideTasks || [];
 
@@ -36,13 +36,13 @@ export function createTaskList(date: string, tasks?: Task[], sideTasks?: Task[])
   };
 }
 
-export function isTaskListComplete(taskList: TaskList): boolean {
-  return taskList.tasks.every(task => task.text.trim() !== '');
+export function isPowerListComplete(powerList: PowerList): boolean {
+  return powerList.tasks.every(task => task.text.trim() !== '');
 }
 
-export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
+export function calculateWinLoss(powerList: PowerList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
 
-  const completedTasks = taskList.tasks.filter(task => task.completed).length;
+  const completedTasks = powerList.tasks.filter(task => task.completed).length;
   const isWin = completedTasks === 5;
 
   if (!isWin) {
@@ -58,29 +58,29 @@ export function calculateWinLoss(taskList: TaskList, isToday: boolean = false): 
   return { isWin, isLoss };
 }
 
-export function updateTaskListStatus(taskList: TaskList, isToday: boolean = false): TaskList {
-  const { isWin, isLoss } = calculateWinLoss(taskList, isToday);
+export function updatePowerListStatus(powerList: PowerList, isToday: boolean = false): PowerList {
+  const { isWin, isLoss } = calculateWinLoss(powerList, isToday);
 
   return {
-    ...taskList,
+    ...powerList,
     isWin,
     isLoss,
-    isComplete: isTaskListComplete(taskList),
+    isComplete: isPowerListComplete(powerList),
     updatedAt: new Date().toISOString(),
   };
 }
 
-export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tasks: Task[], sideTasks: Task[] } {
+export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { tasks: Task[], sideTasks: Task[] } {
   const dates = Object.keys(taskHistory).sort().reverse();
 
   for (const date of dates) {
-    const taskList = normalizeTaskList(taskHistory[date]);
-    if (taskList && isTaskListComplete(taskList)) {
-      const tasks = taskList.tasks.map((task) => ({
+    const powerList = normalizePowerList(taskHistory[date]);
+    if (powerList && isPowerListComplete(powerList)) {
+      const tasks = powerList.tasks.map((task) => ({
         ...createEmptyTask(),
         text: task.text,
       }));
-      const sideTasks = taskList.sideTasks.map((task) => ({
+      const sideTasks = powerList.sideTasks.map((task) => ({
         ...createEmptyTask(),
         text: task.text,
       }));
@@ -94,10 +94,10 @@ export function getMostRecentTasks(taskHistory: Record<string, TaskList>): { tas
   };
 }
 
-export function calculateAppStats(taskHistory: Record<string, TaskList>): AppStats {
-  const taskLists = Object.values(taskHistory);
+export function calculatePowerListStats(taskHistory: Record<string, PowerList>): PowerListStats {
+  const powerLists = Object.values(taskHistory);
   // Only count completed lists for stats
-  const completeLists = taskLists.filter(list => isTaskListComplete(list));
+  const completeLists = powerLists.filter(list => isPowerListComplete(list));
 
   const totalWins = completeLists.filter(list => list.isWin).length;
   const totalLosses = completeLists.filter(list => list.isLoss).length;
@@ -108,11 +108,11 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
   let currentStreak = 0;
 
   for (const date of sortedDates) {
-    const taskList = taskHistory[date];
+    const powerList = taskHistory[date];
     // Only count completed lists for streak calculation
-    if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
+    if (powerList && isPowerListComplete(powerList) && powerList.isWin) {
       currentStreak++;
-    } else if (taskList && isTaskListComplete(taskList)) {
+    } else if (powerList && isPowerListComplete(powerList)) {
       // Break streak only on completed losses, not in-progress days
       break;
     }
@@ -123,11 +123,11 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
   let tempStreak = 0;
 
   for (const date of sortedDates.reverse()) {
-    const taskList = taskHistory[date];
-    if (taskList && isTaskListComplete(taskList) && taskList.isWin) {
+    const powerList = taskHistory[date];
+    if (powerList && isPowerListComplete(powerList) && powerList.isWin) {
       tempStreak++;
       longestStreak = Math.max(longestStreak, tempStreak);
-    } else if (taskList && isTaskListComplete(taskList)) {
+    } else if (powerList && isPowerListComplete(powerList)) {
       // Reset streak only on completed losses, not in-progress days
       tempStreak = 0;
     }
@@ -144,5 +144,5 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
 
 export const GetStats = () => () => {
   const allHistory = db.getAllTaskHistory();
-  return calculateAppStats(allHistory);
+  return calculatePowerListStats(allHistory);
 };

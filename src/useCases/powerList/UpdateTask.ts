@@ -1,26 +1,26 @@
-import { Task, TaskList } from '@/types/powerList';
-import { updateTaskListStatus } from '@/logic/powerList'
+import { Task, PowerList } from '@/types/powerList';
+import { updatePowerListStatus } from '@/logic/powerList'
 
 type UpdateTaskArgs = {
-  currentTaskList: TaskList | null;
-  setCurrentTaskList: (taskList: TaskList) => void;
+  currentPowerList: PowerList | null;
+  setCurrentPowerList: (powerList: PowerList) => void;
 };
 
-const UpdateTask = ({ currentTaskList, setCurrentTaskList }: UpdateTaskArgs) =>
+const UpdateTask = ({ currentPowerList, setCurrentPowerList }: UpdateTaskArgs) =>
   (taskId: string, text: string ) => {
-    if (!currentTaskList) return;
+    if (!currentPowerList) return;
 
-    const updatedTasks = currentTaskList.tasks.map((task: Task) =>
+    const updatedTasks = currentPowerList.tasks.map((task: Task) =>
       task.id === taskId ? { ...task, text } : task
     );
 
     //TODO: Broken params???
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
+    const updatedList = updatePowerListStatus({
+      ...currentPowerList,
       tasks: updatedTasks,
     });
 
-    setCurrentTaskList(updatedList);
+    setCurrentPowerList(updatedList);
   };
 
 export default UpdateTask;

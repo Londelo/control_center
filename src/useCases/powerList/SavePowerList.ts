@@ -6,7 +6,7 @@ type SavePowerListArgs = {
   currentPowerList: PowerList | null;
   currentDate: string;
   today: string;
-  setCurrentPowerList: (powerList: PowerList) => void;
+  setCurrentPowerList: (PowerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
 };
 

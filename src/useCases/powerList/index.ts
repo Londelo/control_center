@@ -1,11 +1,11 @@
-export { default as LoadTaskListForDate } from './LoadTaskListForDate';
-export { default as HandleMissedDays } from './handleMissedDays';
+export { default as LoadPowerListForDate } from './LoadPowerListForDate';
+export { default as HandleMissedDays } from './HandleMissedDays';
 export { default as NavigateToDate } from './NavigateToDate';
 export { default as UpdateTask } from './UpdateTask';
 export { default as UpdateSideTask } from './UpdateSideTask';
 export { default as AddSideTask } from './AddSideTask';
 export { default as RemoveSideTask } from './RemoveSideTask';
 export { default as ToggleTaskCompletion } from './ToggleTaskCompletion';
-export { default as SaveTaskList } from './SaveTaskList';
+export { default as SavePowerList } from './SavePowerList';
 export { default as HandleKeyDown } from './HandleKeyDown';
 export { default as ToggleEditMode } from './ToggleEditMode';

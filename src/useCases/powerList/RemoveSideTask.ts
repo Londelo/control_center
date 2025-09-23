@@ -1,24 +1,24 @@
-import { updateTaskListStatus } from '@/logic/powerList';
-import { TaskList } from '@/types/powerList';
+import { updatePowerListStatus } from '@/logic/powerList';
+import { PowerList } from '@/types/powerList';
 
 type RemoveSideTaskArgs = {
-  currentTaskList: TaskList | null;
-  setCurrentTaskList: (taskList: TaskList) => void;
+  currentPowerList: PowerList | null;
+  setCurrentPowerList: (powerList: PowerList) => void;
 };
 
-const RemoveSideTask = ({ currentTaskList, setCurrentTaskList }: RemoveSideTaskArgs) =>
+const RemoveSideTask = ({ currentPowerList, setCurrentPowerList }: RemoveSideTaskArgs) =>
   (taskId: string) => {
 
-    if (!currentTaskList) return;
+    if (!currentPowerList) return;
 
-    const updatedSideTasks = currentTaskList.sideTasks.filter(task => task.id !== taskId);
+    const updatedSideTasks = currentPowerList.sideTasks.filter(task => task.id !== taskId);
 
-    const updatedList = updateTaskListStatus({
-      ...currentTaskList,
+    const updatedList = updatePowerListStatus({
+      ...currentPowerList,
       sideTasks: updatedSideTasks,
     });
 
-    setCurrentTaskList(updatedList);
+    setCurrentPowerList(updatedList);
   };
 
 export default RemoveSideTask;

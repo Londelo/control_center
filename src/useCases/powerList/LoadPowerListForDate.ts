@@ -4,7 +4,7 @@ import { PowerList } from '@/types/powerList';
 
 type LoadPowerListForDateArgs = {
   setIsLoading: (isLoading: boolean) => void;
-  setCurrentPowerList: (powerList: PowerList) => void;
+  setCurrentPowerList: (PowerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
   today: string;
 };
@@ -16,20 +16,20 @@ const LoadPowerListForDate = ({
   today,
 }: LoadPowerListForDateArgs) => async (date: string) => {
   setIsLoading(true);
-  let powerList = db.getTasksByDate(date);
+  let PowerList = db.getTasksByDate(date);
 
-  if (!powerList) {
+  if (!PowerList) {
     if (date === today) {
       const allTasks = db.getAllTaskHistory();
       const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allTasks);
-      powerList = createPowerList(date, recentTasks, recentSideTasks);
-      db.saveTasksForDate(date, powerList);
+      PowerList = createPowerList(date, recentTasks, recentSideTasks);
+      db.saveTasksForDate(date, PowerList);
     } else {
-      powerList = createPowerList(date);
+      PowerList = createPowerList(date);
     }
   }
-  setCurrentPowerList(powerList);
-  setIsEditing(!isPowerListComplete(powerList));
+  setCurrentPowerList(PowerList);
+  setIsEditing(!isPowerListComplete(PowerList));
   setIsLoading(false);};
 
 export default LoadPowerListForDate;

@@ -1,17 +1,17 @@
 "use client"
 
-import { TaskList } from '@/types/powerList';
+import { PowerList } from '@/types/powerList';
 import LocalStore from '../../backend/localStorage';
 
 const STORAGE_KEY = 'power_list';
 
 type StorageData = {
-  taskLists: Record<string, TaskList>;
+  powerLists: Record<string, PowerList>;
   lastSaveDate: string;
 };
 
 const getStorageData = (): StorageData => {
-  const defaultData = { taskLists: {}, lastSaveDate: '' };
+  const defaultData = { powerLists: {}, lastSaveDate: '' };
   const data = LocalStore.get<StorageData>(STORAGE_KEY);
   const hasData = data !== undefined;
   return hasData ? data : defaultData;
@@ -21,33 +21,33 @@ const upsertStorageData = (data: StorageData): void => {
   LocalStore.upsert(STORAGE_KEY, data);
 };
 
-const getTasksByDate = (date: string): TaskList | null => {
+const getTasksByDate = (date: string): PowerList | null => {
   const storageData = getStorageData();
-  const taskList = storageData.taskLists[date]
-  return taskList ? taskList : null;
+  const powerList = storageData.powerLists[date]
+  return powerList ? powerList : null;
 };
 
-const saveTasksForDate = (date: string, taskList: TaskList): void => {
+const saveTasksForDate = (date: string, powerList: PowerList): void => {
   const storageData = getStorageData();
-  storageData.taskLists[date] = taskList;
+  storageData.powerLists[date] = powerList;
   storageData.lastSaveDate = date;
   upsertStorageData(storageData);
 };
 
-const getAllTaskHistory = (): Record<string, TaskList> => {
+const getAllTaskHistory = (): Record<string, PowerList> => {
   const storageData = getStorageData();
-  return storageData.taskLists;
+  return storageData.powerLists;
 };
 
 const updateTaskStatus = (date: string, taskId: string, completed: boolean): void => {
   const storageData = getStorageData();
-  const hasTaskList = Object.prototype.hasOwnProperty.call(storageData.taskLists, date);
-  if (hasTaskList) {
-    const task = storageData.taskLists[date].tasks.find(t => t.id === taskId);
+  const hasPowerList = Object.prototype.hasOwnProperty.call(storageData.powerLists, date);
+  if (hasPowerList) {
+    const task = storageData.powerLists[date].tasks.find(t => t.id === taskId);
     const hasTask = task !== undefined;
     if (hasTask) {
       task.completed = completed;
-      storageData.taskLists[date].updatedAt = new Date().toISOString();
+      storageData.powerLists[date].updatedAt = new Date().toISOString();
       upsertStorageData(storageData);
     }
   }
@@ -63,15 +63,15 @@ const clearAllData = (): void => {
 };
 
 export type PowerListType = {
-    getTasksByDate: (date: string) => TaskList | null;
-    saveTasksForDate: (date: string, taskList: TaskList) => void;
-    getAllTaskHistory: () => Record<string, TaskList>;
+    getTasksByDate: (date: string) => PowerList | null;
+    saveTasksForDate: (date: string, powerList: PowerList) => void;
+    getAllTaskHistory: () => Record<string, PowerList>;
     updateTaskStatus: (date: string, taskId: string, completed: boolean) => void;
     getLastSaveDate: () => string;
     clearAllData: () => void;
 }
 
-const PowerList = {
+const PowerListDB = {
   getTasksByDate,
   saveTasksForDate,
   getAllTaskHistory,
@@ -80,4 +80,4 @@ const PowerList = {
   clearAllData
 };
 
-export default PowerList
+export default PowerListDB

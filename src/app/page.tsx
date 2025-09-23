@@ -1,14 +1,14 @@
 "use client";
 
-import { TaskList } from "@/app/_components/TaskList";
+import { PowerList } from "@/app/_components/PowerList";
 import { SideTaskList } from "@/app/_components/SideTaskList";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { TaskList as TaskListType } from "@/types/powerList";
+import { PowerList as PowerListType } from "@/types/powerList";
 
-const getListStatus = (currentTaskList: TaskListType, currentDate: string, today: string, purpose = 'text') => {
-  if (currentTaskList.isWin) {
+const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
+  if (currentPowerList.isWin) {
     return purpose === 'text' ? 'WIN' : 'text-green-600'
   }
 
@@ -27,7 +27,7 @@ export default function Home() {
     addSideTask,
     removeSideTask,
     toggleTaskCompletion,
-    saveTaskList,
+    savePowerList,
     toggleEditMode,
     navigateToDate,
     handleKeyDown
@@ -41,7 +41,7 @@ export default function Home() {
     );
   }
 
-  if (!state.currentTaskList) {
+  if (!state.currentPowerList) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="font-mono">Error loading PowerList</div>
@@ -63,8 +63,8 @@ export default function Home() {
 
         <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
           <span>{state.currentDate} -</span>
-          <span className={getListStatus(state.currentTaskList, state.currentDate, state.today, 'color')}>
-            {getListStatus(state.currentTaskList, state.currentDate, state.today)}
+          <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
+            {getListStatus(state.currentPowerList, state.currentDate, state.today)}
           </span>
         </div>
 
@@ -86,10 +86,10 @@ export default function Home() {
           <div className="max-w-md mx-auto">
             <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
 
-            <TaskList
-              taskList={state.currentTaskList}
+            <PowerList
+              powerList={state.currentPowerList}
               isEditing={state.isEditing}
-              showCheckboxes={!state.isEditing && state.currentTaskList.isComplete}
+              showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
               taskRefs={state.powerListRefs}
@@ -104,9 +104,9 @@ export default function Home() {
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
             <SideTaskList
-              tasks={state.currentTaskList.sideTasks}
+              tasks={state.currentPowerList.sideTasks}
               isEditing={state.isEditing}
-              showCheckboxes={!state.isEditing && state.currentTaskList.isComplete}
+              showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateSideTask}
               onTaskToggle={toggleTaskCompletion}
               onAddTask={addSideTask}
@@ -123,7 +123,7 @@ export default function Home() {
         <div className="flex justify-center gap-4">
           {state.isEditing ? (
             <button
-              onClick={saveTaskList}
+              onClick={savePowerList}
               disabled={!state.canSave}
               className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
             >
