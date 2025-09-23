@@ -1,8 +1,8 @@
 "use client";
 
-import { TaskList } from "@/components/TaskList";
-import { SideTaskList } from "@/components/SideTaskList";
-import { usePowerListService } from "@/hooks/usePowerListService";
+import { TaskList } from "@/app/_components/TaskList";
+import { SideTaskList } from "@/app/_components/SideTaskList";
+import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { TaskList as TaskListType } from "@/types/powerList";
