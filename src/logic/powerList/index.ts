@@ -1,6 +1,6 @@
-import powerList from '@/controllers/powerList';
 import { Task, TaskList, AppStats } from '@/types/powerList';
 import { v4 } from 'uuid'
+import db from '@/logic/powerList/db';
 
 export function normalizeTaskList(taskList: TaskList): TaskList {
   return {
@@ -143,6 +143,6 @@ export function calculateAppStats(taskHistory: Record<string, TaskList>): AppSta
 }
 
 export const GetStats = () => () => {
-  const allHistory = powerList.getAllTaskHistory();
+  const allHistory = db.getAllTaskHistory();
   return calculateAppStats(allHistory);
 };

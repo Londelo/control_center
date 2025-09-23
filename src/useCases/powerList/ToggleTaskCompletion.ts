@@ -1,6 +1,6 @@
 import { TaskList } from '@/types/powerList';
 import { updateTaskListStatus } from '@/logic/powerList';
-import powerList from '@/controllers/powerList';
+import db from '@/logic/powerList/db';
 
 type ToggleTaskCompletionArgs = {
   currentTaskList: TaskList | null;
@@ -25,7 +25,7 @@ const ToggleTaskCompletion = ({
   const newCompletedStatus = !task.completed;
 
   // Update in backend
-  powerList.updateTaskStatus(currentDate, taskId, newCompletedStatus);
+  db.updateTaskStatus(currentDate, taskId, newCompletedStatus);
 
   // Update local state for both task lists
   const updatedTasks = currentTaskList.tasks.map(t =>

@@ -1,7 +1,7 @@
 "use client"
 
 import { TaskList } from '@/types/powerList';
-import LocalStore from '../backend/localStorage';
+import LocalStore from '../../backend/localStorage';
 
 const STORAGE_KEY = 'power_list';
 

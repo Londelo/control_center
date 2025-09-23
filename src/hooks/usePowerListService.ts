@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { TaskList } from '@/types/powerList';
-import powerList from '@/controllers/powerList';
 import { GetStats, isTaskListComplete } from '@/logic/powerList';
 import {
   HandleMissedDays,
@@ -17,7 +16,7 @@ import {
   SaveTaskList,
   HandleKeyDown,
   ToggleEditMode
-} from '../useCases/powerList';
+} from '@/useCases/powerList';
 
 
 export function usePowerListService() {
@@ -42,7 +41,7 @@ export function usePowerListService() {
       setIsEditing,
       today
     }),
-    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate, powerList]
+    [setIsLoading, setCurrentTaskList, setIsEditing, today, currentDate]
   );
 
   //ON INIT

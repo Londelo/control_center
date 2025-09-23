@@ -1,5 +1,5 @@
 import { updateTaskListStatus } from '@/logic/powerList';
-import powerList from '@/controllers/powerList';
+import db from '@/logic/powerList/db';
 import { TaskList } from '@/types/powerList';
 
 type SaveTaskListArgs = {
@@ -21,7 +21,7 @@ const SaveTaskList = ({
 
   const updatedList = updateTaskListStatus(currentTaskList, currentDate === today);
   setCurrentTaskList(updatedList);
-  powerList.saveTasksForDate(currentDate, updatedList);
+  db.saveTasksForDate(currentDate, updatedList);
   setIsEditing(false);
 };
 

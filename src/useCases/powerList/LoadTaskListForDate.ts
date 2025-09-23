@@ -1,5 +1,5 @@
 import { createTaskList, getMostRecentTasks, isTaskListComplete, normalizeTaskList } from '@/logic/powerList';
-import powerList from '@/controllers/powerList';
+import db from '@/logic/powerList/db';
 import { TaskList } from '@/types/powerList';
 
 type LoadTaskListForDateArgs = {
@@ -17,13 +17,13 @@ const LoadTaskListForDate = ({
 }: LoadTaskListForDateArgs) => async (date: string) => {
   setIsLoading(true);
   try {
-    let taskList = powerList.getTasksByDate(date);
+    let taskList = db.getTasksByDate(date);
     if (!taskList) {
       if (date === today) {
-        const allTasks = powerList.getAllTaskHistory();
+        const allTasks = db.getAllTaskHistory();
         const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allTasks);
         taskList = createTaskList(date, recentTasks, recentSideTasks);
-        powerList.saveTasksForDate(date, taskList);
+        db.saveTasksForDate(date, taskList);
       } else {
         taskList = createTaskList(date);
       }
