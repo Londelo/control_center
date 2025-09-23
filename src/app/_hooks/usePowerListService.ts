@@ -127,10 +127,11 @@ export function usePowerListService() {
       currentPowerList,
       isEditing,
       currentDate,
+      today,
       setCurrentPowerList,
       updatePowerListsItem
     }),
-    [currentPowerList, isEditing, currentDate, setCurrentPowerList, updatePowerListsItem]
+    [currentPowerList, isEditing, currentDate, today, setCurrentPowerList, updatePowerListsItem]
   );
 
   const savePowerList = useCallback(

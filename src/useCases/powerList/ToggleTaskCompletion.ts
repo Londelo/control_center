@@ -1,11 +1,12 @@
 import { PowerList } from '@/types/powerList';
-import { updatePowerListStatus } from '@/logic/powerList';
+import { updatePowerListStatus, isPowerListComplete } from '@/logic/powerList';
 import db from '@/logic/powerList/db';
 
 type ToggleTaskCompletionArgs = {
   currentPowerList: PowerList | null;
   isEditing: boolean;
   currentDate: string;
+  today: string;
   setCurrentPowerList: (powerList: PowerList) => void;
   updatePowerListsItem: (date: string, powerList: PowerList) => void;
 };
@@ -14,6 +15,7 @@ const ToggleTaskCompletion = ({
   currentPowerList,
   isEditing,
   currentDate,
+  today,
   setCurrentPowerList,
   updatePowerListsItem
 }: ToggleTaskCompletionArgs) => (taskId: string) => {
@@ -25,9 +27,6 @@ const ToggleTaskCompletion = ({
   if (!task) return;
 
   const newCompletedStatus = !task.completed;
-
-  // Update in backend
-  db.updateTaskStatus(currentDate, taskId, newCompletedStatus);
 
   // Update local state for both task lists
   const updatedTasks = currentPowerList.tasks.map(t =>
@@ -42,7 +41,10 @@ const ToggleTaskCompletion = ({
     ...currentPowerList,
     tasks: updatedTasks,
     sideTasks: updatedSideTasks,
-  });
+  }, currentDate === today);
+
+  // Save to database - this will persist the win/loss status
+  db.saveTasksForDate(currentDate, updatedList);
 
   setCurrentPowerList(updatedList);
   updatePowerListsItem(currentDate, updatedList);
