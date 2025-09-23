@@ -12,13 +12,13 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
     return purpose === 'text' ? 'WIN' : 'text-green-600'
   }
 
-  if (currentPowerList.isLoss) {
-    return purpose === 'text' ? 'LOSE' : 'text-red-600'
-  }
-
   // If it's today and neither win nor loss, it's in progress
   if (currentDate === today) {
     return purpose === 'text' ? 'IN PROGRESS' : 'text-blue-600'
+  }
+
+  if (currentPowerList.isLoss) {
+    return purpose === 'text' ? 'LOSE' : 'text-red-600'
   }
 
   // Fallback (shouldn't reach here with proper logic)
