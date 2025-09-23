@@ -6,4 +6,6 @@ CC-1 TODO:
     - DB is part of the outer most ring
   - Reduce the amount of functions im sure this can be simplified
   - Fix issues
-    -
+    - navigating doesnt change the list
+    - the list status is incorrect on init for a win
+    - total lost count is off
