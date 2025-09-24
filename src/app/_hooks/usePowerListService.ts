@@ -7,6 +7,7 @@ import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList'
 import createMockPowerLists from '@/tools/createMockPowerLists';
 import {
   HandleMissedDays,
+  HandleLostDays,
   LoadPowerListForDate,
   NavigateToDate,
   AddSideTask,
@@ -42,6 +43,7 @@ export function usePowerListService() {
   const canNavigateBackward = getCanNavigateBackward(currentDate, powerLists);
 
   const handleMissedDays = useCallback(HandleMissedDays(), [])
+  const handleLostDays = useCallback(HandleLostDays(), [])
 
   const loadPowerListForDate = useCallback(
     LoadPowerListForDate({
@@ -58,6 +60,7 @@ export function usePowerListService() {
   useEffect(() => {
     createMockPowerLists(today);
     handleMissedDays(today);
+    handleLostDays(today);
     loadPowerListForDate(today);
     db.updateLastViewedDate(today)
   }, []);
