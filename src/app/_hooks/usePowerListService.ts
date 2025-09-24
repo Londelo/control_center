@@ -96,8 +96,9 @@ export function usePowerListService() {
       setCurrentDate,
       canNavigateForward,
       canNavigateBackward,
+      loadPowerListForDate,
     }),
-    [currentDate, today, setCurrentDate, canNavigateForward, canNavigateBackward]
+    [currentDate, setCurrentDate, canNavigateForward, canNavigateBackward, loadPowerListForDate]
   );
 
   const updateTask = useCallback(
