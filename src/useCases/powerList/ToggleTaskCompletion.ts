@@ -1,5 +1,5 @@
 import { PowerList } from '@/types/powerList';
-import { updatePowerListStatus, isPowerListComplete } from '@/logic/powerList';
+import { updatePowerListStatus } from '@/logic/powerList';
 import db from '@/logic/powerList/db';
 
 type ToggleTaskCompletionArgs = {

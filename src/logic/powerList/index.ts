@@ -1,6 +1,5 @@
 import { Task, PowerList, PowerListStats } from '@/types/powerList';
 import { v4 } from 'uuid'
-import db from '@/logic/powerList/db';
 
 export function normalizePowerList(powerList: PowerList): PowerList {
   return {
