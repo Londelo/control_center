@@ -5,6 +5,7 @@ const createMockPowerLists = (today: string) => {
   // Clear all existing data
   db.clearAllData();
 
+  db.updateLastViewedDate(today)
   // Create 5 PowerLists starting from today
   for (let i = 0; i < 5; i++) {
     const date = new Date(today);

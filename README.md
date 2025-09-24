@@ -12,5 +12,3 @@ CC-1 TODO:
     - done - data from the db needs to be saved on init in the state so I dont have to constantly call the db
     - done - we should not be allowed to navigate back if there is not record
     - done - the list status is incorrect on init for a win
-
-

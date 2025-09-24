@@ -30,7 +30,6 @@ const getTasksByDate = (date: string): PowerList | null => {
 const saveTasksForDate = (date: string, powerList: PowerList): void => {
   const storageData = getStorageData();
   storageData.powerLists[date] = powerList;
-  storageData.lastViewedDate = date;
   upsertStorageData(storageData);
 };
 

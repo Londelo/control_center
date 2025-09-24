@@ -19,9 +19,8 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
 const HandleMissedDays = () => (today: string) => {
   const lastViewedDate = db.getLastViewedDate();
   const allPowerLists = db.getAllPowerLists();
-  if (lastViewedDate && lastViewedDate !== today) {
-    db.updateLastViewedDate(today)
 
+  if (lastViewedDate && lastViewedDate !== today) {
     const missedDays = generateMissedDays(lastViewedDate, today)
     for (const missedDay of missedDays) {
       const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allPowerLists);

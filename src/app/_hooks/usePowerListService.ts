@@ -18,6 +18,7 @@ import {
   HandleKeyDown,
   ToggleEditMode
 } from '@/useCases/powerList';
+import db from '@/logic/powerList/db';
 
 const today = new Date().toLocaleDateString();
 
@@ -58,6 +59,7 @@ export function usePowerListService() {
     createMockPowerLists(today);
     handleMissedDays(today);
     loadPowerListForDate(today);
+    db.updateLastViewedDate(today)
   }, []);
 
   // Initialize refs
