@@ -1,34 +1,41 @@
 "use client";
 
-import { TaskList } from "@/components/TaskList";
-import { SideTaskList } from "@/components/SideTaskList";
-import { usePowerListService } from "@/hooks/usePowerListService";
-import { Trophy, Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { PowerList } from "@/app/_components/PowerList";
+import { SideTaskList } from "@/app/_components/SideTaskList";
+import { usePowerListService } from "@/app/_hooks/usePowerListService";
+import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { PowerList as PowerListType } from "@/types/powerList";
+
+const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
+  if (currentPowerList.isWin) {
+    return purpose === 'text' ? 'WIN' : 'text-green-600'
+  }
+
+  // If it's today and neither win nor loss, it's in progress
+  if (currentDate === today) {
+    return purpose === 'text' ? 'IN PROGRESS' : 'text-blue-600'
+  }
+
+  // Fallback (shouldn't reach here with proper logic)
+  return purpose === 'text' ? 'LOSE' : 'text-red-600'
+}
 
 export default function Home() {
   const {
-    currentTaskList,
-    currentDate,
-    isEditing,
-    isLoading,
+    state,
     updateTask,
     updateSideTask,
     addSideTask,
     removeSideTask,
     toggleTaskCompletion,
-    saveTaskList,
+    savePowerList,
     toggleEditMode,
     navigateToDate,
-    powerListRefs,
-    sideTaskRefs,
-    handleKeyDown,
-    canSave,
-    isWin,
-    canNavigateNext,
+    handleKeyDown
   } = usePowerListService();
 
-  if (isLoading) {
+  if (state.isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="font-mono">Loading your PowerList...</div>
@@ -36,7 +43,7 @@ export default function Home() {
     );
   }
 
-  if (!currentTaskList) {
+  if (!state.currentPowerList) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="font-mono">Error loading PowerList</div>
@@ -51,26 +58,23 @@ export default function Home() {
         {/* Left Arrow */}
         <button
           onClick={() => navigateToDate('prev')}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded"
+          disabled={!state.canNavigateBackward}
+          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         >
           <ChevronLeft size={24} />
         </button>
 
         <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
-          <span>{currentDate} -</span>
-          <span className={`${
-            currentTaskList.isWin ? 'text-green-600' : 
-            currentTaskList.isLoss ? 'text-red-600' : 
-            'text-blue-600'
-          }`}>
-            {currentTaskList.isWin ? 'WIN' : currentTaskList.isLoss ? 'LOSE' : 'IN PROGRESS'}
+          <span>{state.currentDate} -</span>
+          <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
+            {getListStatus(state.currentPowerList, state.currentDate, state.today)}
           </span>
         </div>
 
         {/* Right Arrow */}
         <button
           onClick={() => navigateToDate('next')}
-          disabled={!canNavigateNext}
+          disabled={!state.canNavigateForward}
           className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
         >
           <ChevronRight size={24} />
@@ -85,13 +89,13 @@ export default function Home() {
           <div className="max-w-md mx-auto">
             <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
 
-            <TaskList
-              taskList={currentTaskList}
-              isEditing={isEditing}
-              showCheckboxes={!isEditing && currentTaskList.isComplete}
+            <PowerList
+              powerList={state.currentPowerList}
+              isEditing={state.isEditing}
+              showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
-              taskRefs={powerListRefs}
+              taskRefs={state.powerListRefs}
               onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
@@ -103,14 +107,14 @@ export default function Home() {
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
             <SideTaskList
-              tasks={currentTaskList.sideTasks}
-              isEditing={isEditing}
-              showCheckboxes={!isEditing && currentTaskList.isComplete}
+              tasks={state.currentPowerList.sideTasks}
+              isEditing={state.isEditing}
+              showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateSideTask}
               onTaskToggle={toggleTaskCompletion}
               onAddTask={addSideTask}
               onRemoveTask={removeSideTask}
-              taskRefs={sideTaskRefs}
+              taskRefs={state.sideTaskRefs}
               onKeyDown={(index, e) => handleKeyDown('side', index, e)}
             />
           </div>
@@ -120,10 +124,10 @@ export default function Home() {
       {/* Footer - Action Buttons */}
       <footer className="text-center py-8 border-t border-gray-200 space-y-4">
         <div className="flex justify-center gap-4">
-          {isEditing ? (
+          {state.isEditing ? (
             <button
-              onClick={saveTaskList}
-              disabled={!canSave}
+              onClick={savePowerList}
+              disabled={!state.canSave}
               className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
             >
               Save Lists

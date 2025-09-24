@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { usePowerListService } from '@/hooks/usePowerListService';
+import { usePowerListService } from '@/app/_hooks/usePowerListService';
 
 export function StatsPanel() {
   const { getStats } = usePowerListService();

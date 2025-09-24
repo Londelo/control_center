@@ -5,7 +5,7 @@ export interface Task {
   createdAt: string;
 }
 
-export interface TaskList {
+export interface PowerList {
   id: string;
   date: string;
   tasks: Task[];
@@ -15,6 +15,10 @@ export interface TaskList {
   isComplete: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PowerLists {
+  [date: string]: PowerList
 }
 
 export interface DayStats {
@@ -32,7 +36,7 @@ export interface TaskStats {
   successRate: number;
 }
 
-export interface AppStats {
+export interface PowerListStats {
   totalWins: number;
   totalLosses: number;
   currentStreak: number;

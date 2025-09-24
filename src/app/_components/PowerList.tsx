@@ -1,10 +1,10 @@
 "use client"
 
-import { TaskList as TaskListType } from '@/types/powerList';
+import { PowerList as PowerListType } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
 
-interface TaskListProps {
-  taskList: TaskListType;
+interface PowerListProps {
+  powerList: PowerListType;
   isEditing: boolean;
   showCheckboxes: boolean;
   onTaskUpdate: (taskId: string, text: string) => void;
@@ -13,10 +13,10 @@ interface TaskListProps {
   onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
-export function TaskList({ taskList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, taskRefs, onKeyDown }: TaskListProps) {
+export function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, taskRefs, onKeyDown }: PowerListProps) {
   return (
     <div className="space-y-3">
-      {taskList.tasks.map((task, index) => (
+      {powerList.tasks.map((task, index) => (
         <TaskCard
           key={task.id}
           task={task}
