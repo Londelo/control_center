@@ -17,7 +17,8 @@ import {
   ToggleTaskCompletion,
   SavePowerList,
   HandleKeyDown,
-  ToggleEditMode
+  ToggleEditMode,
+  OnInit
 } from '@/useCases/powerList';
 import db from '@/logic/powerList/db';
 
@@ -45,6 +46,17 @@ export function usePowerListService() {
   const handleMissedDays = useCallback(HandleMissedDays(), [])
   const handleLostDays = useCallback(HandleLostDays(), [])
 
+  const onInit = useCallback(
+    OnInit({
+      today,
+      setPowerLists,
+      handleMissedDays,
+      handleLostDays,
+      loadPowerListForDate
+    }),
+    [setPowerLists, handleMissedDays, handleLostDays, loadPowerListForDate]
+  );
+
   const loadPowerListForDate = useCallback(
     LoadPowerListForDate({
       setIsLoading,
@@ -58,12 +70,8 @@ export function usePowerListService() {
 
   //ON INIT
   useEffect(() => {
-    createMockPowerLists(today);
-    handleMissedDays(today);
-    handleLostDays(today);
-    loadPowerListForDate(today);
-    db.updateLastViewedDate(today)
-  }, []);
+    onInit();
+  }, [onInit]);
 
   // Initialize refs
   useEffect(() => {
