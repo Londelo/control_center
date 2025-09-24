@@ -1,41 +1,51 @@
 import db from '@/logic/powerList/db';
-import createMockPowerLists from '@/tools/createMockPowerLists';
-import { PowerLists } from '@/types/powerList';
+// import createMockPowerLists from '@/tools/createMockPowerLists';
+import { PowerLists, PowerList } from '@/types/powerList';
+import {
+  HandleMissedDays,
+  HandleLostDays,
+  LoadPowerListForDate
+} from '@/useCases/powerList';
 
 type OnInitArgs = {
   today: string;
   setPowerLists: (powerLists: PowerLists) => void;
-  handleMissedDays: (today: string) => void;
-  handleLostDays: (today: string) => void;
-  loadPowerListForDate: (date: string) => void;
-};
+  setIsLoading: (isLoading: boolean) => void;
+  setCurrentPowerList: (PowerList: PowerList) => void;
+  setIsEditing: (isEditing: boolean) => void;
+}
 
 const OnInit = ({
   today,
   setPowerLists,
-  handleMissedDays,
-  handleLostDays,
-  loadPowerListForDate
+  setIsLoading,
+  setCurrentPowerList,
+  setIsEditing
 }: OnInitArgs) => () => {
-  // Get all existing power lists and last viewed date
+  setIsLoading(true);
+
+  // createMockPowerLists(today);
+
   const allPowerLists = db.getAllPowerLists();
-  const lastViewedDate = db.getLastViewedDate();
-  
-  // Set the power lists in state
   setPowerLists(allPowerLists);
-  
-  // Create mock data if needed (this should probably be conditional in real app)
-  createMockPowerLists(today);
-  
-  // Handle missed days and lost days
+
+  const handleMissedDays = HandleMissedDays(allPowerLists)
+  const handleLostDays = HandleLostDays(allPowerLists)
+  const loadPowerListForDate = LoadPowerListForDate({
+    today,
+    allPowerLists,
+    setCurrentPowerList,
+    setIsEditing
+  })
+
+
   handleMissedDays(today);
   handleLostDays(today);
-  
-  // Load the current day's power list
   loadPowerListForDate(today);
-  
-  // Update last viewed date
+
   db.updateLastViewedDate(today);
+
+  setIsLoading(false);
 };
 
 export default OnInit;

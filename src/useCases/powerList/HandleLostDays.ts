@@ -1,7 +1,7 @@
 import db from '@/logic/powerList/db';
+import { PowerLists } from '@/types/powerList';
 
-const HandleLostDays = () => (today: string) => {
-  const allPowerLists = db.getAllPowerLists();
+const HandleLostDays = (allPowerLists: PowerLists) => (today: string) => {
 
   Object.entries(allPowerLists).forEach(([date, powerList]) => {
     // Only process past dates (not today) that are not wins and not already marked as losses

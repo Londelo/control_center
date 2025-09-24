@@ -1,5 +1,6 @@
 import db from '@/logic/powerList/db';
 import { getMostRecentTasks, createPowerList } from '@/logic/powerList';
+import { PowerLists } from '@/types/powerList';
 
 export function generateMissedDays(lastDate: string, currentDate: string): string[] {
   const missed: string[] = [];
@@ -16,9 +17,8 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
   return missed;
 }
 
-const HandleMissedDays = () => (today: string) => {
+const HandleMissedDays = (allPowerLists: PowerLists) => (today: string) => {
   const lastViewedDate = db.getLastViewedDate();
-  const allPowerLists = db.getAllPowerLists();
 
   if (lastViewedDate && lastViewedDate !== today) {
     const missedDays = generateMissedDays(lastViewedDate, today)

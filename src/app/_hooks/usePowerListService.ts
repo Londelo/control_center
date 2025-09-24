@@ -4,11 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { PowerList, PowerLists } from '@/types/powerList';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
-import createMockPowerLists from '@/tools/createMockPowerLists';
 import {
-  HandleMissedDays,
-  HandleLostDays,
-  LoadPowerListForDate,
   NavigateToDate,
   AddSideTask,
   RemoveSideTask,
@@ -20,7 +16,6 @@ import {
   ToggleEditMode,
   OnInit
 } from '@/useCases/powerList';
-import db from '@/logic/powerList/db';
 
 const today = new Date().toLocaleDateString();
 
@@ -43,29 +38,15 @@ export function usePowerListService() {
   const canNavigateForward = currentDate < today;
   const canNavigateBackward = getCanNavigateBackward(currentDate, powerLists);
 
-  const handleMissedDays = useCallback(HandleMissedDays(), [])
-  const handleLostDays = useCallback(HandleLostDays(), [])
-
   const onInit = useCallback(
     OnInit({
       today,
       setPowerLists,
-      handleMissedDays,
-      handleLostDays,
-      loadPowerListForDate
-    }),
-    [setPowerLists, handleMissedDays, handleLostDays, loadPowerListForDate]
-  );
-
-  const loadPowerListForDate = useCallback(
-    LoadPowerListForDate({
       setIsLoading,
       setCurrentPowerList,
-      setIsEditing,
-      setPowerLists,
-      today
+      setIsEditing
     }),
-    [setIsLoading, setCurrentPowerList, setIsEditing, setPowerLists, today]
+    []
   );
 
   //ON INIT
@@ -107,11 +88,12 @@ export function usePowerListService() {
     NavigateToDate({
       currentDate,
       setCurrentDate,
+      powerLists,
+      setCurrentPowerList,
       canNavigateForward,
-      canNavigateBackward,
-      loadPowerListForDate,
+      canNavigateBackward
     }),
-    [currentDate, setCurrentDate, canNavigateForward, canNavigateBackward, loadPowerListForDate]
+    [currentDate, powerLists, setCurrentDate, canNavigateForward, canNavigateBackward]
   );
 
   const updateTask = useCallback(

@@ -2,24 +2,20 @@ import { createPowerList, getMostRecentTasks, isPowerListComplete } from '@/logi
 import db from '@/logic/powerList/db';
 import { PowerList, PowerLists } from '@/types/powerList';
 
-type LoadPowerListForDateArgs = {
-  setIsLoading: (isLoading: boolean) => void;
+export type LoadPowerListForDateArgs = {
   setCurrentPowerList: (PowerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
-  setPowerLists: (allPowerLists: PowerLists) => void;
   today: string;
+  allPowerLists: PowerLists
 };
 
 const LoadPowerListForDate = ({
-  setIsLoading,
   setCurrentPowerList,
   setIsEditing,
-  setPowerLists,
   today,
+  allPowerLists
 }: LoadPowerListForDateArgs) => async (date: string) => {
-  setIsLoading(true);
-  let powerList = db.getTasksByDate(date);
-  const allPowerLists = db.getAllPowerLists();
+  let powerList = allPowerLists[date]
 
   if (!powerList) {
     if (date === today) {
@@ -30,9 +26,9 @@ const LoadPowerListForDate = ({
       powerList = createPowerList(date);
     }
   }
+
   setCurrentPowerList(powerList);
-  setPowerLists(allPowerLists)
   setIsEditing(!isPowerListComplete(powerList));
-  setIsLoading(false);};
+};
 
 export default LoadPowerListForDate;

@@ -6,9 +6,11 @@ CC-1 TODO:
     - DB is part of the outer most ring
   - done - Reduce the amount of functions im sure this can be simplified
   - Fix issues
-    - navigating does not change the list
-    - total lost count is off
+    - done - On init we want to get all the data and then pass it to the other init functions
+    - done - total lost count is off
+    - done - navigating does not change the list
     - done - lastSavedDate should be lastVisitedDate and it should be updated on init
     - done - data from the db needs to be saved on init in the state so I dont have to constantly call the db
     - done - we should not be allowed to navigate back if there is not record
     - done - the list status is incorrect on init for a win
+

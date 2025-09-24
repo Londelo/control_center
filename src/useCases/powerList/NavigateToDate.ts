@@ -1,12 +1,15 @@
+import { PowerList, PowerLists } from '@/types/powerList';
+
 type NavigateToDateArgs = {
   currentDate: string;
+  powerLists: PowerLists
   setCurrentDate: (date: string) => void;
+  setCurrentPowerList: (PowerList: PowerList) => void;
   canNavigateForward: boolean;
   canNavigateBackward: boolean;
-  loadPowerListForDate: (date: string) => void;
 };
 
-const NavigateToDate = ({ currentDate, setCurrentDate, canNavigateForward, canNavigateBackward, loadPowerListForDate }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
+const NavigateToDate = ({ currentDate, setCurrentDate, powerLists, setCurrentPowerList, canNavigateForward, canNavigateBackward }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
   if (direction === 'next' && !canNavigateForward) {
     return;
   }
@@ -19,8 +22,9 @@ const NavigateToDate = ({ currentDate, setCurrentDate, canNavigateForward, canNa
   const isPreviousDirection = direction === 'prev';
   currentDateObject.setDate(currentDateObject.getDate() + (isPreviousDirection ? -1 : 1));
   const newDate = currentDateObject.toLocaleDateString();
+  const currentPowerList = powerLists[newDate]
   setCurrentDate(newDate);
-  loadPowerListForDate(newDate);
+  setCurrentPowerList(currentPowerList)
 };
 
 export default NavigateToDate;
