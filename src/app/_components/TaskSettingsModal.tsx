@@ -8,14 +8,19 @@ interface TaskSettingsModalProps {
   task: Task | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: (taskId: string, updates: Partial<Task>) => void;
+  onUpdate: (taskId: string, updates: Partial<Task>) => void;
 }
 
-export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSettingsModalProps) {
+export function TaskSettingsModal({ task, isOpen, onClose, onUpdate }: TaskSettingsModalProps) {
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
   const [reason, setReason] = useState('');
   const [timeNeeded, setTimeNeeded] = useState(30);
+
+  const updateTask = (updates: Partial<Task>) => {
+    if (!task) return;
+    onUpdate(task.id, updates);
+  };
 
   useEffect(() => {
     if (task) {
@@ -25,21 +30,6 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
       setTimeNeeded(task.time.needed);
     }
   }, [task]);
-
-  const handleSave = () => {
-    if (!task) return;
-
-    onSave(task.id, {
-      text,
-      description,
-      reason,
-      time: {
-        ...task.time,
-        needed: timeNeeded
-      }
-    });
-    onClose();
-  };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -76,7 +66,11 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
             <input
               type="text"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => {
+                const newText = e.target.value;
+                setText(newText);
+                updateTask({ text: newText });
+              }}
               className="w-full p-2 border-2 border-black font-mono text-base"
               placeholder="Enter task text"
             />
@@ -89,7 +83,11 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
             </label>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => {
+                const newDescription = e.target.value;
+                setDescription(newDescription);
+                updateTask({ description: newDescription });
+              }}
               rows={3}
               className="w-full p-2 border-2 border-black font-mono text-base resize-none"
               placeholder="Enter task description (optional)"
@@ -103,7 +101,11 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
             </label>
             <textarea
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={(e) => {
+                const newReason = e.target.value;
+                setReason(newReason);
+                updateTask({ reason: newReason });
+              }}
               rows={3}
               className="w-full p-2 border-2 border-black font-mono text-base resize-none"
               placeholder="Enter reason for this task (optional)"
@@ -118,7 +120,16 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
             <input
               type="number"
               value={timeNeeded}
-              onChange={(e) => setTimeNeeded(Math.max(1, parseInt(e.target.value) || 1))}
+              onChange={(e) => {
+                const newTimeNeeded = Math.max(1, parseInt(e.target.value) || 1);
+                setTimeNeeded(newTimeNeeded);
+                updateTask({ 
+                  time: {
+                    ...task?.time || { needed: 30, left: 30 },
+                    needed: newTimeNeeded
+                  }
+                });
+              }}
               min="1"
               className="w-full p-2 border-2 border-black font-mono text-base"
             />
@@ -126,22 +137,6 @@ export function TaskSettingsModal({ task, isOpen, onClose, onSave }: TaskSetting
               Number of days required before this becomes a habit
             </p>
           </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-3 mt-6">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border-2 border-black text-black font-mono hover:bg-gray-100 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex-1 px-4 py-2 bg-black text-white font-mono hover:bg-gray-800 transition-colors"
-          >
-            Save
-          </button>
         </div>
       </div>
     </div>

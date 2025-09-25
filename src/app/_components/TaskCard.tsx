@@ -10,11 +10,12 @@ interface TaskCardProps {
   onTextChange: (text: string) => void;
   onToggleComplete: () => void;
   onSettingsClick?: () => void;
+  onTaskClick?: () => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;
   inputRef?: React.RefObject<HTMLInputElement>;
 }
 
-export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onKeyDown, inputRef }: TaskCardProps) {
+export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick, onKeyDown, inputRef }: TaskCardProps) {
   return (
     <div className="flex items-start gap-3 font-mono text-base text-left">
       {showCheckbox && (
@@ -49,11 +50,14 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
           className="flex-1 bg-transparent border-none outline-none font-mono text-base placeholder-gray-400"
         />
       ) : (
-        <span
-          className={`flex-1 ${task.completed ? 'line-through text-gray-500' : 'text-black'}`}
+        <button
+          onClick={onTaskClick}
+          className={`flex-1 text-left hover:bg-gray-50 px-1 py-0.5 rounded transition-colors ${
+            task.completed ? 'line-through text-gray-500' : 'text-black hover:text-blue-600'
+          }`}
         >
           {task.text ? task.text : 'Enter your task'}
-        </span>
+        </button>
       )}
     </div>
   );

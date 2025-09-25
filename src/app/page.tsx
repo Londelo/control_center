@@ -3,6 +3,7 @@
 import { PowerList } from "@/app/_components/PowerList";
 import { StandardTaskList } from "@/app/_components/StandardTaskList";
 import { TaskSettingsModal } from "@/app/_components/TaskSettingsModal";
+import { TaskDetailsModal } from "@/app/_components/TaskDetailsModal";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +27,8 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
 export default function Home() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTaskForDetails, setSelectedTaskForDetails] = useState<Task | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const {
     state,
@@ -48,23 +51,33 @@ export default function Home() {
     }
   };
 
+  const handleTaskClick = (taskId: string) => {
+    const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
+    if (task) {
+      setSelectedTaskForDetails(task);
+      setIsDetailsModalOpen(true);
+    }
+  };
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
   };
 
-  const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
-    if (!state.currentPowerList) return;
+  const handleDetailsModalClose = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedTaskForDetails(null);
+  };
 
-    const updatedTask = { ...state.currentPowerList.tasks.find(t => t.id === taskId), ...updates } as Task;
-    updateTask(taskId, updatedTask.text);
-
-    // Update other properties if they exist
-    if (updates.description !== undefined || updates.time !== undefined) {
-      // We need to update the full task object, not just the text
-      // This will require updating the updateTask function or creating a new one
-      console.log('Full task update needed:', updates);
+  const handleEditFromDetails = () => {
+    if (selectedTaskForDetails) {
+      setSelectedTask(selectedTaskForDetails);
+      setIsDetailsModalOpen(false);
+      setIsModalOpen(true);
     }
+  };
+
+  const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
+    updateTask(taskId, updates);
   };
 
   if (state.isLoading) {
@@ -130,6 +143,7 @@ export default function Home() {
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
               onTaskSettings={handleTaskSettings}
+              onTaskClick={handleTaskClick}
               taskRefs={state.powerListRefs}
               onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
@@ -192,7 +206,15 @@ export default function Home() {
         task={selectedTask}
         isOpen={isModalOpen}
         onClose={handleModalClose}
-        onSave={handleTaskUpdate}
+        onUpdate={handleTaskUpdate}
+      />
+
+      {/* Task Details Modal */}
+      <TaskDetailsModal
+        task={selectedTaskForDetails}
+        isOpen={isDetailsModalOpen}
+        onClose={handleDetailsModalClose}
+        onEdit={handleEditFromDetails}
       />
     </div>
   );
