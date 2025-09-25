@@ -55,10 +55,10 @@ export default function Home() {
 
   const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
     if (!state.currentPowerList) return;
-    
+
     const updatedTask = { ...state.currentPowerList.tasks.find(t => t.id === taskId), ...updates } as Task;
     updateTask(taskId, updatedTask.text);
-    
+
     // Update other properties if they exist
     if (updates.description !== undefined || updates.time !== undefined) {
       // We need to update the full task object, not just the text
@@ -118,8 +118,10 @@ export default function Home() {
       <main className="flex-1 flex">
         {/* Left Column - PowerList */}
         <div className="flex-1 p-8 border-r border-gray-200">
-          <div className="max-w-md mx-auto">
-            <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
+          <div className="mx-auto">
+            <div className="relative mb-6">
+              <h1 className="text-lg font-mono font-bold text-center">POWER LIST:</h1>
+            </div>
 
             <PowerList
               powerList={state.currentPowerList}

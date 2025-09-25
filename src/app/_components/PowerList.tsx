@@ -16,7 +16,7 @@ interface PowerListProps {
 
 export function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, onTaskSettings, taskRefs, onKeyDown }: PowerListProps) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 max-w-md mx-auto">
       {powerList.tasks.map((task, index) => (
         <TaskCard
           key={task.id}
