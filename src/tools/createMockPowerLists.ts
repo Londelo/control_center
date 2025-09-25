@@ -1,4 +1,4 @@
-import { createPowerList, createEmptyTask } from '@/logic/powerList';
+import { createPowerList, createEmptyTask, createEmptyStandardTask } from '@/logic/powerList';
 import db from '@/logic/powerList/db';
 
 const createMockPowerLists = (today: string) => {
@@ -19,15 +19,15 @@ const createMockPowerLists = (today: string) => {
       return task;
     });
 
-    // Create side tasks with "side item" text
-    const sideTasks = Array.from({ length: 2 }, () => {
-      const task = createEmptyTask();
-      task.text = 'side item';
+    // Create standard tasks with "standard item" text
+    const standardTasks = Array.from({ length: 2 }, () => {
+      const task = createEmptyStandardTask();
+      task.text = 'standard item';
       return task;
     });
 
     // Create the PowerList
-    const powerList = createPowerList(dateString, tasks, sideTasks);
+    const powerList = createPowerList(dateString, tasks, standardTasks);
     powerList.isComplete = true;
 
     // Save to database

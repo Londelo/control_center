@@ -23,7 +23,7 @@ const ToggleTaskCompletion = ({
 
   const task =
     currentPowerList.tasks.find(t => t.id === taskId) ||
-    currentPowerList.sideTasks.find(t => t.id === taskId);
+    currentPowerList.standardTasks.find(t => t.id === taskId);
   if (!task) return;
 
   const newCompletedStatus = !task.completed;
@@ -33,14 +33,14 @@ const ToggleTaskCompletion = ({
     t.id === taskId ? { ...t, completed: newCompletedStatus } : t
   );
 
-  const updatedSideTasks = currentPowerList.sideTasks.map(t =>
+  const updatedStandardTasks = currentPowerList.standardTasks.map(t =>
     t.id === taskId ? { ...t, completed: newCompletedStatus } : t
   );
 
   const updatedList = updatePowerListStatus({
     ...currentPowerList,
     tasks: updatedTasks,
-    sideTasks: updatedSideTasks,
+    standardTasks: updatedStandardTasks,
   }, currentDate === today);
 
   // Save to database - this will persist the win/loss status

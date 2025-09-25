@@ -1,22 +1,22 @@
 import { PowerList } from '@/types/powerList';
 import { updatePowerListStatus } from '@/logic/powerList'
 
-type UpdateSideTaskArgs = {
+type UpdateStandardTaskArgs = {
   currentPowerList: PowerList | null;
   setCurrentPowerList: (powerList: PowerList) => void;
 };
 
-const UpdateSideTask = ({ currentPowerList, setCurrentPowerList }: UpdateSideTaskArgs) =>
+const UpdateStandardTask = ({ currentPowerList, setCurrentPowerList }: UpdateStandardTaskArgs) =>
   ( taskId: string, text: string ) => {
     if (!currentPowerList) return;
-    const updatedSideTasks = currentPowerList.sideTasks.map(task =>
+    const updatedStandardTasks = currentPowerList.standardTasks.map(task =>
       task.id === taskId ? { ...task, text } : task
     );
     const updatedList = updatePowerListStatus({
       ...currentPowerList,
-      sideTasks: updatedSideTasks,
+      standardTasks: updatedStandardTasks,
     });
     setCurrentPowerList(updatedList);
   };
 
-export default UpdateSideTask;
+export default UpdateStandardTask;

@@ -1,11 +1,13 @@
 "use client";
 
 import { PowerList } from "@/app/_components/PowerList";
-import { SideTaskList } from "@/app/_components/SideTaskList";
+import { StandardTaskList } from "@/app/_components/StandardTaskList";
+import { TaskSettingsModal } from "@/app/_components/TaskSettingsModal";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
-import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { PowerList as PowerListType } from "@/types/powerList";
+import { PowerList as PowerListType, Task } from "@/types/powerList";
+import { useState } from "react";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
@@ -22,18 +24,48 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
 }
 
 export default function Home() {
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
     state,
     updateTask,
-    updateSideTask,
-    addSideTask,
-    removeSideTask,
+    updateStandardTask,
+    addStandardTask,
+    removeStandardTask,
     toggleTaskCompletion,
     savePowerList,
     toggleEditMode,
     navigateToDate,
     handleKeyDown
   } = usePowerListService();
+
+  const handleTaskSettings = (taskId: string) => {
+    const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
+    if (task) {
+      setSelectedTask(task);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
+    if (!state.currentPowerList) return;
+    
+    const updatedTask = { ...state.currentPowerList.tasks.find(t => t.id === taskId), ...updates } as Task;
+    updateTask(taskId, updatedTask.text);
+    
+    // Update other properties if they exist
+    if (updates.description !== undefined || updates.time !== undefined) {
+      // We need to update the full task object, not just the text
+      // This will require updating the updateTask function or creating a new one
+      console.log('Full task update needed:', updates);
+    }
+  };
 
   if (state.isLoading) {
     return (
@@ -95,27 +127,28 @@ export default function Home() {
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
+              onTaskSettings={handleTaskSettings}
               taskRefs={state.powerListRefs}
               onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
         </div>
 
-        {/* Right Column - Side Tasks */}
+        {/* Right Column - Standard Tasks */}
         <div className="flex-1 p-8">
           <div className="max-w-md mx-auto">
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
-            <SideTaskList
-              tasks={state.currentPowerList.sideTasks}
+            <StandardTaskList
+              tasks={state.currentPowerList.standardTasks}
               isEditing={state.isEditing}
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
-              onTaskUpdate={updateSideTask}
+              onTaskUpdate={updateStandardTask}
               onTaskToggle={toggleTaskCompletion}
-              onAddTask={addSideTask}
-              onRemoveTask={removeSideTask}
-              taskRefs={state.sideTaskRefs}
-              onKeyDown={(index, e) => handleKeyDown('side', index, e)}
+              onAddTask={addStandardTask}
+              onRemoveTask={removeStandardTask}
+              taskRefs={state.standardTaskRefs}
+              onKeyDown={(index, e) => handleKeyDown('standard', index, e)}
             />
           </div>
         </div>
@@ -151,6 +184,14 @@ export default function Home() {
           </Link>
         </div>
       </footer>
+
+      {/* Task Settings Modal */}
+      <TaskSettingsModal
+        task={selectedTask}
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleTaskUpdate}
+      />
     </div>
   );
 }

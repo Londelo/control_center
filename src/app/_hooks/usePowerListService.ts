@@ -6,9 +6,9 @@ import { PowerList, PowerLists } from '@/types/powerList';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import {
   NavigateToDate,
-  AddSideTask,
-  RemoveSideTask,
-  UpdateSideTask,
+  AddStandardTask,
+  RemoveStandardTask,
+  UpdateStandardTask,
   UpdateTask,
   ToggleTaskCompletion,
   SavePowerList,
@@ -33,7 +33,7 @@ export function usePowerListService() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
-  const sideTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
+  const standardTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
   const canNavigateForward = currentDate < today;
   const canNavigateBackward = getCanNavigateBackward(currentDate, powerLists);
@@ -63,12 +63,12 @@ export function usePowerListService() {
 
   useEffect(() => {
     const hasCurrentPowerList = Boolean(currentPowerList);
-    const sideTaskInputCount = currentPowerList?.sideTasks.length || 0;
+    const standardTaskInputCount = currentPowerList?.standardTasks.length || 0;
     if (hasCurrentPowerList) {
-      const createSideTaskRefs = Array.from({ length: sideTaskInputCount }, () => React.createRef<HTMLInputElement>());
-      sideTaskRefs.current = createSideTaskRefs as React.RefObject<HTMLInputElement>[];
+      const createStandardTaskRefs = Array.from({ length: standardTaskInputCount }, () => React.createRef<HTMLInputElement>());
+      standardTaskRefs.current = createStandardTaskRefs as React.RefObject<HTMLInputElement>[];
     }
-  }, [currentPowerList?.sideTasks.length]);
+  }, [currentPowerList?.standardTasks.length]);
 
   const getStats = useCallback(() => {
     return calculatePowerListStats(powerLists);
@@ -104,24 +104,24 @@ export function usePowerListService() {
     [currentPowerList, setCurrentPowerList]
   );
 
-  const updateSideTask = useCallback(
-    UpdateSideTask({
+  const updateStandardTask = useCallback(
+    UpdateStandardTask({
       currentPowerList,
       setCurrentPowerList
     }),
     [currentPowerList, setCurrentPowerList]
   );
 
-  const addSideTask = useCallback(
-    AddSideTask({
+  const addStandardTask = useCallback(
+    AddStandardTask({
       currentPowerList,
       setCurrentPowerList
     }),
     [currentPowerList, setCurrentPowerList]
   );
 
-  const removeSideTask = useCallback(
-    RemoveSideTask({
+  const removeStandardTask = useCallback(
+    RemoveStandardTask({
       currentPowerList,
       setCurrentPowerList
     }),
@@ -164,9 +164,9 @@ export function usePowerListService() {
     HandleKeyDown({
       currentPowerList,
       powerListRefs: powerListRefs.current,
-      sideTaskRefs: sideTaskRefs.current,
+      standardTaskRefs: standardTaskRefs.current,
     }),
-    [currentPowerList, powerListRefs, sideTaskRefs]
+    [currentPowerList, powerListRefs, standardTaskRefs]
   );
 
   return {
@@ -177,15 +177,15 @@ export function usePowerListService() {
       isEditing,
       isLoading,
       powerListRefs: powerListRefs.current,
-      sideTaskRefs: sideTaskRefs.current,
+      standardTaskRefs: standardTaskRefs.current,
       canSave: currentPowerList ? isPowerListComplete(currentPowerList) : false,
       canNavigateForward,
       canNavigateBackward,
     },
     updateTask,
-    updateSideTask,
-    addSideTask,
-    removeSideTask,
+    updateStandardTask,
+    addStandardTask,
+    removeStandardTask,
     toggleTaskCompletion,
     savePowerList,
     toggleEditMode,

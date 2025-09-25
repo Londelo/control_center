@@ -1,5 +1,5 @@
 import db from '@/logic/powerList/db';
-// import createMockPowerLists from '@/tools/createMockPowerLists';
+import createMockPowerLists from '@/tools/createMockPowerLists';
 import { PowerLists, PowerList } from '@/types/powerList';
 import {
   HandleMissedDays,
@@ -24,7 +24,7 @@ const OnInit = ({
 }: OnInitArgs) => () => {
   setIsLoading(true);
 
-  // createMockPowerLists(today);
+  createMockPowerLists(today);
 
   const allPowerLists = db.getAllPowerLists();
   setPowerLists(allPowerLists);

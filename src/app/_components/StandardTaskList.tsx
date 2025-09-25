@@ -1,11 +1,11 @@
 "use client"
 
-import { Task } from '@/types/powerList';
-import { TaskCard } from './TaskCard';
+import { StandardTask } from '@/types/powerList';
+import { StandardTaskCard } from './StandardTaskCard';
 import { Plus, X } from 'lucide-react';
 
-interface SideTaskListProps {
-  tasks: Task[];
+interface StandardTaskListProps {
+  tasks: StandardTask[];
   isEditing: boolean;
   showCheckboxes: boolean;
   onTaskUpdate: (taskId: string, text: string) => void;
@@ -16,7 +16,7 @@ interface SideTaskListProps {
   onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
-export function SideTaskList({
+export function StandardTaskList({
   tasks,
   isEditing,
   showCheckboxes,
@@ -26,12 +26,12 @@ export function SideTaskList({
   onRemoveTask,
   taskRefs,
   onKeyDown
-}: SideTaskListProps) {
+}: StandardTaskListProps) {
   return (
     <div className="space-y-3">
       {tasks.map((task, index) => (
         <div key={task.id} className="flex items-start gap-2">
-          <TaskCard
+          <StandardTaskCard
             task={task}
             isEditing={isEditing}
             showCheckbox={showCheckboxes}

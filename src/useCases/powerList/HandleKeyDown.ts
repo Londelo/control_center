@@ -4,16 +4,16 @@ import { PowerList } from '@/types/powerList';
 type HandleKeyDownArgs = {
   currentPowerList: PowerList | null;
   powerListRefs: React.RefObject<HTMLInputElement>[];
-  sideTaskRefs: React.RefObject<HTMLInputElement>[];
+  standardTaskRefs: React.RefObject<HTMLInputElement>[];
 };
 
-const HandleKeyDown = ({ currentPowerList, powerListRefs, sideTaskRefs }: HandleKeyDownArgs) =>
-  ( listType: 'power' | 'side', index: number, e: React.KeyboardEvent) => {
+const HandleKeyDown = ({ currentPowerList, powerListRefs, standardTaskRefs }: HandleKeyDownArgs) =>
+  ( listType: 'power' | 'standard', index: number, e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       const powerListLength = 5;
-      const sideTaskLength = currentPowerList?.sideTasks.length || 0;
-      const totalInputs = powerListLength + sideTaskLength;
+      const standardTaskLength = currentPowerList?.standardTasks.length || 0;
+      const totalInputs = powerListLength + standardTaskLength;
       let currentGlobalIndex: number;
       if (listType === 'power') {
         currentGlobalIndex = index;
@@ -29,8 +29,8 @@ const HandleKeyDown = ({ currentPowerList, powerListRefs, sideTaskRefs }: Handle
       if (nextGlobalIndex < powerListLength) {
         powerListRefs[nextGlobalIndex]?.current?.focus();
       } else {
-        const sideIndex = nextGlobalIndex - powerListLength;
-        sideTaskRefs[sideIndex]?.current?.focus();
+        const standardIndex = nextGlobalIndex - powerListLength;
+        standardTaskRefs[standardIndex]?.current?.focus();
       }
     }
   };
