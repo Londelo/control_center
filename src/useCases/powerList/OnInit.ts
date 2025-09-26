@@ -2,10 +2,12 @@ import db from '@/logic/powerList/db';
 import createMockPowerLists from '@/tools/createMockPowerLists';
 import { PowerLists, PowerList } from '@/types/powerList';
 import {
-  HandleMissedDays,
-  HandleLostDays,
-  LoadPowerListForDate
-} from '@/useCases/powerList';
+  handleMissedDays,
+  handleLostDays,
+  calculateHabitCompletion,
+  getTodaysPowerList,
+  isPowerListComplete
+} from '@/logic/powerList';
 
 type OnInitArgs = {
   today: string;
@@ -26,25 +28,20 @@ const OnInit = ({
 
   createMockPowerLists(today);
 
-  const allPowerLists = db.getAllPowerLists();
+  let allPowerLists = db.getAllPowerLists();
+  allPowerLists = handleMissedDays({ allPowerLists, today })
+  allPowerLists = handleLostDays({ allPowerLists, today })
+  allPowerLists = calculateHabitCompletion({ allPowerLists })
   setPowerLists(allPowerLists);
 
-  const handleMissedDays = HandleMissedDays(allPowerLists)
-  const handleLostDays = HandleLostDays(allPowerLists)
-  const loadPowerListForDate = LoadPowerListForDate({
+  const todaysPowerList = getTodaysPowerList({
     today,
     allPowerLists,
-    setCurrentPowerList,
-    setIsEditing
-  })
-
-
-  handleMissedDays(today);
-  handleLostDays(today);
-  loadPowerListForDate(today);
+  });
 
   db.updateLastViewedDate(today);
-
+  setCurrentPowerList(todaysPowerList);
+  setIsEditing(!isPowerListComplete(todaysPowerList));
   setIsLoading(false);
 };
 

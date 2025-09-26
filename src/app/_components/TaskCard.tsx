@@ -2,6 +2,7 @@
 
 import { Task } from '@/types/powerList';
 import { Check, Settings } from 'lucide-react';
+import { getTaskBackgroundColor } from '@/useCases/powerList';
 
 interface TaskCardProps {
   task: Task;
@@ -16,8 +17,11 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick, onKeyDown, inputRef }: TaskCardProps) {
+  // Calculate circle color based on task progress
+  const circleColor = !isEditing ? getTaskBackgroundColor(task.time.needed, task.time.left) : '#e5e7eb';
+
   return (
-    <div className="flex items-start gap-3 font-mono text-base text-left">
+    <div className="flex items-start gap-3 font-mono text-base text-left relative">
       {showCheckbox && (
         <button
           onClick={onToggleComplete}
@@ -50,14 +54,21 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
           className="flex-1 bg-white border-2 border-gray-300 outline-none font-mono text-base placeholder-gray-400 px-2 py-1 focus:border-black"
         />
       ) : (
-        <button
-          onClick={onTaskClick}
-          className={`flex-1 text-left hover:bg-stone-200 px-1 py-0.5 rounded transition-colors ${
-            task.completed ? 'line-through text-gray-500' : 'text-black'
-          }`}
-        >
-          {task.text ? task.text : 'Enter your task'}
-        </button>
+        <div className="flex-1 relative">
+          <button
+            onClick={onTaskClick}
+            className={`w-full text-left bg-stone-200 hover:bg-stone-300 px-1 py-0.5 rounded transition-colors ${
+              task.completed ? 'line-through text-gray-500' : 'text-black'
+            }`}
+          >
+            {task.text ? task.text : 'Enter your task'}
+          </button>
+          {/* Progress Circle */}
+          <div
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 rounded-full border border-gray-300"
+            style={{ backgroundColor: circleColor }}
+          />
+        </div>
       )}
     </div>
   );

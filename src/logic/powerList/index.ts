@@ -154,3 +154,8 @@ export function calculatePowerListStats(taskHistory: Record<string, PowerList>):
     winRate: Math.round(winRate),
   };
 }
+
+export { default as handleMissedDays } from './handleMissedDays';
+export { default as handleLostDays } from './handleLostDays';
+export { default as calculateHabitCompletion } from './calculateHabitCompletion';
+export { default as getTodaysPowerList } from './getTodaysPowerList';

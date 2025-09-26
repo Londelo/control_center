@@ -1,4 +1,4 @@
-import { PowerList } from '@/types/powerList';
+import { PowerList, StandardTask, Task } from '@/types/powerList';
 import { updatePowerListStatus } from '@/logic/powerList';
 import db from '@/logic/powerList/db';
 
@@ -28,14 +28,24 @@ const ToggleTaskCompletion = ({
 
   const newCompletedStatus = !task.completed;
 
-  // Update local state for both task lists
-  const updatedTasks = currentPowerList.tasks.map(t =>
-    t.id === taskId ? { ...t, completed: newCompletedStatus } : t
-  );
+  const getUpdatedTask = (task: Task) => {
+    const shouldDecrementTimeLeft = newCompletedStatus && task.id === taskId && task.time && typeof task.time.left === 'number';
+    return task.id === taskId
+      ? {
+          ...task,
+          completed: newCompletedStatus,
+          time: shouldDecrementTimeLeft
+            ? { ...task.time, left: task.time.left - 1 }
+            : task.time
+        }
+      : task;
+  };
 
-  const updatedStandardTasks = currentPowerList.standardTasks.map(t =>
-    t.id === taskId ? { ...t, completed: newCompletedStatus } : t
-  );
+  const getUpdatedStandardTask = (task: StandardTask) =>
+    task.id === taskId ? { ...task, completed: newCompletedStatus } : task;
+
+  const updatedTasks = currentPowerList.tasks.map(getUpdatedTask);
+  const updatedStandardTasks = currentPowerList.standardTasks.map(getUpdatedStandardTask);
 
   const updatedList = updatePowerListStatus({
     ...currentPowerList,

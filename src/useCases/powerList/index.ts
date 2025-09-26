@@ -1,6 +1,3 @@
-export { default as LoadPowerListForDate } from './LoadPowerListForDate';
-export { default as HandleMissedDays } from '../../logic/powerList/HandleMissedDays';
-export { default as HandleLostDays } from '../../logic/powerList/HandleLostDays';
 export { default as NavigateToDate } from './NavigateToDate';
 export { default as UpdateTask } from './UpdateTask';
 export { default as UpdateStandardTask } from './UpdateStandardTask';
@@ -11,3 +8,4 @@ export { default as SavePowerList } from './SavePowerList';
 export { default as HandleKeyDown } from './HandleKeyDown';
 export { default as ToggleEditMode } from './ToggleEditMode';
 export { default as OnInit } from './OnInit';
+export { default as getTaskBackgroundColor } from './getTaskBackgroundColor';
