@@ -8,13 +8,15 @@ import {
   NavigateToDate,
   AddStandardTask,
   RemoveStandardTask,
+  RemoveTask,
   UpdateStandardTask,
   UpdateTask,
   ToggleTaskCompletion,
   SavePowerList,
   HandleKeyDown,
   ToggleEditMode,
-  OnInit
+  OnInit,
+  ConvertToStandard
 } from '@/useCases/powerList';
 
 const today = new Date().toLocaleDateString();
@@ -134,6 +136,22 @@ export function usePowerListService() {
     [currentPowerList, setCurrentPowerList]
   );
 
+  const removeTask = useCallback(
+    RemoveTask({
+      currentPowerList,
+      setCurrentPowerList
+    }),
+    [currentPowerList, setCurrentPowerList]
+  );
+
+  const convertToStandard = useCallback(
+    ConvertToStandard({
+      currentPowerList,
+      setCurrentPowerList
+    }),
+    [currentPowerList, setCurrentPowerList]
+  );
+
   const toggleTaskCompletion = useCallback(
     ToggleTaskCompletion({
       currentPowerList,
@@ -231,6 +249,8 @@ export function usePowerListService() {
     updateStandardTask,
     addStandardTask,
     removeStandardTask,
+    removeTask,
+    convertToStandard,
     toggleTaskCompletion,
     savePowerList,
     toggleEditMode,

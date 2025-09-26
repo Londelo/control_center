@@ -34,7 +34,7 @@ export type NewHabits = {
 
 export type PowerLists = {
   [date: string]: PowerList
-} & NewHabits;
+}
 
 export interface PowerListStats {
   totalWins: number;

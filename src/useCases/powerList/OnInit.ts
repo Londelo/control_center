@@ -1,3 +1,5 @@
+"use client"
+
 import db from '@/logic/powerList/db';
 import createMockPowerLists from '@/tools/createMockPowerLists';
 import { PowerLists, PowerList } from '@/types/powerList';
@@ -25,8 +27,10 @@ const OnInit = ({
   setIsEditing
 }: OnInitArgs) => () => {
   setIsLoading(true);
-
-  createMockPowerLists(today);
+  console.log("ENV: ",process.env.NODE_ENV)
+  if(process.env.NODE_ENV === 'development') {
+    createMockPowerLists(today);
+  }
 
   let allPowerLists = db.getAllPowerLists();
   allPowerLists = handleMissedDays({ allPowerLists, today })

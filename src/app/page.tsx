@@ -30,6 +30,8 @@ export default function Home() {
     updateStandardTask,
     addStandardTask,
     removeStandardTask,
+    removeTask,
+    convertToStandard,
     toggleTaskCompletion,
     savePowerList,
     toggleEditMode,
@@ -71,7 +73,7 @@ export default function Home() {
           <ChevronLeft size={24} />
         </button>
 
-        <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
+        <div className="text-2xl font-mono mb-2 flex items-center justify-center gap-2">
           <span>{state.currentDate} -</span>
           <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
             {getListStatus(state.currentPowerList, state.currentDate, state.today)}
@@ -169,6 +171,14 @@ export default function Home() {
         isOpen={state.isSettingsModalOpen}
         onClose={handleModalClose}
         onUpdate={updateTask}
+        onMakeStandard={(taskId) => {
+          convertToStandard(taskId);
+          handleModalClose();
+        }}
+        onDelete={(taskId) => {
+          removeTask(taskId);
+          handleModalClose();
+        }}
       />
 
       {/* Task Details Modal */}
