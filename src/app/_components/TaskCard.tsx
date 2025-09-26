@@ -2,7 +2,7 @@
 
 import { Task } from '@/types/powerList';
 import { Check, Settings } from 'lucide-react';
-import { GetTaskBackgroundColor } from '@/useCases/powerList';
+import { getTaskBackgroundColor } from '@/useCases/powerList';
 
 interface TaskCardProps {
   task: Task;
@@ -18,7 +18,7 @@ interface TaskCardProps {
 
 export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick, onKeyDown, inputRef }: TaskCardProps) {
   // Calculate background color based on task progress
-  const backgroundColor = !isEditing ? GetTaskBackgroundColor(task.time.needed, task.time.left) : 'transparent';
+  const backgroundColor = !isEditing ? getTaskBackgroundColor(task.time.needed, task.time.left) : 'transparent';
 
   return (
     <div className="flex items-start gap-3 font-mono text-base text-left">
