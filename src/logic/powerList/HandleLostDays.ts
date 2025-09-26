@@ -1,7 +1,17 @@
-import db from '@/logic/powerList/db';
 import { PowerLists } from '@/types/powerList';
+import db from '@/logic/powerList/db';
 
-const HandleLostDays = (allPowerLists: PowerLists) => (today: string) => {
+export type HandleLostDays = {
+  today: string;
+  allPowerLists: PowerLists
+};
+
+
+const handleLostDays = ({
+  today,
+  allPowerLists
+}: HandleLostDays) => {
+  const updatedPowerLists: PowerLists = { ...allPowerLists };
 
   Object.entries(allPowerLists).forEach(([date, powerList]) => {
     // Only process past dates (not today) that are not wins and not already marked as losses
@@ -12,10 +22,12 @@ const HandleLostDays = (allPowerLists: PowerLists) => (today: string) => {
         isComplete: true,
         updatedAt: new Date().toISOString(),
       };
-
       db.saveTasksForDate(date, updatedPowerList);
+      updatedPowerLists[date] = updatedPowerList;
     }
   });
+
+  return updatedPowerLists;
 };
 
-export default HandleLostDays;
+export default handleLostDays;
