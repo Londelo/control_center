@@ -1,4 +1,3 @@
-
 const getTaskBackgroundColor = (timeNeeded: number, timeLeft: number): string => {
   // Handle edge cases
   if (timeNeeded <= 0) return 'hsl(0, 70%, 85%)'; // Red for invalid data
