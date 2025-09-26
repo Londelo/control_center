@@ -4,8 +4,9 @@ import { PowerLists, PowerList } from '@/types/powerList';
 import {
   HandleMissedDays,
   HandleLostDays,
-  LoadPowerListForDate
-} from '@/useCases/powerList';
+  LoadPowerListForDate,
+  CalculateHabitCompletion
+} from '@/logic/powerList';
 
 type OnInitArgs = {
   today: string;
@@ -31,16 +32,26 @@ const OnInit = ({
 
   const handleMissedDays = HandleMissedDays(allPowerLists)
   const handleLostDays = HandleLostDays(allPowerLists)
+
   const loadPowerListForDate = LoadPowerListForDate({
     today,
-    allPowerLists,
+    allPowerLists: allPowerLists,
     setCurrentPowerList,
     setIsEditing
   })
 
-
   handleMissedDays(today);
   handleLostDays(today);
+
+  // Re-fetch updated PowerLists after handling missed/lost days
+  const updatedPowerLists = db.getAllPowerLists();
+  const calculateHabitCompletion = CalculateHabitCompletion(updatedPowerLists);
+  const finalPowerLists = calculateHabitCompletion();
+
+  // Update state with final processed PowerLists
+  setPowerLists(finalPowerLists);
+
+  // Load current date with updated data
   loadPowerListForDate(today);
 
   db.updateLastViewedDate(today);
