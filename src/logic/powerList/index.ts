@@ -155,7 +155,7 @@ export function calculatePowerListStats(taskHistory: Record<string, PowerList>):
   };
 }
 
-export { default as handleMissedDays } from './_handleMissedDays';
-export { default as handleLostDays } from './_handleLostDays';
-export { default as calculateHabitCompletion } from './_calculateHabitCompletion';
+export { default as handleMissedDays } from './handleMissedDays';
+export { default as handleLostDays } from './handleLostDays';
+export { default as calculateHabitCompletion } from './calculateHabitCompletion';
 export { default as getTodaysPowerList } from './getTodaysPowerList';

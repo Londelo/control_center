@@ -4,7 +4,7 @@ export type CalculateHabitCompletion = {
   allPowerLists: PowerLists
 };
 
-const calculateHabitCompletion = ({ allPowerLists }: CalculateHabitCompletion): PowerLists => {
+const calculateHabitCompletion = ({allPowerLists}:CalculateHabitCompletion): PowerLists => {
   // Track completion count for each unique task text
   const taskCompletionMap = new Map<string, number>();
   const updatedPowerLists: PowerLists = {...allPowerLists};
