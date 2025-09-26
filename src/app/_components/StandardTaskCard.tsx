@@ -1,25 +1,36 @@
 "use client"
 
-import { Task } from '@/types/powerList';
-import { Check, Settings } from 'lucide-react';
-import { GetTaskBackgroundColor } from '@/useCases/powerList';
+import { StandardTask } from '@/types/powerList';
+import { Check } from 'lucide-react';
 
 interface TaskCardProps {
-  task: Task;
+  task: StandardTask;
   isEditing: boolean;
   showCheckbox: boolean;
   onTextChange: (text: string) => void;
   onToggleComplete: () => void;
-  onSettingsClick?: () => void;
-  onTaskClick?: () => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;
   inputRef?: React.RefObject<HTMLInputElement>;
 }
 
-export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick, onKeyDown, inputRef }: TaskCardProps) {
-  // Calculate background color based on task progress
-  const backgroundColor = !isEditing ? GetTaskBackgroundColor(task.time.needed, task.time.left) : 'transparent';
+const formatTaskText = (text: string) => {
+  const commaIndex = text.indexOf(',');
+  if (commaIndex === -1) {
+    return <span>{text}</span>;
+  }
 
+  const beforeComma = text.substring(0, commaIndex);
+  const afterComma = text.substring(commaIndex);
+
+  return (
+    <span>
+      <strong>{beforeComma}</strong>
+      {afterComma}
+    </span>
+  );
+};
+
+export function StandardTaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onKeyDown, inputRef }: TaskCardProps) {
   return (
     <div className="flex items-start gap-3 font-mono text-base text-left">
       {showCheckbox && (
@@ -34,15 +45,6 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         </button>
       )}
 
-      {isEditing && (
-        <button
-          onClick={onSettingsClick}
-          className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-black flex-shrink-0 mt-2"
-        >
-          <Settings size={14} />
-        </button>
-      )}
-
       {isEditing ? (
         <input
           ref={inputRef}
@@ -54,15 +56,11 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
           className="flex-1 bg-white border-2 border-gray-300 outline-none font-mono text-base placeholder-gray-400 px-2 py-1 focus:border-black"
         />
       ) : (
-        <button
-          onClick={onTaskClick}
-          style={{ backgroundColor }}
-          className={`flex-1 text-left hover:bg-stone-200 px-1 py-0.5 rounded transition-colors ${
-            task.completed ? 'line-through text-gray-500' : 'text-black'
-          }`}
+        <span
+          className={`flex-1 cursor-default ${task.completed ? 'line-through text-gray-500' : 'text-black'}`}
         >
-          {task.text ? task.text : 'Enter your task'}
-        </button>
+          {task.text ? formatTaskText(task.text) : 'Enter your task'}
+        </span>
       )}
     </div>
   );

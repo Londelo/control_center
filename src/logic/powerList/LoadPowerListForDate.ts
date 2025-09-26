@@ -19,8 +19,8 @@ const LoadPowerListForDate = ({
 
   if (!powerList) {
     if (date === today) {
-      const { tasks: recentTasks, sideTasks: recentSideTasks } = getMostRecentTasks(allPowerLists);
-      powerList = createPowerList(date, recentTasks, recentSideTasks);
+      const { tasks: recentTasks, standardTasks: recentStandardTasks } = getMostRecentTasks(allPowerLists);
+      powerList = createPowerList(date, recentTasks, recentStandardTasks);
       db.saveTasksForDate(date, powerList);
     } else {
       powerList = createPowerList(date);

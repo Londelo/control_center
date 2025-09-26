@@ -1,0 +1,4 @@
+
+const THIRTY_DAYS = 30
+
+export const DEFAULT_TIME_NEEDED = THIRTY_DAYS
