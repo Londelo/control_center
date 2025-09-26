@@ -57,7 +57,7 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         <div className="flex-1 relative">
           <button
             onClick={onTaskClick}
-            className={`w-full text-left hover:bg-stone-200 px-1 py-0.5 rounded transition-colors ${
+            className={`w-full text-left bg-stone-200 hover:bg-stone-300 px-1 py-0.5 rounded transition-colors ${
               task.completed ? 'line-through text-gray-500' : 'text-black'
             }`}
           >
