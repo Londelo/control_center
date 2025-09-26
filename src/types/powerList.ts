@@ -28,9 +28,13 @@ export interface PowerList {
   updatedAt: string;
 }
 
-export interface PowerLists {
-  [date: string]: PowerList
+export type NewHabits = {
+  newHabits?: Task[];
 }
+
+export type PowerLists = {
+  [date: string]: PowerList
+} & NewHabits;
 
 export interface PowerListStats {
   totalWins: number;
