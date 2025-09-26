@@ -169,6 +169,10 @@ export default function Home() {
         isOpen={state.isSettingsModalOpen}
         onClose={handleModalClose}
         onUpdate={updateTask}
+        onMakeStandard={(taskId) => {
+          // TODO: Implement make standard functionality
+          console.log('Make standard:', taskId);
+        }}
       />
 
       {/* Task Details Modal */}

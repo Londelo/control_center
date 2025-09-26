@@ -9,9 +9,10 @@ interface TaskSettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (taskId: string, updates: Partial<Task>) => void;
+  onMakeStandard?: (taskId: string) => void;
 }
 
-export function TaskSettingsModal({ task, isOpen, onClose, onUpdate }: TaskSettingsModalProps) {
+export function TaskSettingsModal({ task, isOpen, onClose, onUpdate, onMakeStandard }: TaskSettingsModalProps) {
   const [text, setText] = useState('');
   const [description, setDescription] = useState('');
   const [reason, setReason] = useState('');
@@ -137,6 +138,21 @@ export function TaskSettingsModal({ task, isOpen, onClose, onUpdate }: TaskSetti
               Number of days required before this becomes a habit
             </p>
           </div>
+
+          {/* Make Standard Button - only show when time.left is 0 */}
+          {task.time.left === 0 && (
+            <div className="pt-4 border-t border-gray-200">
+              <button
+                onClick={() => onMakeStandard?.(task.id)}
+                className="w-full px-6 py-2 bg-green-600 text-white font-mono hover:bg-green-700 transition-colors"
+              >
+                Make a Standard
+              </button>
+              <p className="text-xs text-gray-500 mt-2 font-mono text-center">
+                This task has become a habit! Convert it to a standard task.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
