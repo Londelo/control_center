@@ -10,6 +10,7 @@ interface TaskSettingsModalProps {
   onClose: () => void;
   onUpdate: (taskId: string, updates: Partial<Task>) => void;
   onMakeStandard?: (taskId: string) => void;
+  onDelete?: (taskId: string) => void;
 }
 
 export function TaskSettingsModal({ task, isOpen, onClose, onUpdate, onMakeStandard }: TaskSettingsModalProps) {
@@ -153,6 +154,24 @@ export function TaskSettingsModal({ task, isOpen, onClose, onUpdate, onMakeStand
               </p>
             </div>
           )}
+
+          {/* Delete Button */}
+          <div className="pt-4 border-t border-gray-200">
+            <button
+              onClick={() => {
+                if (window.confirm('Are you sure you want to delete this task? This action cannot be undone.')) {
+                  onDelete?.(task.id);
+                  onClose();
+                }
+              }}
+              className="w-full px-6 py-2 bg-red-600 text-white font-mono hover:bg-red-700 transition-colors"
+            >
+              Delete Task
+            </button>
+            <p className="text-xs text-gray-500 mt-2 font-mono text-center">
+              Permanently remove this task from your power list.
+            </p>
+          </div>
         </div>
       </div>
     </div>

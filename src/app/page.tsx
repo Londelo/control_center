@@ -173,6 +173,10 @@ export default function Home() {
           // TODO: Implement make standard functionality
           console.log('Make standard:', taskId);
         }}
+        onDelete={(taskId) => {
+          // TODO: Implement delete functionality
+          console.log('Delete task:', taskId);
+        }}
       />
 
       {/* Task Details Modal */}
