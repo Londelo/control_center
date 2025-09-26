@@ -43,7 +43,7 @@ export function StandardTaskList({
           {isEditing && (
             <button
               onClick={() => onRemoveTask(task.id)}
-              className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-0.5"
+              className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-2"
             >
               <X size={14} />
             </button>

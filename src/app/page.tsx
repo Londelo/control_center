@@ -8,7 +8,6 @@ import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { PowerList as PowerListType, Task } from "@/types/powerList";
-import { useState } from "react";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
@@ -25,11 +24,6 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
 }
 
 export default function Home() {
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedTaskForDetails, setSelectedTaskForDetails] = useState<Task | null>(null);
-  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
-
   const {
     state,
     updateTask,
@@ -40,45 +34,13 @@ export default function Home() {
     savePowerList,
     toggleEditMode,
     navigateToDate,
-    handleKeyDown
+    handleKeyDown,
+    handleDetailsModalClose,
+    handleEditFromDetails,
+    handleModalClose,
+    handleTaskClick,
+    handleTaskSettings
   } = usePowerListService();
-
-  const handleTaskSettings = (taskId: string) => {
-    const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
-    if (task) {
-      setSelectedTask(task);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleTaskClick = (taskId: string) => {
-    const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
-    if (task) {
-      setSelectedTaskForDetails(task);
-      setIsDetailsModalOpen(true);
-    }
-  };
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedTask(null);
-  };
-
-  const handleDetailsModalClose = () => {
-    setIsDetailsModalOpen(false);
-    setSelectedTaskForDetails(null);
-  };
-
-  const handleEditFromDetails = () => {
-    if (selectedTaskForDetails) {
-      setSelectedTask(selectedTaskForDetails);
-      setIsDetailsModalOpen(false);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleTaskUpdate = (taskId: string, updates: Partial<Task>) => {
-    updateTask(taskId, updates);
-  };
 
   if (state.isLoading) {
     return (
@@ -203,16 +165,16 @@ export default function Home() {
 
       {/* Task Settings Modal */}
       <TaskSettingsModal
-        task={selectedTask}
-        isOpen={isModalOpen}
+        task={state.selectedTask}
+        isOpen={state.isSettingsModalOpen}
         onClose={handleModalClose}
-        onUpdate={handleTaskUpdate}
+        onUpdate={updateTask}
       />
 
       {/* Task Details Modal */}
       <TaskDetailsModal
-        task={selectedTaskForDetails}
-        isOpen={isDetailsModalOpen}
+        task={state.selectedTaskForDetails}
+        isOpen={state.isDetailsModalOpen}
         onClose={handleDetailsModalClose}
         onEdit={handleEditFromDetails}
       />

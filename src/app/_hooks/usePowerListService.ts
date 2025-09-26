@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
-import { PowerList, PowerLists } from '@/types/powerList';
+import { PowerList, PowerLists, Task } from '@/types/powerList';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import {
   NavigateToDate,
@@ -32,6 +32,12 @@ export function usePowerListService() {
   const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [selectedTaskForDetails, setSelectedTaskForDetails] = useState<Task | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const standardTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
@@ -169,6 +175,41 @@ export function usePowerListService() {
     [currentPowerList, powerListRefs, standardTaskRefs]
   );
 
+  const handleTaskSettings = useCallback((taskId: string) => {
+    const task = currentPowerList?.tasks.find(t => t.id === taskId);
+    if (task) {
+      setSelectedTask(task);
+      setIsSettingsModalOpen(true);
+    }
+  }, [currentPowerList]);
+
+  const handleTaskClick = useCallback((taskId: string) => {
+    const task = currentPowerList?.tasks.find(t => t.id === taskId);
+    if (task) {
+      setSelectedTaskForDetails(task);
+      setIsDetailsModalOpen(true);
+    }
+  }, [currentPowerList]);
+
+  const handleModalClose = useCallback(() => {
+    setIsSettingsModalOpen(false);
+    setSelectedTask(null);
+  }, []);
+
+  const handleDetailsModalClose = useCallback(() => {
+    setIsDetailsModalOpen(false);
+    setSelectedTaskForDetails(null);
+  }, []);
+
+  const handleEditFromDetails = useCallback(() => {
+    if (selectedTaskForDetails) {
+      setSelectedTask(selectedTaskForDetails);
+      setIsDetailsModalOpen(false);
+      setIsSettingsModalOpen(true);
+      setIsEditing(true);
+    }
+  }, [selectedTaskForDetails]);
+
   return {
     state: {
       today,
@@ -181,6 +222,10 @@ export function usePowerListService() {
       canSave: currentPowerList ? isPowerListComplete(currentPowerList) : false,
       canNavigateForward,
       canNavigateBackward,
+      isSettingsModalOpen,
+      isDetailsModalOpen,
+      selectedTask,
+      selectedTaskForDetails
     },
     updateTask,
     updateStandardTask,
@@ -193,5 +238,10 @@ export function usePowerListService() {
     navigateToDate,
     handleKeyDown,
     updatePowerListsItem,
+    handleDetailsModalClose,
+    handleEditFromDetails,
+    handleModalClose,
+    handleTaskClick,
+    handleTaskSettings
   };
 }
