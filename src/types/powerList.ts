@@ -1,4 +1,15 @@
+
 export interface Task {
+  id: string;
+  text: string;
+  description?: string;
+  reason?: string;
+  time: { needed: number, left: number}
+  completed: boolean;
+  createdAt: string;
+}
+
+export interface StandardTask {
   id: string;
   text: string;
   completed: boolean;
@@ -9,7 +20,7 @@ export interface PowerList {
   id: string;
   date: string;
   tasks: Task[];
-  sideTasks: Task[];
+  standardTasks: StandardTask[];
   isWin: boolean;
   isLoss: boolean;
   isComplete: boolean;
@@ -17,23 +28,12 @@ export interface PowerList {
   updatedAt: string;
 }
 
-export interface PowerLists {
+export type NewHabits = {
+  newHabits?: Task[];
+}
+
+export type PowerLists = {
   [date: string]: PowerList
-}
-
-export interface DayStats {
-  date: string;
-  isWin: boolean;
-  isLoss: boolean;
-  completedTasks: number;
-  totalTasks: number;
-}
-
-export interface TaskStats {
-  taskText: string;
-  completions: number;
-  attempts: number;
-  successRate: number;
 }
 
 export interface PowerListStats {

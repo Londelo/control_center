@@ -1,11 +1,13 @@
 "use client";
 
 import { PowerList } from "@/app/_components/PowerList";
-import { SideTaskList } from "@/app/_components/SideTaskList";
+import { StandardTaskList } from "@/app/_components/StandardTaskList";
+import { TaskSettingsModal } from "@/app/_components/TaskSettingsModal";
+import { TaskDetailsModal } from "@/app/_components/TaskDetailsModal";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
-import { Edit3, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { PowerList as PowerListType } from "@/types/powerList";
+import { PowerList as PowerListType, Task } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
@@ -25,14 +27,21 @@ export default function Home() {
   const {
     state,
     updateTask,
-    updateSideTask,
-    addSideTask,
-    removeSideTask,
+    updateStandardTask,
+    addStandardTask,
+    removeStandardTask,
+    removeTask,
+    convertToStandard,
     toggleTaskCompletion,
     savePowerList,
     toggleEditMode,
     navigateToDate,
-    handleKeyDown
+    handleKeyDown,
+    handleDetailsModalClose,
+    handleEditFromDetails,
+    handleModalClose,
+    handleTaskClick,
+    handleTaskSettings
   } = usePowerListService();
 
   if (state.isLoading) {
@@ -64,7 +73,7 @@ export default function Home() {
           <ChevronLeft size={24} />
         </button>
 
-        <div className="text-lg font-mono mb-2 flex items-center justify-center gap-2">
+        <div className="text-2xl font-mono mb-2 flex items-center justify-center gap-2">
           <span>{state.currentDate} -</span>
           <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
             {getListStatus(state.currentPowerList, state.currentDate, state.today)}
@@ -86,8 +95,10 @@ export default function Home() {
       <main className="flex-1 flex">
         {/* Left Column - PowerList */}
         <div className="flex-1 p-8 border-r border-gray-200">
-          <div className="max-w-md mx-auto">
-            <h1 className="text-lg font-mono font-bold mb-6 text-center">POWER LIST:</h1>
+          <div className="mx-auto">
+            <div className="relative mb-6">
+              <h1 className="text-lg font-mono font-bold text-center">POWER LIST:</h1>
+            </div>
 
             <PowerList
               powerList={state.currentPowerList}
@@ -95,27 +106,29 @@ export default function Home() {
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateTask}
               onTaskToggle={toggleTaskCompletion}
+              onTaskSettings={handleTaskSettings}
+              onTaskClick={handleTaskClick}
               taskRefs={state.powerListRefs}
               onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
         </div>
 
-        {/* Right Column - Side Tasks */}
+        {/* Right Column - Standard Tasks */}
         <div className="flex-1 p-8">
           <div className="max-w-md mx-auto">
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
-            <SideTaskList
-              tasks={state.currentPowerList.sideTasks}
+            <StandardTaskList
+              tasks={state.currentPowerList.standardTasks}
               isEditing={state.isEditing}
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
-              onTaskUpdate={updateSideTask}
+              onTaskUpdate={updateStandardTask}
               onTaskToggle={toggleTaskCompletion}
-              onAddTask={addSideTask}
-              onRemoveTask={removeSideTask}
-              taskRefs={state.sideTaskRefs}
-              onKeyDown={(index, e) => handleKeyDown('side', index, e)}
+              onAddTask={addStandardTask}
+              onRemoveTask={removeStandardTask}
+              taskRefs={state.standardTaskRefs}
+              onKeyDown={(index, e) => handleKeyDown('standard', index, e)}
             />
           </div>
         </div>
@@ -151,6 +164,30 @@ export default function Home() {
           </Link>
         </div>
       </footer>
+
+      {/* Task Settings Modal */}
+      <TaskSettingsModal
+        task={state.selectedTask}
+        isOpen={state.isSettingsModalOpen}
+        onClose={handleModalClose}
+        onUpdate={updateTask}
+        onMakeStandard={(taskId) => {
+          convertToStandard(taskId);
+          handleModalClose();
+        }}
+        onDelete={(taskId) => {
+          removeTask(taskId);
+          handleModalClose();
+        }}
+      />
+
+      {/* Task Details Modal */}
+      <TaskDetailsModal
+        task={state.selectedTaskForDetails}
+        isOpen={state.isDetailsModalOpen}
+        onClose={handleDetailsModalClose}
+        onEdit={handleEditFromDetails}
+      />
     </div>
   );
 }

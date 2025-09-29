@@ -10,8 +10,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
+    "start": "npm run build && next start -p 8080",
     "build": "next build",
-    "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "test": "jest --watch",

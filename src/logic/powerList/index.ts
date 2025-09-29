@@ -1,10 +1,11 @@
-import { Task, PowerList, PowerListStats } from '@/types/powerList';
+import { DEFAULT_TIME_NEEDED } from '@/enums/powerList';
+import { Task, PowerList, PowerListStats, StandardTask } from '@/types/powerList';
 import { v4 } from 'uuid'
 
 export function normalizePowerList(powerList: PowerList): PowerList {
   return {
     ...powerList,
-    sideTasks: powerList.sideTasks || [],
+    standardTasks: powerList.standardTasks || [],
     tasks: powerList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
   };
 }
@@ -13,26 +14,39 @@ export function createEmptyTask(): Task {
   return {
     id: v4(),
     text: '',
+    time: { needed: DEFAULT_TIME_NEEDED, left: DEFAULT_TIME_NEEDED },
     completed: false,
     createdAt: new Date().toISOString(),
   };
 }
 
-export function createPowerList(date: string, tasks?: Task[], sideTasks?: Task[]): PowerList {
-  const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
-  const defaultSideTasks = sideTasks || [];
-
+export function createEmptyStandardTask(): StandardTask {
   return {
+    id: v4(),
+    text: '',
+    completed: false,
+    createdAt: new Date().toISOString(),
+  };
+}
+
+export function createPowerList(date: string, tasks?: Task[], standardTasks?: StandardTask[]): PowerList {
+  const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
+  const defaultStandardTasks = standardTasks || [];
+  let powerList = {
     id: v4(),
     date,
     tasks: defaultTasks,
-    sideTasks: defaultSideTasks,
+    standardTasks: defaultStandardTasks,
     isWin: false,
     isLoss: false,
     isComplete: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-  };
+  }
+
+  powerList.isComplete = isPowerListComplete(powerList)
+
+  return powerList;
 }
 
 export function isPowerListComplete(powerList: PowerList): boolean {
@@ -69,7 +83,7 @@ export function updatePowerListStatus(powerList: PowerList, isToday: boolean = f
   };
 }
 
-export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { tasks: Task[], sideTasks: Task[] } {
+export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { tasks: Task[], standardTasks: StandardTask[] } {
   const dates = Object.keys(taskHistory).sort().reverse();
 
   for (const date of dates) {
@@ -79,17 +93,17 @@ export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { ta
         ...createEmptyTask(),
         text: task.text,
       }));
-      const sideTasks = powerList.sideTasks.map((task) => ({
-        ...createEmptyTask(),
+      const standardTasks = powerList.standardTasks.map((task) => ({
+        ...createEmptyStandardTask(),
         text: task.text,
       }));
-      return { tasks, sideTasks };
+      return { tasks, standardTasks };
     }
   }
 
   return {
     tasks: Array.from({ length: 5 }, () => createEmptyTask()),
-    sideTasks: []
+    standardTasks: []
   };
 }
 
@@ -140,3 +154,8 @@ export function calculatePowerListStats(taskHistory: Record<string, PowerList>):
     winRate: Math.round(winRate),
   };
 }
+
+export { default as handleMissedDays } from './handleMissedDays';
+export { default as handleLostDays } from './handleLostDays';
+export { default as calculateHabitCompletion } from './calculateHabitCompletion';
+export { default as getTodaysPowerList } from './getTodaysPowerList';
