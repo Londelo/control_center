@@ -27,8 +27,8 @@ const OnInit = ({
   setIsEditing
 }: OnInitArgs) => () => {
   setIsLoading(true);
-  console.log("ENV: ",process.env.NODE_ENV)
-  if(process.env.NODE_ENV === 'development') {
+  if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
+    console.warn("MOCKING POWER LISTS")
     createMockPowerLists(today);
   }
 

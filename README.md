@@ -1,7 +1,7 @@
 
 TODO:
 
-  - CC-3: Learn and implement Envs and Server vs Client rendering
+  - CC-3: Learn and implement Envs
     - Fix calculateHabitCompletion
 
   - CC-(?): We need this to be live
