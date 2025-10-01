@@ -1,6 +1,6 @@
 "use client";
 
-import { StatsPanel } from "@/app/_components/StatsPanel";
+import { StatsPanel } from "@/app/_components/powerList/StatsPanel";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { PowerList } from "@/app/_components/PowerList";
-import { StandardTaskList } from "@/app/_components/StandardTaskList";
-import { TaskSettingsModal } from "@/app/_components/TaskSettingsModal";
-import { TaskDetailsModal } from "@/app/_components/TaskDetailsModal";
+import { PowerList } from "@/app/_components/powerList/PowerList";
+import { StandardTaskList } from "@/app/_components/powerList/StandardTaskList";
+import { TaskSettingsModal } from "@/app/_components/powerList/TaskSettingsModal";
+import { TaskDetailsModal } from "@/app/_components/powerList/TaskDetailsModal";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";

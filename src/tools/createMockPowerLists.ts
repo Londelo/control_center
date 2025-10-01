@@ -1,5 +1,6 @@
 import { createPowerList, createEmptyTask, createEmptyStandardTask, calculateWinLoss } from '@/logic/powerList';
 import db from '@/logic/powerList/db';
+// import { tasks, standardTasks } from './defaultTasks'
 
 const NUM_POWER_LISTS = 30
 
