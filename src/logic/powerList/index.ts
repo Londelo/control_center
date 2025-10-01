@@ -15,8 +15,7 @@ export function createEmptyTask(): Task {
     id: v4(),
     text: '',
     time: { needed: DEFAULT_TIME_NEEDED, left: DEFAULT_TIME_NEEDED },
-    completed: false,
-    createdAt: new Date().toISOString(),
+    completed: false
   };
 }
 
@@ -24,8 +23,7 @@ export function createEmptyStandardTask(): StandardTask {
   return {
     id: v4(),
     text: '',
-    completed: false,
-    createdAt: new Date().toISOString(),
+    completed: false
   };
 }
 
@@ -89,14 +87,7 @@ export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { ta
   for (const date of dates) {
     const powerList = normalizePowerList(taskHistory[date]);
     if (powerList && isPowerListComplete(powerList)) {
-      const tasks = powerList.tasks.map((task) => ({
-        ...createEmptyTask(),
-        text: task.text,
-      }));
-      const standardTasks = powerList.standardTasks.map((task) => ({
-        ...createEmptyStandardTask(),
-        text: task.text,
-      }));
+      const { tasks, standardTasks } = powerList
       return { tasks, standardTasks };
     }
   }

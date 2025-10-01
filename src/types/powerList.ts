@@ -6,14 +6,12 @@ export interface Task {
   reason?: string;
   time: { needed: number, left: number}
   completed: boolean;
-  createdAt: string;
 }
 
 export interface StandardTask {
   id: string;
   text: string;
   completed: boolean;
-  createdAt: string;
 }
 
 export interface PowerList {

@@ -27,6 +27,7 @@ const OnInit = ({
   setIsEditing
 }: OnInitArgs) => () => {
   setIsLoading(true);
+
   if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
     console.warn("MOCKING POWER LISTS")
     createMockPowerLists(today);
