@@ -15,7 +15,11 @@ const getTodaysPowerList = ({
 
   if (!powerList) {
     const { tasks: recentTasks, standardTasks: recentStandardTasks } = getMostRecentTasks(allPowerLists);
-    powerList = createPowerList(today, recentTasks, recentStandardTasks);
+    powerList = createPowerList(
+      today,
+      recentTasks.map(task => ({ ...task, completed: false })),
+      recentStandardTasks.map(task => ({ ...task, completed: false }))
+    );
     db.saveTasksForDate(today, powerList);
     return powerList
   }

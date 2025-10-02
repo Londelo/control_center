@@ -34,7 +34,11 @@ const handleMissedDays = ({
     const missedDays = generateMissedDays(lastViewedDate, today);
     for (const missedDay of missedDays) {
       const { tasks: recentTasks, standardTasks: recentStandardTasks } = getMostRecentTasks(allPowerLists);
-      const missedList = createPowerList(missedDay, recentTasks, recentStandardTasks);
+      const missedList = createPowerList(
+        missedDay,
+        recentTasks.map(task => ({ ...task, completed: false })),
+        recentStandardTasks.map(task => ({ ...task, completed: false }))
+      );
       missedList.isLoss = true;
       missedList.isComplete = true;
       db.saveTasksForDate(missedDay, missedList);

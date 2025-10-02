@@ -37,12 +37,13 @@ const OnInit = ({
   allPowerLists = handleMissedDays({ allPowerLists, today })
   allPowerLists = handleLostDays({ allPowerLists, today })
   allPowerLists = calculateHabitCompletion({ allPowerLists })
-  setPowerLists(allPowerLists);
 
   const todaysPowerList = getTodaysPowerList({
     today,
     allPowerLists,
   });
+
+  setPowerLists({ ...allPowerLists, [today]: todaysPowerList});
 
   db.updateLastViewedDate(today);
   setCurrentPowerList(todaysPowerList);
