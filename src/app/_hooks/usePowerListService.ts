@@ -43,8 +43,8 @@ export function usePowerListService() {
   const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
   const standardTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
-  const canNavigateForward = new Date(currentDate).getTime() < new Date(today).getTime();
-  const canNavigateBackward = getCanNavigateBackward(currentDate, powerLists);
+  const canNavigateForward = !isEditing && new Date(currentDate).getTime() < new Date(today).getTime();
+  const canNavigateBackward = !isEditing && getCanNavigateBackward(currentDate, powerLists);
 
   const onInit = useCallback(
     OnInit({
