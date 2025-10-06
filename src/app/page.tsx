@@ -23,6 +23,13 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
   return purpose === 'text' ? 'LOSE' : 'text-red-600'
 }
 
+const getDayOfWeek = (currentDate: string): string => {
+  const date = new Date(currentDate);
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  console.log(date.getDay())
+  return days[date.getDay()];
+}
+
 export default function Home() {
   const {
     state,
@@ -60,6 +67,10 @@ export default function Home() {
     );
   }
 
+  const dayOfWeek = getDayOfWeek(state.currentDate);
+  const statusColor = getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')
+  const status = getListStatus(state.currentPowerList, state.currentDate, state.today)
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
@@ -74,10 +85,14 @@ export default function Home() {
         </button>
 
         <div className="text-2xl font-mono mb-2 flex items-center justify-center gap-2">
-          <span>{state.currentDate} -</span>
-          <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
-            {getListStatus(state.currentPowerList, state.currentDate, state.today)}
+          <span>{dayOfWeek} -</span>
+          <span className={statusColor}>
+            {status}
           </span>
+        </div>
+
+        <div className="text-xl font-mono mb-3 text-gray-600">
+          {state.currentDate}
         </div>
 
         {/* Right Arrow */}

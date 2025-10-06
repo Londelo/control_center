@@ -243,7 +243,8 @@ export function usePowerListService() {
       isSettingsModalOpen,
       isDetailsModalOpen,
       selectedTask,
-      selectedTaskForDetails
+      selectedTaskForDetails,
+      powerLists
     },
     updateTask,
     updateStandardTask,
