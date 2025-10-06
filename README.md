@@ -4,7 +4,11 @@ TODO:
     - update all the calls
     - test to see how easy it is to switch from different DB's, it should be easy
     - test the limits for how much data we can store on indexDB
+    - create export btn
+    - clean up css
 
+  - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB
+  - CC-(?): Create a just for today to do list
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering
   - CC-(?): We need a database

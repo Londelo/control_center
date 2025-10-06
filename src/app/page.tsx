@@ -11,16 +11,16 @@ import { PowerList as PowerListType, Task } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
-    return purpose === 'text' ? 'WIN' : 'text-green-600'
+    return purpose === 'text' ? 'WIN' : 'status-success'
   }
 
   // If it's today and neither win nor loss, it's in progress
   if (currentDate === today) {
-    return purpose === 'text' ? 'IN PROGRESS' : 'text-blue-600'
+    return purpose === 'text' ? 'IN PROGRESS' : 'status-info'
   }
 
   // Fallback (shouldn't reach here with proper logic)
-  return purpose === 'text' ? 'LOSE' : 'text-red-600'
+  return purpose === 'text' ? 'LOSE' : 'status-error'
 }
 
 const getDayOfWeek = (currentDate: string): string => {
@@ -74,12 +74,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="relative text-center py-8 border-b border-gray-200">
+      <header className="relative text-center py-8 border-b border-ui">
         {/* Left Arrow */}
         <button
           onClick={() => navigateToDate('prev')}
           disabled={!state.canNavigateBackward}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          className="absolute left-8 top-1/2 transform -translate-y-1/2 btn-icon"
         >
           <ChevronLeft size={24} />
         </button>
@@ -91,7 +91,7 @@ export default function Home() {
           </span>
         </div>
 
-        <div className="text-xl font-mono mb-3 text-gray-600">
+        <div className="text-xl font-mono mb-3 text-ui-secondary">
           {state.currentDate}
         </div>
 
@@ -99,7 +99,7 @@ export default function Home() {
         <button
           onClick={() => navigateToDate('next')}
           disabled={!state.canNavigateForward}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          className="absolute right-8 top-1/2 transform -translate-y-1/2 btn-icon"
         >
           <ChevronRight size={24} />
         </button>
@@ -109,7 +109,7 @@ export default function Home() {
       {/* Main Content - Two Columns */}
       <main className="flex-1 flex">
         {/* Left Column - PowerList */}
-        <div className="flex-1 p-8 border-r border-gray-200">
+        <div className="flex-1 p-8 border-r border-ui">
           <div className="mx-auto">
             <div className="relative mb-6">
               <h1 className="text-lg font-mono font-bold text-center">POWER LIST:</h1>
@@ -150,20 +150,20 @@ export default function Home() {
       </main>
 
       {/* Footer - Action Buttons */}
-      <footer className="text-center py-8 border-t border-gray-200 space-y-4">
+      <footer className="text-center py-8 border-t border-ui space-y-4">
         <div className="flex justify-center gap-4">
           {state.isEditing ? (
             <button
               onClick={savePowerList}
               disabled={!state.canSave}
-              className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
+              className="btn-primary"
             >
               Save Lists
             </button>
           ) : (
             <button
               onClick={toggleEditMode}
-              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors"
+              className="btn-outline"
             >
               <Edit3 size={16} />
               Edit Tasks
@@ -172,7 +172,7 @@ export default function Home() {
 
           {/* Stats Button */}
           <Link href="/stats">
-            <button className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors">
+            <button className="btn-outline">
               <BarChart3 size={16} />
               View Stats
             </button>
