@@ -1,10 +1,12 @@
 
 TODO:
   - CC-(4): Add a indexDB system
+    - done centralize/optimize css
+    - done make new indexDB file
+    - create export btn
     - update all the calls
     - test to see how easy it is to switch from different DB's, it should be easy
     - test the limits for how much data we can store on indexDB
-    - create export btn
     - clean up css
 
   - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB

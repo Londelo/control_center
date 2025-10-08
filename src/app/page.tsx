@@ -4,10 +4,13 @@ import { PowerList } from "@/app/_components/powerList/PowerList";
 import { StandardTaskList } from "@/app/_components/powerList/StandardTaskList";
 import { TaskSettingsModal } from "@/app/_components/powerList/TaskSettingsModal";
 import { TaskDetailsModal } from "@/app/_components/powerList/TaskDetailsModal";
+import { HeaderBar } from "@/app/_components/powerList/HeaderBar";
+import { NavBar } from "@/app/_components/powerList/NavBar";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
-import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
+import { CreditCard as Edit3, ChartBar as BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { PowerList as PowerListType, Task } from "@/types/powerList";
+import ExportService from "@/backend/export";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
@@ -71,40 +74,23 @@ export default function Home() {
   const statusColor = getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')
   const status = getListStatus(state.currentPowerList, state.currentDate, state.today)
 
+  const handleExport = () => {
+    ExportService.exportToJSON();
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="relative text-center py-8 border-b border-ui">
-        {/* Left Arrow */}
-        <button
-          onClick={() => navigateToDate('prev')}
-          disabled={!state.canNavigateBackward}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 btn-icon"
-        >
-          <ChevronLeft size={24} />
-        </button>
+      <HeaderBar onExport={handleExport} />
 
-        <div className="text-2xl font-mono mb-2 flex items-center justify-center gap-2">
-          <span>{dayOfWeek} -</span>
-          <span className={statusColor}>
-            {status}
-          </span>
-        </div>
-
-        <div className="text-xl font-mono mb-3 text-ui-secondary">
-          {state.currentDate}
-        </div>
-
-        {/* Right Arrow */}
-        <button
-          onClick={() => navigateToDate('next')}
-          disabled={!state.canNavigateForward}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 btn-icon"
-        >
-          <ChevronRight size={24} />
-        </button>
-
-      </header>
+      <NavBar
+        dayOfWeek={dayOfWeek}
+        status={status}
+        statusColor={statusColor}
+        currentDate={state.currentDate}
+        canNavigateBackward={state.canNavigateBackward}
+        canNavigateForward={state.canNavigateForward}
+        onNavigateToDate={navigateToDate}
+      />
 
       {/* Main Content - Two Columns */}
       <main className="flex-1 flex">
