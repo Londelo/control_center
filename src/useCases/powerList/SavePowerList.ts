@@ -1,5 +1,5 @@
+import PowerListDB from '@/backend/powerList';
 import { updatePowerListStatus } from '@/logic/powerList';
-import db from '@/logic/powerList/db';
 import { PowerList } from '@/types/powerList';
 
 type SavePowerListArgs = {
@@ -17,13 +17,13 @@ const SavePowerList = ({
   today,
   setCurrentPowerList,
   setIsEditing,
-  updatePowerListsItem,
-}: SavePowerListArgs) => () => {
+  updatePowerListsItem
+}: SavePowerListArgs) => async () => {
   if (!currentPowerList) return;
 
   const updatedList = updatePowerListStatus(currentPowerList, currentDate === today);
   setCurrentPowerList(updatedList);
-  db.saveTasksForDate(currentDate, updatedList);
+  await PowerListDB.saveList(updatedList);
   updatePowerListsItem(currentDate, updatedList);
   setIsEditing(false);
 };

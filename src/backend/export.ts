@@ -1,6 +1,6 @@
 "use client"
 
-import PowerListDB from '@/logic/powerList/db';
+import PowerListDB from '@/backend/powerList';
 
 interface ExportData {
   powerLists: Record<string, unknown>;
@@ -9,12 +9,12 @@ interface ExportData {
   version: string;
 }
 
-const exportToJSON = (): void => {
+const exportToJSON = async () => {
   if (typeof window === 'undefined') {
     return;
   }
 
-  const powerLists = PowerListDB.getAllPowerLists();
+  const powerLists = await PowerListDB.getAllPowerLists();
   const lastViewedDate = PowerListDB.getLastViewedDate();
 
   const exportData: ExportData = {

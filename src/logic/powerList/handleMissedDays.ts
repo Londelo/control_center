@@ -1,4 +1,4 @@
-import db from '@/logic/powerList/db';
+import PowerListDB from '@/backend/powerList';
 import { getMostRecentTasks, createPowerList } from '@/logic/powerList';
 import { PowerLists } from '@/types/powerList';
 
@@ -23,11 +23,11 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
 }
 
 
-const handleMissedDays = ({
+const handleMissedDays = async ({
   today,
   allPowerLists
 }: HandleMissedDays) => {
-  const lastViewedDate = db.getLastViewedDate();
+  const lastViewedDate = PowerListDB.getLastViewedDate();
   let updatedPowerLists: PowerLists = { ...allPowerLists };
 
   if (lastViewedDate && lastViewedDate !== today) {
@@ -41,7 +41,7 @@ const handleMissedDays = ({
       );
       missedList.isLoss = true;
       missedList.isComplete = true;
-      db.saveTasksForDate(missedDay, missedList);
+      await PowerListDB.saveList(missedList);
       updatedPowerLists[missedDay] = missedList;
     }
   }

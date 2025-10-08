@@ -9,8 +9,7 @@ import { NavBar } from "@/app/_components/powerList/NavBar";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
 import { CreditCard as Edit3, ChartBar as BarChart3 } from "lucide-react";
 import Link from "next/link";
-import { PowerList as PowerListType, Task } from "@/types/powerList";
-import ExportService from "@/backend/export";
+import { PowerList as PowerListType } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
@@ -74,13 +73,9 @@ export default function Home() {
   const statusColor = getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')
   const status = getListStatus(state.currentPowerList, state.currentDate, state.today)
 
-  const handleExport = () => {
-    ExportService.exportToJSON();
-  };
-
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <HeaderBar onExport={handleExport} />
+      <HeaderBar/>
 
       <NavBar
         dayOfWeek={dayOfWeek}

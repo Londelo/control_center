@@ -1,5 +1,5 @@
 import { createPowerList, getMostRecentTasks } from '@/logic/powerList';
-import db from '@/logic/powerList/db';
+import PowerListDB from '@/backend/powerList';
 import { PowerLists } from '@/types/powerList';
 
 export type GetTodaysPowerList = {
@@ -7,7 +7,7 @@ export type GetTodaysPowerList = {
   allPowerLists: PowerLists
 };
 
-const getTodaysPowerList = ({
+const getTodaysPowerList = async ({
   today,
   allPowerLists
 }: GetTodaysPowerList) => {
@@ -20,7 +20,7 @@ const getTodaysPowerList = ({
       recentTasks.map(task => ({ ...task, completed: false })),
       recentStandardTasks.map(task => ({ ...task, completed: false }))
     );
-    db.saveTasksForDate(today, powerList);
+    await PowerListDB.saveList(powerList);
     return powerList
   }
 

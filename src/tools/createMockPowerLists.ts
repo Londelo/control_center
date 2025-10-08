@@ -1,17 +1,16 @@
+import PowerListDB from '@/backend/powerList';
 import { createPowerList, createEmptyTask, createEmptyStandardTask, calculateWinLoss } from '@/logic/powerList';
-import db from '@/logic/powerList/db';
-// import { tasks, standardTasks } from './defaultTasks'
 
 const NUM_POWER_LISTS = 30
 const DATE_OFFSET = 0
 
-const createMockPowerLists = (today: string) => {
+const createMockPowerLists = async (today: string) => {
   // Clear all existing data
-  db.clearAllData();
+  await PowerListDB.clearAllData();
 
   const lastViewedDate = new Date(today);
   lastViewedDate.setDate(lastViewedDate.getDate() - DATE_OFFSET);
-  db.updateLastViewedDate(lastViewedDate.toLocaleDateString())
+  await PowerListDB.updateLastViewedDate(lastViewedDate.toLocaleDateString())
 
   // Create tasks with "power list item" text
   const tasks = Array.from({ length: 5 }, () => {
@@ -43,7 +42,7 @@ const createMockPowerLists = (today: string) => {
     powerList.isLoss = isLoss
 
     // Save to database
-    db.saveTasksForDate(dateString, powerList);
+    await PowerListDB.saveList(powerList);
   }
 };
 

@@ -8,26 +8,13 @@ export interface Task {
   completed: boolean;
 }
 
-export interface StandardTask {
-  id: string;
-  text: string;
-  completed: boolean;
-}
-
 export interface PowerList {
   id: string;
   date: string;
   tasks: Task[];
-  standardTasks: StandardTask[];
   isWin: boolean;
   isLoss: boolean;
   isComplete: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type NewHabits = {
-  newHabits?: Task[];
 }
 
 export type PowerLists = {
