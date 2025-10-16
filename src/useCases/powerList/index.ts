@@ -1,8 +1,5 @@
 export { default as NavigateToDate } from './NavigateToDate';
 export { default as UpdateTask } from './UpdateTask';
-export { default as UpdateStandardTask } from './UpdateStandardTask';
-export { default as AddStandardTask } from './AddStandardTask';
-export { default as RemoveStandardTask } from './RemoveStandardTask';
 export { default as RemoveTask } from './RemoveTask';
 export { default as ToggleTaskCompletion } from './ToggleTaskCompletion';
 export { default as SavePowerList } from './SavePowerList';
@@ -10,4 +7,3 @@ export { default as HandleKeyDown } from './HandleKeyDown';
 export { default as ToggleEditMode } from './ToggleEditMode';
 export { default as OnInit } from './OnInit';
 export { default as getTaskBackgroundColor } from './getTaskBackgroundColor';
-export { default as ConvertToStandard } from './ConvertToStandard';

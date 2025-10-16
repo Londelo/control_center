@@ -15,6 +15,9 @@ export interface PowerList {
   isWin: boolean;
   isLoss: boolean;
   isComplete: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  standardTasks?: import('@/types/standards').StandardTask[];
 }
 
 export type PowerLists = {

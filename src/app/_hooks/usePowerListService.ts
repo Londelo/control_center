@@ -3,21 +3,30 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import { PowerList, PowerLists, Task } from '@/types/powerList';
+import { StandardTask, Standards } from '@/types/standards';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
+import ControlCenterDB from '@/backend/indexedDB';
+// import createMockPowerLists from '@/tools/createMockPowerLists';
+
 import {
   NavigateToDate,
-  AddStandardTask,
-  RemoveStandardTask,
   RemoveTask,
-  UpdateStandardTask,
   UpdateTask,
   ToggleTaskCompletion,
   SavePowerList,
   HandleKeyDown,
   ToggleEditMode,
-  OnInit,
-  ConvertToStandard
+  OnInit as PowerListOnInit,
 } from '@/useCases/powerList';
+import {
+  AddStandardTask,
+  RemoveStandardTask,
+  UpdateStandardTask,
+  ToggleStandardTaskCompletion,
+  SaveStandardsList,
+  ConvertToStandard,
+  OnInit as StandardsOnInit
+} from '@/useCases/standards';
 
 const today = new Date().toLocaleDateString();
 
@@ -31,6 +40,8 @@ const getCanNavigateBackward = (date: string, lists: PowerLists) => {
 export function usePowerListService() {
   const [powerLists, setPowerLists] = useState<PowerLists>({});
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
+  const [allStandards, setAllStandards] = useState<Standards>({});
+  const [currentStandardTasks, setCurrentStandardTasks] = useState<StandardTask[]>([]);
   const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -46,21 +57,41 @@ export function usePowerListService() {
   const canNavigateForward = !isEditing && new Date(currentDate).getTime() < new Date(today).getTime();
   const canNavigateBackward = !isEditing && getCanNavigateBackward(currentDate, powerLists);
 
-  const onInit = useCallback(
-    OnInit({
+  const powerListOnInit = useCallback(
+    PowerListOnInit({
       today,
       setPowerLists,
-      setIsLoading,
       setCurrentPowerList,
       setIsEditing
     }),
     []
   );
 
-  //ON INIT
+  const standardsOnInit = useCallback(
+    StandardsOnInit({
+      today,
+      setAllStandards,
+      setCurrentStandardTasks,
+      setIsLoading
+    }),
+    []
+  );
+
   useEffect(() => {
-    onInit();
-  }, [onInit]);
+    const initializeApp = async () => {
+      setIsLoading(true);
+      await ControlCenterDB.handleOpenDatabase();
+
+      // if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
+      //   console.warn("MOCKING POWER LISTS")
+      //   await createMockPowerLists(today);
+      // }
+
+      await Promise.all([powerListOnInit(), standardsOnInit()]);
+      setIsLoading(false);
+    };
+    initializeApp();
+  }, [powerListOnInit, standardsOnInit]);
 
   // Initialize refs
   useEffect(() => {
@@ -70,13 +101,12 @@ export function usePowerListService() {
   }, []);
 
   useEffect(() => {
-    const hasCurrentPowerList = Boolean(currentPowerList);
-    const standardTaskInputCount = currentPowerList?.standardTasks.length || 0;
-    if (hasCurrentPowerList) {
+    const standardTaskInputCount = currentStandardTasks.length;
+    if (standardTaskInputCount > 0) {
       const createStandardTaskRefs = Array.from({ length: standardTaskInputCount }, () => React.createRef<HTMLInputElement>());
       standardTaskRefs.current = createStandardTaskRefs as React.RefObject<HTMLInputElement>[];
     }
-  }, [currentPowerList?.standardTasks.length]);
+  }, [currentStandardTasks.length]);
 
   const getStats = useCallback(() => {
     return calculatePowerListStats(powerLists);
@@ -97,11 +127,13 @@ export function usePowerListService() {
       currentDate,
       setCurrentDate,
       powerLists,
+      allStandards,
       setCurrentPowerList,
+      setCurrentStandardTasks,
       canNavigateForward,
       canNavigateBackward
     }),
-    [currentDate, powerLists, setCurrentDate, canNavigateForward, canNavigateBackward]
+    [currentDate, powerLists, allStandards, setCurrentDate, canNavigateForward, canNavigateBackward]
   );
 
   const updateTask = useCallback(
@@ -114,26 +146,27 @@ export function usePowerListService() {
 
   const updateStandardTask = useCallback(
     UpdateStandardTask({
-      currentPowerList,
-      setCurrentPowerList
+      currentStandardTasks,
+      setCurrentStandardTasks
     }),
-    [currentPowerList, setCurrentPowerList]
+    [currentStandardTasks, setCurrentStandardTasks]
   );
 
   const addStandardTask = useCallback(
     AddStandardTask({
-      currentPowerList,
-      setCurrentPowerList
+      currentDate,
+      currentStandardTasks,
+      setCurrentStandardTasks
     }),
-    [currentPowerList, setCurrentPowerList]
+    [currentDate, currentStandardTasks, setCurrentStandardTasks]
   );
 
   const removeStandardTask = useCallback(
     RemoveStandardTask({
-      currentPowerList,
-      setCurrentPowerList
+      currentStandardTasks,
+      setCurrentStandardTasks
     }),
-    [currentPowerList, setCurrentPowerList]
+    [currentStandardTasks, setCurrentStandardTasks]
   );
 
   const removeTask = useCallback(
@@ -146,10 +179,11 @@ export function usePowerListService() {
 
   const convertToStandard = useCallback(
     ConvertToStandard({
-      currentPowerList,
-      setCurrentPowerList
+      currentDate,
+      currentStandardTasks,
+      setCurrentStandardTasks
     }),
-    [currentPowerList, setCurrentPowerList]
+    [currentDate, currentStandardTasks, setCurrentStandardTasks]
   );
 
   const toggleTaskCompletion = useCallback(
@@ -164,16 +198,37 @@ export function usePowerListService() {
     [currentPowerList, isEditing, currentDate, today, setCurrentPowerList, updatePowerListsItem]
   );
 
-  const savePowerList = useCallback(
-    SavePowerList({
-      currentPowerList,
+  const toggleStandardTaskCompletion = useCallback(
+    ToggleStandardTaskCompletion({
       currentDate,
-      today,
-      setCurrentPowerList,
-      setIsEditing,
-      updatePowerListsItem
+      currentStandardTasks,
+      setCurrentStandardTasks,
+      isEditing
     }),
-    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem]
+    [currentDate, currentStandardTasks, setCurrentStandardTasks, isEditing]
+  );
+
+  const saveStandardsList = useCallback(
+    SaveStandardsList({
+      currentDate,
+      currentStandardTasks
+    }),
+    [currentDate, currentStandardTasks]
+  );
+
+  const savePowerList = useCallback(
+    async () => {
+      await SavePowerList({
+        currentPowerList,
+        currentDate,
+        today,
+        setCurrentPowerList,
+        setIsEditing,
+        updatePowerListsItem
+      })();
+      await saveStandardsList();
+    },
+    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveStandardsList]
   );
 
   const toggleEditMode = useCallback(
@@ -186,11 +241,11 @@ export function usePowerListService() {
 
   const handleKeyDown = useCallback(
     HandleKeyDown({
-      currentPowerList,
+      standardTaskLength: currentStandardTasks.length,
       powerListRefs: powerListRefs.current,
       standardTaskRefs: standardTaskRefs.current,
     }),
-    [currentPowerList, powerListRefs, standardTaskRefs]
+    [currentStandardTasks.length, powerListRefs, standardTaskRefs]
   );
 
   const handleTaskSettings = useCallback((taskId: string) => {
@@ -232,6 +287,7 @@ export function usePowerListService() {
     state: {
       today,
       currentPowerList,
+      currentStandardTasks,
       currentDate,
       isEditing,
       isLoading,
@@ -244,7 +300,8 @@ export function usePowerListService() {
       isDetailsModalOpen,
       selectedTask,
       selectedTaskForDetails,
-      powerLists
+      powerLists,
+      allStandards
     },
     updateTask,
     updateStandardTask,
@@ -253,6 +310,7 @@ export function usePowerListService() {
     removeTask,
     convertToStandard,
     toggleTaskCompletion,
+    toggleStandardTaskCompletion,
     savePowerList,
     toggleEditMode,
     getStats,

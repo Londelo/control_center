@@ -9,7 +9,7 @@ type UpdateStandardTaskArgs = {
 const UpdateStandardTask = ({ currentPowerList, setCurrentPowerList }: UpdateStandardTaskArgs) =>
   ( taskId: string, text: string ) => {
     if (!currentPowerList) return;
-    const updatedStandardTasks = currentPowerList.standardTasks.map(task =>
+    const updatedStandardTasks = (currentPowerList.standardTasks || []).map(task =>
       task.id === taskId ? { ...task, text } : task
     );
     const updatedList = updatePowerListStatus({

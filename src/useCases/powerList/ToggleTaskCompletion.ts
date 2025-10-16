@@ -1,4 +1,4 @@
-import { PowerList, StandardTask, Task } from '@/types/powerList';
+import { PowerList, Task } from '@/types/powerList';
 import { updatePowerListStatus } from '@/logic/powerList';
 import PowerListDB from '@/backend/powerList';
 
@@ -21,9 +21,7 @@ const ToggleTaskCompletion = ({
 }: ToggleTaskCompletionArgs) => async (taskId: string) => {
   if (!currentPowerList || isEditing) return;
 
-  const task =
-    currentPowerList.tasks.find(t => t.id === taskId) ||
-    currentPowerList.standardTasks.find(t => t.id === taskId);
+  const task = currentPowerList.tasks.find(t => t.id === taskId);
   if (!task) return;
 
   const newCompletedStatus = !task.completed;
@@ -41,19 +39,13 @@ const ToggleTaskCompletion = ({
       : task;
   };
 
-  const getUpdatedStandardTask = (task: StandardTask) =>
-    task.id === taskId ? { ...task, completed: newCompletedStatus } : task;
-
   const updatedTasks = currentPowerList.tasks.map(getUpdatedTask);
-  const updatedStandardTasks = currentPowerList.standardTasks.map(getUpdatedStandardTask);
 
   const updatedList = updatePowerListStatus({
     ...currentPowerList,
     tasks: updatedTasks,
-    standardTasks: updatedStandardTasks,
   }, currentDate === today);
 
-  // Save to database - this will persist the win/loss status
   await PowerListDB.saveList(updatedList);
 
   setCurrentPowerList(updatedList);

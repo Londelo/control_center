@@ -1,6 +1,6 @@
 "use client"
 
-import { StandardTask } from '@/types/powerList';
+import { StandardTask } from '@/types/standards';
 import { Check } from 'lucide-react';
 
 interface TaskCardProps {

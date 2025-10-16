@@ -19,6 +19,9 @@ const getAllPowerLists = async (): Promise<PowerLists> => {
 };
 
 const clearAllData = async (): Promise<void> => {
+  // if (!confirm('Are you sure you want to clear all power lists? This action cannot be undone.')) {
+  //   return;
+  // }
   const powerList = await ControlCenterDB.getAll('PowerList');
   await Promise.all(powerList.map((item) => ControlCenterDB.remove('PowerList', item.id)));
 };

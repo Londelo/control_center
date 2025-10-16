@@ -33,11 +33,10 @@ const handleMissedDays = async ({
   if (lastViewedDate && lastViewedDate !== today) {
     const missedDays = generateMissedDays(lastViewedDate, today);
     for (const missedDay of missedDays) {
-      const { tasks: recentTasks, standardTasks: recentStandardTasks } = getMostRecentTasks(allPowerLists);
+      const recentTasks = getMostRecentTasks(allPowerLists);
       const missedList = createPowerList(
         missedDay,
-        recentTasks.map(task => ({ ...task, completed: false })),
-        recentStandardTasks.map(task => ({ ...task, completed: false }))
+        recentTasks.map(task => ({ ...task, completed: false }))
       );
       missedList.isLoss = true;
       missedList.isComplete = true;

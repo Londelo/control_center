@@ -11,7 +11,7 @@ const RemoveStandardTask = ({ currentPowerList, setCurrentPowerList }: RemoveSta
 
     if (!currentPowerList) return;
 
-    const updatedStandardTasks = currentPowerList.standardTasks.filter(task => task.id !== taskId);
+    const updatedStandardTasks = (currentPowerList.standardTasks || []).filter(task => task.id !== taskId);
 
     const updatedList = updatePowerListStatus({
       ...currentPowerList,

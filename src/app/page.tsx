@@ -42,6 +42,7 @@ export default function Home() {
     removeTask,
     convertToStandard,
     toggleTaskCompletion,
+    toggleStandardTaskCompletion,
     savePowerList,
     toggleEditMode,
     navigateToDate,
@@ -116,11 +117,11 @@ export default function Home() {
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
             <StandardTaskList
-              tasks={state.currentPowerList.standardTasks}
+              tasks={state.currentStandardTasks}
               isEditing={state.isEditing}
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateStandardTask}
-              onTaskToggle={toggleTaskCompletion}
+              onTaskToggle={toggleStandardTaskCompletion}
               onAddTask={addStandardTask}
               onRemoveTask={removeStandardTask}
               taskRefs={state.standardTaskRefs}
@@ -168,7 +169,11 @@ export default function Home() {
         onClose={handleModalClose}
         onUpdate={updateTask}
         onMakeStandard={(taskId) => {
-          convertToStandard(taskId);
+          const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
+          if (task) {
+            convertToStandard(task);
+            removeTask(taskId);
+          }
           handleModalClose();
         }}
         onDelete={(taskId) => {
