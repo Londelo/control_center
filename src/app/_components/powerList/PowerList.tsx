@@ -11,14 +11,12 @@ interface PowerListProps {
   onTaskToggle: (taskId: string) => void;
   onTaskSettings?: (taskId: string) => void;
   onTaskClick?: (taskId: string) => void;
-  taskRefs: React.RefObject<HTMLInputElement>[];
-  onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
-export function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, onTaskSettings, onTaskClick, taskRefs, onKeyDown }: PowerListProps) {
+export function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, onTaskSettings, onTaskClick }: PowerListProps) {
   return (
     <div className="space-y-3 max-w-md mx-auto">
-      {powerList.tasks.map((task, index) => (
+      {powerList.tasks.map((task) => (
         <TaskCard
           key={task.id}
           task={task}
@@ -28,8 +26,6 @@ export function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, 
           onToggleComplete={() => onTaskToggle(task.id)}
           onSettingsClick={() => onTaskSettings?.(task.id)}
           onTaskClick={() => onTaskClick?.(task.id)}
-          inputRef={taskRefs[index]}
-          onKeyDown={(e) => onKeyDown(index, e)}
         />
       ))}
     </div>

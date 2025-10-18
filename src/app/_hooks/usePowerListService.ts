@@ -1,12 +1,11 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import React from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PowerList, PowerLists, Task } from '@/types/powerList';
 import { StandardTask, Standards } from '@/types/standards';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import ControlCenterDB from '@/backend/indexedDB';
-// import createMockPowerLists from '@/tools/createMockPowerLists';
+import createMockPowerLists from '@/tools/createMockPowerLists';
 
 import {
   NavigateToDate,
@@ -14,7 +13,6 @@ import {
   UpdateTask,
   ToggleTaskCompletion,
   SavePowerList,
-  HandleKeyDown,
   ToggleEditMode,
   OnInit as PowerListOnInit,
 } from '@/useCases/powerList';
@@ -51,8 +49,6 @@ export function usePowerListService() {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
 
-  const powerListRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
-  const standardTaskRefs = useRef<React.RefObject<HTMLInputElement>[]>([]);
 
   const canNavigateForward = !isEditing && new Date(currentDate).getTime() < new Date(today).getTime();
   const canNavigateBackward = !isEditing && getCanNavigateBackward(currentDate, powerLists);
@@ -82,10 +78,10 @@ export function usePowerListService() {
       setIsLoading(true);
       await ControlCenterDB.handleOpenDatabase();
 
-      // if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
-      //   console.warn("MOCKING POWER LISTS")
-      //   await createMockPowerLists(today);
-      // }
+      if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
+        console.warn("MOCKING POWER LISTS")
+        await createMockPowerLists(today);
+      }
 
       await Promise.all([powerListOnInit(), standardsOnInit()]);
       setIsLoading(false);
@@ -93,20 +89,6 @@ export function usePowerListService() {
     initializeApp();
   }, [powerListOnInit, standardsOnInit]);
 
-  // Initialize refs
-  useEffect(() => {
-    const powerListInputCount = 5;
-    const createPowerListRefs = Array.from({ length: powerListInputCount }, () => React.createRef<HTMLInputElement>());
-    powerListRefs.current = createPowerListRefs as React.RefObject<HTMLInputElement>[];
-  }, []);
-
-  useEffect(() => {
-    const standardTaskInputCount = currentStandardTasks.length;
-    if (standardTaskInputCount > 0) {
-      const createStandardTaskRefs = Array.from({ length: standardTaskInputCount }, () => React.createRef<HTMLInputElement>());
-      standardTaskRefs.current = createStandardTaskRefs as React.RefObject<HTMLInputElement>[];
-    }
-  }, [currentStandardTasks.length]);
 
   const getStats = useCallback(() => {
     return calculatePowerListStats(powerLists);
@@ -239,14 +221,6 @@ export function usePowerListService() {
     [isEditing, setIsEditing]
   );
 
-  const handleKeyDown = useCallback(
-    HandleKeyDown({
-      standardTaskLength: currentStandardTasks.length,
-      powerListRefs: powerListRefs.current,
-      standardTaskRefs: standardTaskRefs.current,
-    }),
-    [currentStandardTasks.length, powerListRefs, standardTaskRefs]
-  );
 
   const handleTaskSettings = useCallback((taskId: string) => {
     const task = currentPowerList?.tasks.find(t => t.id === taskId);
@@ -291,8 +265,6 @@ export function usePowerListService() {
       currentDate,
       isEditing,
       isLoading,
-      powerListRefs: powerListRefs.current,
-      standardTaskRefs: standardTaskRefs.current,
       canSave: currentPowerList ? isPowerListComplete(currentPowerList) : false,
       canNavigateForward,
       canNavigateBackward,
@@ -315,7 +287,6 @@ export function usePowerListService() {
     toggleEditMode,
     getStats,
     navigateToDate,
-    handleKeyDown,
     updatePowerListsItem,
     handleDetailsModalClose,
     handleEditFromDetails,

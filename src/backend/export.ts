@@ -1,13 +1,19 @@
 "use client"
 
 import PowerListDB from '@/backend/powerList';
+import StandardsDB from '@/backend/standards';
 
 interface ExportData {
   powerLists: Record<string, unknown>;
-  lastViewedDate: string;
+  standards: Record<string, unknown>;
   exportedAt: string;
   version: string;
 }
+
+const parseDate = (dateStr: string): number => {
+  const [month, day, year] = dateStr.split('/').map(Number);
+  return new Date(year, month - 1, day).getTime();
+};
 
 const exportToJSON = async () => {
   if (typeof window === 'undefined') {
@@ -15,11 +21,25 @@ const exportToJSON = async () => {
   }
 
   const powerLists = await PowerListDB.getAllPowerLists();
-  const lastViewedDate = PowerListDB.getLastViewedDate();
+  const standards = await StandardsDB.getAllStandardsLists();
+
+  const sortedPowerLists = Object.keys(powerLists)
+    .sort((a, b) => parseDate(b) - parseDate(a))
+    .reduce((acc, date) => {
+      acc[date] = powerLists[date];
+      return acc;
+    }, {} as Record<string, unknown>);
+
+  const sortedStandards = Object.keys(standards)
+    .sort((a, b) => parseDate(b) - parseDate(a))
+    .reduce((acc, date) => {
+      acc[date] = standards[date];
+      return acc;
+    }, {} as Record<string, unknown>);
 
   const exportData: ExportData = {
-    powerLists,
-    lastViewedDate,
+    powerLists: sortedPowerLists,
+    standards: sortedStandards,
     exportedAt: new Date().toISOString(),
     version: '1.0.0'
   };

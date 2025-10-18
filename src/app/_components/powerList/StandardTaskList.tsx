@@ -12,8 +12,6 @@ interface StandardTaskListProps {
   onTaskToggle: (taskId: string) => void;
   onAddTask: () => void;
   onRemoveTask: (taskId: string) => void;
-  taskRefs: React.RefObject<HTMLInputElement>[];
-  onKeyDown: (index: number, e: React.KeyboardEvent) => void;
 }
 
 export function StandardTaskList({
@@ -23,13 +21,11 @@ export function StandardTaskList({
   onTaskUpdate,
   onTaskToggle,
   onAddTask,
-  onRemoveTask,
-  taskRefs,
-  onKeyDown
+  onRemoveTask
 }: StandardTaskListProps) {
   return (
     <div className="space-y-3">
-      {tasks.map((task, index) => (
+      {tasks.map((task) => (
         <div key={task.id} className="flex items-start gap-2">
           <StandardTaskCard
             task={task}
@@ -37,8 +33,6 @@ export function StandardTaskList({
             showCheckbox={showCheckboxes}
             onTextChange={(text) => onTaskUpdate(task.id, text)}
             onToggleComplete={() => onTaskToggle(task.id)}
-            inputRef={taskRefs[index]}
-            onKeyDown={(e) => onKeyDown(index, e)}
           />
           {isEditing && (
             <button

@@ -12,11 +12,9 @@ interface TaskCardProps {
   onToggleComplete: () => void;
   onSettingsClick?: () => void;
   onTaskClick?: () => void;
-  onKeyDown?: (e: React.KeyboardEvent) => void;
-  inputRef?: React.RefObject<HTMLInputElement>;
 }
 
-export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick, onKeyDown, inputRef }: TaskCardProps) {
+export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick }: TaskCardProps) {
   const circleColor = !isEditing ? getTaskBackgroundColor(task.time.needed, task.time.left) : '#e5e7eb';
 
   return (
@@ -44,11 +42,9 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
 
       {isEditing ? (
         <input
-          ref={inputRef}
           type="text"
           value={task.text}
           onChange={(e) => onTextChange(e.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Enter your task"
           className="input-task"
         />

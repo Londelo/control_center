@@ -9,8 +9,6 @@ interface TaskCardProps {
   showCheckbox: boolean;
   onTextChange: (text: string) => void;
   onToggleComplete: () => void;
-  onKeyDown?: (e: React.KeyboardEvent) => void;
-  inputRef?: React.RefObject<HTMLInputElement>;
 }
 
 const formatTaskText = (text: string) => {
@@ -30,7 +28,7 @@ const formatTaskText = (text: string) => {
   );
 };
 
-export function StandardTaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onKeyDown, inputRef }: TaskCardProps) {
+export function StandardTaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete }: TaskCardProps) {
   return (
     <div className="task-card-container">
       {showCheckbox && (
@@ -47,11 +45,9 @@ export function StandardTaskCard({ task, isEditing, showCheckbox, onTextChange, 
 
       {isEditing ? (
         <input
-          ref={inputRef}
           type="text"
           value={task.text}
           onChange={(e) => onTextChange(e.target.value)}
-          onKeyDown={onKeyDown}
           placeholder="Enter your task"
           className="input-task"
         />

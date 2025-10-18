@@ -7,8 +7,8 @@ import { TaskDetailsModal } from "@/app/_components/powerList/TaskDetailsModal";
 import { HeaderBar } from "@/app/_components/powerList/HeaderBar";
 import { NavBar } from "@/app/_components/powerList/NavBar";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
-import { CreditCard as Edit3, ChartBar as BarChart3 } from "lucide-react";
-import Link from "next/link";
+import { CreditCard as Edit3, Download } from "lucide-react";
+import ExportService from "@/backend/export";
 import { PowerList as PowerListType } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
@@ -28,7 +28,6 @@ const getListStatus = (currentPowerList: PowerListType, currentDate: string, tod
 const getDayOfWeek = (currentDate: string): string => {
   const date = new Date(currentDate);
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  console.log(date.getDay())
   return days[date.getDay()];
 }
 
@@ -46,7 +45,6 @@ export default function Home() {
     savePowerList,
     toggleEditMode,
     navigateToDate,
-    handleKeyDown,
     handleDetailsModalClose,
     handleEditFromDetails,
     handleModalClose,
@@ -105,8 +103,6 @@ export default function Home() {
               onTaskToggle={toggleTaskCompletion}
               onTaskSettings={handleTaskSettings}
               onTaskClick={handleTaskClick}
-              taskRefs={state.powerListRefs}
-              onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
         </div>
@@ -124,8 +120,6 @@ export default function Home() {
               onTaskToggle={toggleStandardTaskCompletion}
               onAddTask={addStandardTask}
               onRemoveTask={removeStandardTask}
-              taskRefs={state.standardTaskRefs}
-              onKeyDown={(index, e) => handleKeyDown('standard', index, e)}
             />
           </div>
         </div>
@@ -152,13 +146,14 @@ export default function Home() {
             </button>
           )}
 
-          {/* Stats Button */}
-          <Link href="/stats">
-            <button className="btn-outline">
-              <BarChart3 size={16} />
-              View Stats
-            </button>
-          </Link>
+          {/* Export Button */}
+          <button
+            onClick={() => ExportService.exportToJSON()}
+            className="btn-outline"
+          >
+            <Download size={16} />
+            Export
+          </button>
         </div>
       </footer>
 
