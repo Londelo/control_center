@@ -22,8 +22,9 @@ const indexDB = new Dexie('ControlCenterDB') as Dexie & {
 };
 
 const handleOpenDatabase = async (): Promise<void> => {
-  indexDB.version(1).stores(V1_DB);
   try {
+    if (await indexDB.isOpen()) await indexDB.close();
+    await indexDB.version(1).stores(V1_DB);
     await indexDB.open();
   } catch (databaseOpenError: any) {
     // eslint-disable-next-line no-console

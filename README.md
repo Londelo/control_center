@@ -11,13 +11,13 @@ TODO:
     - done remove HandleKeyDown
     - done test the limits for how much data we can store on indexDB
 
+  - CC-(?): Separate the concerns of powerlist and standard in app. e.g. userPowerListService
   - CC-(?): Create a just for today to do list
+  - CC-(?): Look into routing + fix stats page
   - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering
-  - CC-(?): We need a database
   - CC-(?): We need some instructions
-  - CC-(?): Separate the concerns of powerlist and standard in app. e.g. userPowerListService
 
 IDEAS:
   - id love to have it so this app is as cheap to run as possible
