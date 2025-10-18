@@ -3,9 +3,20 @@
 import { StandardTask, Standards } from '@/types/standards';
 import ControlCenterDB from './indexedDB';
 
-const saveStandardsList = async (_date: string, standardTasks: StandardTask[]): Promise<void> => {
+const getStandardTaskByDateAndText = async (date: string, text: string): Promise<StandardTask | undefined> => {
+  return await ControlCenterDB.getTable("Standards")
+    .where({ date, text })
+    .first();
+};
+
+//TODO: date is not being used, remove this param
+const saveList = async (_date: string, standardTasks: StandardTask[]): Promise<void> => {
   await Promise.all(
-    standardTasks.map(task => ControlCenterDB.upsert('Standards', task))
+    standardTasks.map(async task => {
+      const taskExist = await getStandardTaskByDateAndText(task.date, task.text)
+      task.id = taskExist?.id ? taskExist.id : task.id
+      await ControlCenterDB.upsert('Standards', task, task.id)
+    })
   );
 };
 
@@ -43,17 +54,19 @@ const removeStandardTask = async (taskId: string): Promise<void> => {
 };
 
 export type StandardsDBType = {
-  saveStandardsList: (date: string, standardTasks: StandardTask[]) => Promise<void>;
+  saveList: (date: string, standardTasks: StandardTask[]) => Promise<void>;
   getAllStandardsLists: () => Promise<Standards>;
   getStandardsListByDate: (date: string) => Promise<StandardTask[]>;
+  getStandardTaskByDateAndText: (date: string, text: string) => Promise<StandardTask | undefined>;
   clearAllData: () => Promise<void>;
   removeStandardTask: (taskId: string) => Promise<void>;
 };
 
 const StandardsDB: StandardsDBType = {
-  saveStandardsList,
+  saveList,
   getAllStandardsLists,
   getStandardsListByDate,
+  getStandardTaskByDateAndText,
   clearAllData,
   removeStandardTask,
 };

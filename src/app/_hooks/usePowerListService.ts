@@ -190,7 +190,7 @@ export function usePowerListService() {
     [currentDate, currentStandardTasks, setCurrentStandardTasks, isEditing]
   );
 
-  const saveStandardsList = useCallback(
+  const saveList = useCallback(
     SaveStandardsList({
       currentDate,
       currentStandardTasks
@@ -208,9 +208,9 @@ export function usePowerListService() {
         setIsEditing,
         updatePowerListsItem
       })();
-      await saveStandardsList();
+      await saveList();
     },
-    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveStandardsList]
+    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveList]
   );
 
   const toggleEditMode = useCallback(

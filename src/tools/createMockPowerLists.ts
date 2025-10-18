@@ -40,8 +40,9 @@ const initializeLastViewedDate = async (today: string): Promise<void> => {
 };
 
 const createMockPowerLists = async (today: string) => {
-  await PowerListDB.clearAllData();
-  await StandardsDB.clearAllData();
+  //TODO: these are not working right
+  await PowerListDB.clearAllData('date');
+  await StandardsDB.clearAllData('id');
 
   await initializeLastViewedDate(today);
 
@@ -57,10 +58,10 @@ const createMockPowerLists = async (today: string) => {
     powerList.isWin = isWin,
     powerList.isLoss = isLoss
 
-    await PowerListDB.saveList(powerList);
-
     const standardTasks = createMockStandardTasks(dateString);
-    await StandardsDB.saveStandardsList(dateString, standardTasks);
+
+    // await PowerListDB.saveList(powerList);
+    // await StandardsDB.saveList(dateString, standardTasks);
   }
 };
 

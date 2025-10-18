@@ -23,7 +23,7 @@ const ConvertToStandard = ({
 
     const updatedTasks = [...currentStandardTasks, newStandardTask];
     setCurrentStandardTasks(updatedTasks);
-    await StandardsDB.saveStandardsList(currentDate, updatedTasks);
+    await StandardsDB.saveList(currentDate, updatedTasks);
   };
 
 export default ConvertToStandard;

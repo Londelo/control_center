@@ -14,7 +14,6 @@ interface PowerListProps {
 }
 
 function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, onTaskSettings, onTaskClick }: PowerListProps) {
-  console.log(powerList)
   return (
     <div className="flex-1 p-8 border-r border-ui">
       <div className="mx-auto">

@@ -15,7 +15,7 @@ const SaveStandardsList = ({
     date: currentDate
   }));
 
-  await StandardsDB.saveStandardsList(currentDate, tasksWithDate);
+  await StandardsDB.saveList(currentDate, tasksWithDate);
 };
 
 export default SaveStandardsList;
