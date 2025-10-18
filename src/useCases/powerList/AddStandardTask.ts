@@ -1,4 +1,5 @@
-import { createEmptyTask, updatePowerListStatus } from '@/logic/powerList';
+import { updatePowerListStatus } from '@/logic/powerList';
+import { createEmptyStandardTask } from '@/logic/standards';
 import { PowerList } from '@/types/powerList';
 
 type AddStandardTaskArgs = {
@@ -9,8 +10,8 @@ type AddStandardTaskArgs = {
 const AddStandardTask = ({ currentPowerList, setCurrentPowerList }: AddStandardTaskArgs) => () => {
   if (!currentPowerList) return;
 
-  const newTask = createEmptyTask();
-  const updatedStandardTasks = [...currentPowerList.standardTasks, newTask];
+  const newTask = createEmptyStandardTask(currentPowerList.date);
+  const updatedStandardTasks = [...(currentPowerList.standardTasks || []), newTask];
 
   const updatedList = updatePowerListStatus({
     ...currentPowerList,

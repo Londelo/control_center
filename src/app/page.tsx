@@ -4,23 +4,31 @@ import { PowerList } from "@/app/_components/powerList/PowerList";
 import { StandardTaskList } from "@/app/_components/powerList/StandardTaskList";
 import { TaskSettingsModal } from "@/app/_components/powerList/TaskSettingsModal";
 import { TaskDetailsModal } from "@/app/_components/powerList/TaskDetailsModal";
+import { HeaderBar } from "@/app/_components/powerList/HeaderBar";
+import { NavBar } from "@/app/_components/powerList/NavBar";
 import { usePowerListService } from "@/app/_hooks/usePowerListService";
-import { CreditCard as Edit3, ChartBar as BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
-import { PowerList as PowerListType, Task } from "@/types/powerList";
+import { CreditCard as Edit3, Download } from "lucide-react";
+import ExportService from "@/backend/export";
+import { PowerList as PowerListType } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
   if (currentPowerList.isWin) {
-    return purpose === 'text' ? 'WIN' : 'text-green-600'
+    return purpose === 'text' ? 'WIN' : 'status-success'
   }
 
   // If it's today and neither win nor loss, it's in progress
   if (currentDate === today) {
-    return purpose === 'text' ? 'IN PROGRESS' : 'text-blue-600'
+    return purpose === 'text' ? 'IN PROGRESS' : 'status-info'
   }
 
   // Fallback (shouldn't reach here with proper logic)
-  return purpose === 'text' ? 'LOSE' : 'text-red-600'
+  return purpose === 'text' ? 'LOSE' : 'status-error'
+}
+
+const getDayOfWeek = (currentDate: string): string => {
+  const date = new Date(currentDate);
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  return days[date.getDay()];
 }
 
 export default function Home() {
@@ -33,10 +41,10 @@ export default function Home() {
     removeTask,
     convertToStandard,
     toggleTaskCompletion,
+    toggleStandardTaskCompletion,
     savePowerList,
     toggleEditMode,
     navigateToDate,
-    handleKeyDown,
     handleDetailsModalClose,
     handleEditFromDetails,
     handleModalClose,
@@ -60,41 +68,28 @@ export default function Home() {
     );
   }
 
+  const dayOfWeek = getDayOfWeek(state.currentDate);
+  const statusColor = getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')
+  const status = getListStatus(state.currentPowerList, state.currentDate, state.today)
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <header className="relative text-center py-8 border-b border-gray-200">
-        {/* Left Arrow */}
-        <button
-          onClick={() => navigateToDate('prev')}
-          disabled={!state.canNavigateBackward}
-          className="absolute left-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        >
-          <ChevronLeft size={24} />
-        </button>
+      <HeaderBar/>
 
-        <div className="text-2xl font-mono mb-2 flex items-center justify-center gap-2">
-          <span>{state.currentDate} -</span>
-          <span className={getListStatus(state.currentPowerList, state.currentDate, state.today, 'color')}>
-            {getListStatus(state.currentPowerList, state.currentDate, state.today)}
-          </span>
-        </div>
-
-        {/* Right Arrow */}
-        <button
-          onClick={() => navigateToDate('next')}
-          disabled={!state.canNavigateForward}
-          className="absolute right-8 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-        >
-          <ChevronRight size={24} />
-        </button>
-
-      </header>
+      <NavBar
+        dayOfWeek={dayOfWeek}
+        status={status}
+        statusColor={statusColor}
+        currentDate={state.currentDate}
+        canNavigateBackward={state.canNavigateBackward}
+        canNavigateForward={state.canNavigateForward}
+        onNavigateToDate={navigateToDate}
+      />
 
       {/* Main Content - Two Columns */}
       <main className="flex-1 flex">
         {/* Left Column - PowerList */}
-        <div className="flex-1 p-8 border-r border-gray-200">
+        <div className="flex-1 p-8 border-r border-ui">
           <div className="mx-auto">
             <div className="relative mb-6">
               <h1 className="text-lg font-mono font-bold text-center">POWER LIST:</h1>
@@ -108,8 +103,6 @@ export default function Home() {
               onTaskToggle={toggleTaskCompletion}
               onTaskSettings={handleTaskSettings}
               onTaskClick={handleTaskClick}
-              taskRefs={state.powerListRefs}
-              onKeyDown={(index, e) => handleKeyDown('power', index, e)}
             />
           </div>
         </div>
@@ -120,48 +113,47 @@ export default function Home() {
             <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
 
             <StandardTaskList
-              tasks={state.currentPowerList.standardTasks}
+              tasks={state.currentStandardTasks}
               isEditing={state.isEditing}
               showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
               onTaskUpdate={updateStandardTask}
-              onTaskToggle={toggleTaskCompletion}
+              onTaskToggle={toggleStandardTaskCompletion}
               onAddTask={addStandardTask}
               onRemoveTask={removeStandardTask}
-              taskRefs={state.standardTaskRefs}
-              onKeyDown={(index, e) => handleKeyDown('standard', index, e)}
             />
           </div>
         </div>
       </main>
 
       {/* Footer - Action Buttons */}
-      <footer className="text-center py-8 border-t border-gray-200 space-y-4">
+      <footer className="text-center py-8 border-t border-ui space-y-4">
         <div className="flex justify-center gap-4">
           {state.isEditing ? (
             <button
               onClick={savePowerList}
               disabled={!state.canSave}
-              className="px-6 py-2 bg-black text-white font-mono disabled:bg-gray-400"
+              className="btn-primary"
             >
               Save Lists
             </button>
           ) : (
             <button
               onClick={toggleEditMode}
-              className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors"
+              className="btn-outline"
             >
               <Edit3 size={16} />
               Edit Tasks
             </button>
           )}
 
-          {/* Stats Button */}
-          <Link href="/stats">
-            <button className="inline-flex items-center gap-2 px-6 py-2 border-2 border-black text-black font-mono hover:bg-black hover:text-white transition-colors">
-              <BarChart3 size={16} />
-              View Stats
-            </button>
-          </Link>
+          {/* Export Button */}
+          <button
+            onClick={() => ExportService.exportToJSON()}
+            className="btn-outline"
+          >
+            <Download size={16} />
+            Export
+          </button>
         </div>
       </footer>
 
@@ -172,7 +164,11 @@ export default function Home() {
         onClose={handleModalClose}
         onUpdate={updateTask}
         onMakeStandard={(taskId) => {
-          convertToStandard(taskId);
+          const task = state.currentPowerList?.tasks.find(t => t.id === taskId);
+          if (task) {
+            convertToStandard(task);
+            removeTask(taskId);
+          }
           handleModalClose();
         }}
         onDelete={(taskId) => {

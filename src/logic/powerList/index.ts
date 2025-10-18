@@ -1,11 +1,10 @@
 import { DEFAULT_TIME_NEEDED } from '@/enums/powerList';
-import { Task, PowerList, PowerListStats, StandardTask } from '@/types/powerList';
+import { Task, PowerList, PowerListStats } from '@/types/powerList';
 import { v4 } from 'uuid'
 
 export function normalizePowerList(powerList: PowerList): PowerList {
   return {
     ...powerList,
-    standardTasks: powerList.standardTasks || [],
     tasks: powerList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
   };
 }
@@ -19,22 +18,13 @@ export function createEmptyTask(): Task {
   };
 }
 
-export function createEmptyStandardTask(): StandardTask {
-  return {
-    id: v4(),
-    text: '',
-    completed: false
-  };
-}
 
-export function createPowerList(date: string, tasks?: Task[], standardTasks?: StandardTask[]): PowerList {
+export function createPowerList(date: string, tasks?: Task[]): PowerList {
   const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
-  const defaultStandardTasks = standardTasks || [];
   let powerList = {
     id: v4(),
     date,
     tasks: defaultTasks,
-    standardTasks: defaultStandardTasks,
     isWin: false,
     isLoss: false,
     isComplete: false,
@@ -81,21 +71,17 @@ export function updatePowerListStatus(powerList: PowerList, isToday: boolean = f
   };
 }
 
-export function getMostRecentTasks(taskHistory: Record<string, PowerList>): { tasks: Task[], standardTasks: StandardTask[] } {
+export function getMostRecentTasks(taskHistory: Record<string, PowerList>): Task[] {
   const dates = Object.keys(taskHistory).sort().reverse();
 
   for (const date of dates) {
     const powerList = normalizePowerList(taskHistory[date]);
     if (powerList && isPowerListComplete(powerList)) {
-      const { tasks, standardTasks } = powerList
-      return { tasks, standardTasks };
+      return powerList.tasks;
     }
   }
 
-  return {
-    tasks: Array.from({ length: 5 }, () => createEmptyTask()),
-    standardTasks: []
-  };
+  return Array.from({ length: 5 }, () => createEmptyTask());
 }
 
 export function calculatePowerListStats(taskHistory: Record<string, PowerList>): PowerListStats {

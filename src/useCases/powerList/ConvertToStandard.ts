@@ -1,4 +1,5 @@
-import { createEmptyStandardTask, updatePowerListStatus } from '@/logic/powerList';
+import { updatePowerListStatus } from '@/logic/powerList';
+import { createEmptyStandardTask } from '@/logic/standards';
 import { PowerList } from '@/types/powerList';
 import RemoveTask from './RemoveTask'
 
@@ -17,12 +18,12 @@ const ConvertToStandard = ({ currentPowerList, setCurrentPowerList }: ConvertToS
 
     // Create a new standard task from the power list task
     const newStandardTask = {
-      ...createEmptyStandardTask(),
+      ...createEmptyStandardTask(currentPowerList.date),
       text: taskToConvert.text,
     };
 
     // Add the new standard task to the standards list
-    const updatedStandardTasks = [...currentPowerList.standardTasks, newStandardTask];
+    const updatedStandardTasks = [...(currentPowerList.standardTasks || []), newStandardTask];
 
     // Update the power list with both the new standard task and updated tasks
     const updatedList = updatePowerListStatus({

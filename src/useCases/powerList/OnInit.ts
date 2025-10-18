@@ -1,7 +1,6 @@
 "use client"
 
-import db from '@/logic/powerList/db';
-import createMockPowerLists from '@/tools/createMockPowerLists';
+import PowerListDB from '@/backend/powerList';
 import { PowerLists, PowerList } from '@/types/powerList';
 import {
   handleMissedDays,
@@ -14,7 +13,6 @@ import {
 type OnInitArgs = {
   today: string;
   setPowerLists: (powerLists: PowerLists) => void;
-  setIsLoading: (isLoading: boolean) => void;
   setCurrentPowerList: (PowerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
 }
@@ -22,33 +20,24 @@ type OnInitArgs = {
 const OnInit = ({
   today,
   setPowerLists,
-  setIsLoading,
   setCurrentPowerList,
   setIsEditing
-}: OnInitArgs) => () => {
-  setIsLoading(true);
+}: OnInitArgs) => async () => {
+  let allPowerLists = await PowerListDB.getAllPowerLists();
+  allPowerLists = await handleMissedDays({ allPowerLists, today })
+  allPowerLists = await handleLostDays({ allPowerLists, today })
+  allPowerLists = await calculateHabitCompletion({ allPowerLists })
 
-  if(process.env.NEXT_PUBLIC_MOCK_TASKS) {
-    console.warn("MOCKING POWER LISTS")
-    createMockPowerLists(today);
-  }
-
-  let allPowerLists = db.getAllPowerLists();
-  allPowerLists = handleMissedDays({ allPowerLists, today })
-  allPowerLists = handleLostDays({ allPowerLists, today })
-  allPowerLists = calculateHabitCompletion({ allPowerLists })
-
-  const todaysPowerList = getTodaysPowerList({
+  const todaysPowerList = await getTodaysPowerList({
     today,
     allPowerLists,
   });
 
   setPowerLists({ ...allPowerLists, [today]: todaysPowerList});
 
-  db.updateLastViewedDate(today);
+  await PowerListDB.updateLastViewedDate(today);
   setCurrentPowerList(todaysPowerList);
   setIsEditing(!isPowerListComplete(todaysPowerList));
-  setIsLoading(false);
 };
 
 export default OnInit;
