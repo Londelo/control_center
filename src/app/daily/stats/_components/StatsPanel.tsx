@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { usePowerListService } from '@/app/_hooks/usePowerListService';
+import { useDaily } from '@/app/daily/_hooks/useDaily';
 
 export function StatsPanel() {
-  const { getStats } = usePowerListService();
+  const { getStats } = useDaily();
   const [stats, setStats] = useState({
     totalWins: 0,
     totalLosses: 0,

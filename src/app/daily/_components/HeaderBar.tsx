@@ -9,19 +9,20 @@ export function HeaderBar() {
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-mono font-bold">Control Center</h1>
 
-        <Link href="/daily/stats">
-          <button className="btn-outline">
-            <BarChart3 size={16} />
-            View Stats
-          </button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/">
+            <button className="btn-outline">
+              Home
+            </button>
+          </Link>
 
-        <Link href="/">
-          <button className="btn-outline">
-            Home
-          </button>
-        </Link>
-
+          <Link href="/daily/stats">
+            <button className="btn-outline">
+              <BarChart3 size={16} />
+              View Stats
+            </button>
+          </Link>
+        </div>
       </div>
     </header>
   );

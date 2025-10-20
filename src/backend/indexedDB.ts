@@ -60,13 +60,21 @@ const getAll = async <TableName extends DataBases>(
   return selectedTable.toArray()
 };
 
+const clearAll = async <TableName extends DataBases>(
+  tableName: TableName
+): Promise<void> => {
+  const selectedTable = getTable(tableName);
+  await selectedTable.clear()
+};
+
 const ControlCenterDB = {
   ...indexDB,
   handleOpenDatabase,
   upsert,
   getAll,
   remove,
-  getTable
+  getTable,
+  clearAll
 };
 
 export default ControlCenterDB;

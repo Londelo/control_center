@@ -38,7 +38,7 @@ const handleMissedStandardsDays = async ({
         missedDay,
         recentStandardTasks.map(task => ({ ...task, date: missedDay, completed: false }))
       );
-      await StandardsDB.saveList(missedDay, missedList);
+      await StandardsDB.saveList( missedList);
       updatedStandards[missedDay] = missedList;
     }
   }

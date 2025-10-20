@@ -19,12 +19,8 @@ const getAllPowerLists = async (): Promise<PowerLists> => {
   return normalizedList;
 };
 
-const clearAllData = async (key: string): Promise<void> => {
-  // if (!confirm('Are you sure you want to clear all power lists? This action cannot be undone.')) {
-  //   return;
-  // }
-  const powerList = await ControlCenterDB.getAll('PowerList');
-  await Promise.all(powerList.map((item) => ControlCenterDB.remove('PowerList', item[key]));
+const clearAllData = async (): Promise<void> => {
+  await ControlCenterDB.clearAll('PowerList');
 };
 
 const LAST_VIEWED_DATE = 'LAST_VIEWED_DATE';
@@ -43,7 +39,7 @@ export type PowerListType = {
   getAllPowerLists: () => Promise<Record<string, PowerList>>;
   getLastViewedDate: () => string;
   updateLastViewedDate: (date: string) => void;
-  clearAllData: (key: string) => Promise<void>;
+  clearAllData: () => Promise<void>;
 };
 
 const PowerListDB: PowerListType = {

@@ -5,7 +5,7 @@ import StandardsList from "@/app/daily/_components/StandardsList";
 import { HeaderBar } from "@/app/daily/_components/HeaderBar";
 import { NavBar } from "@/app/daily/_components/NavBar";
 import { Footer } from "@/app/daily/_components/Footer";
-import { usePowerListService } from "@/app/_hooks/usePowerListService";
+import { useDaily } from "@/app/daily/_hooks/useDaily";
 import { PowerList as PowerListType } from "@/types/powerList";
 
 const getListStatus = (currentPowerList: PowerListType, currentDate: string, today: string, purpose = 'text') => {
@@ -47,7 +47,7 @@ export default function DailyPage() {
     handleModalClose,
     handleTaskClick,
     handleTaskSettings
-  } = usePowerListService();
+  } = useDaily();
 
   if (state.isLoading) {
     return (
