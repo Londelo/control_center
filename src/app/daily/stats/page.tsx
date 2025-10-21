@@ -9,7 +9,7 @@ export default function StatsPage() {
     <main className="min-h-screen bg-white flex items-center justify-center p-8">
       <div className="w-full max-w-2xl text-center">
         <header className="mb-8">
-          <h1 className="text-lg font-mono font-bold">STANDARDS:</h1>
+          <h1 className="text-lg font-mono font-bold">DAILY STATS:</h1>
         </header>
 
         <div className="mb-12">
@@ -17,7 +17,7 @@ export default function StatsPage() {
         </div>
 
         <div>
-          <Link href="/">
+          <Link href="/daily">
             <button className="inline-flex items-center gap-2 px-6 py-2 bg-black text-white font-mono">
               <ArrowLeft size={16} />
               Back to PowerList

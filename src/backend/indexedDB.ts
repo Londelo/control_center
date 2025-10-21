@@ -2,11 +2,13 @@
 
 import { PowerList } from '@/types/powerList';
 import { StandardTask } from '@/types/standards';
+import { ToDoTask } from '@/types/todoToday';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
   PowerList: 'date',
-  Standards: 'id, [date+text]'
+  Standards: 'id, [date+text]',
+  ToDoToday: 'id, [date+text]'
 };
 
 export type DataBases = keyof typeof V1_DB;
@@ -14,17 +16,19 @@ export type DataBases = keyof typeof V1_DB;
 type TableEntityMap = {
   PowerList: PowerList
   Standards: StandardTask
+  ToDoToday: ToDoTask
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
   PowerList: EntityTable<PowerList, 'date'>;
   Standards: EntityTable<StandardTask, 'id'>;
+  ToDoToday: EntityTable<ToDoTask, 'id'>;
 };
 
 const handleOpenDatabase = async (): Promise<void> => {
   try {
     if (await indexDB.isOpen()) await indexDB.close();
-    await indexDB.version(1).stores(V1_DB);
+    await indexDB.version(2).stores(V1_DB);
     await indexDB.open();
   } catch (databaseOpenError: any) {
     // eslint-disable-next-line no-console
