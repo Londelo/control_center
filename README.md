@@ -2,7 +2,9 @@
 TODO:
 
   - CC-(6): Create a just for today to do list
-  
+    - refactor db so standards and todos are stored in an array so the order can be dictated
+
+  - CC-(?): Add a drag and drop reordering system
   - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering

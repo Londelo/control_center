@@ -2,6 +2,7 @@
 
 import PowerList, { TaskSettingsModal, TaskDetailsModal } from "@/app/daily/_components/PowerList";
 import StandardsList from "@/app/daily/_components/StandardsList";
+import ToDoList from "@/app/daily/_components/ToDoList";
 import { HeaderBar } from "@/app/daily/_components/HeaderBar";
 import { NavBar } from "@/app/daily/_components/NavBar";
 import { Footer } from "@/app/daily/_components/Footer";
@@ -39,6 +40,10 @@ export default function DailyPage() {
     convertToStandard,
     toggleTaskCompletion,
     toggleStandardTaskCompletion,
+    updateToDoTask,
+    addToDoTask,
+    removeToDoTask,
+    toggleToDoTaskCompletion,
     savePowerList,
     toggleEditMode,
     navigateToDate,
@@ -46,7 +51,8 @@ export default function DailyPage() {
     handleEditFromDetails,
     handleModalClose,
     handleTaskClick,
-    handleTaskSettings
+    handleTaskSettings,
+    handleAddToDoList
   } = useDaily();
 
   if (state.isLoading) {
@@ -84,28 +90,43 @@ export default function DailyPage() {
       />
 
       {/* Main Content - Two Columns */}
-      <main className="flex-1 flex">
-        {/* Left Column - PowerList */}
-        <PowerList
-          powerList={state.currentPowerList}
-          isEditing={state.isEditing}
-          showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
-          onTaskUpdate={updateTask}
-          onTaskToggle={toggleTaskCompletion}
-          onTaskSettings={handleTaskSettings}
-          onTaskClick={handleTaskClick}
-        />
+      <main className="flex-1 flex flex-col">
+        <div className="flex flex-1">
+          {/* Left Column - PowerList */}
+          <PowerList
+            powerList={state.currentPowerList}
+            isEditing={state.isEditing}
+            showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
+            onTaskUpdate={updateTask}
+            onTaskToggle={toggleTaskCompletion}
+            onTaskSettings={handleTaskSettings}
+            onTaskClick={handleTaskClick}
+          />
 
-        {/* Right Column - Standard Tasks */}
-        <StandardsList
-          tasks={state.currentStandardTasks}
-          isEditing={state.isEditing}
-          showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
-          onTaskUpdate={updateStandardTask}
-          onTaskToggle={toggleStandardTaskCompletion}
-          onAddTask={addStandardTask}
-          onRemoveTask={removeStandardTask}
-        />
+          {/* Right Column - Standard Tasks */}
+          <StandardsList
+            tasks={state.currentStandardTasks}
+            isEditing={state.isEditing}
+            showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
+            onTaskUpdate={updateStandardTask}
+            onTaskToggle={toggleStandardTaskCompletion}
+            onAddTask={addStandardTask}
+            onRemoveTask={removeStandardTask}
+          />
+        </div>
+
+        {/* Full Width - ToDo List */}
+        {state.showToDoSection && (
+          <ToDoList
+            tasks={state.currentToDoTasks}
+            isEditing={state.isEditing}
+            showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
+            onTaskUpdate={updateToDoTask}
+            onTaskToggle={toggleToDoTaskCompletion}
+            onAddTask={addToDoTask}
+            onRemoveTask={removeToDoTask}
+          />
+        )}
       </main>
 
       <Footer
@@ -113,6 +134,8 @@ export default function DailyPage() {
         canSave={state.canSave}
         onSave={savePowerList}
         onToggleEdit={toggleEditMode}
+        showAddToDoButton={!state.showToDoSection && state.currentDate === state.today}
+        onAddToDoList={handleAddToDoList}
       />
 
       {/* Task Settings Modal */}
