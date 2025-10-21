@@ -2,23 +2,18 @@
 
 import Link from "next/link";
 
-export default function Home() {
+export default function MapPage() {
   return (
     <main className="min-h-screen bg-white flex items-center justify-center p-8">
       <div className="w-full max-w-2xl text-center">
         <header className="mb-8">
-          <h1 className="text-lg font-mono font-bold">Home</h1>
+          <h1 className="text-lg font-mono font-bold">Map</h1>
         </header>
 
         <div>
-          <Link href="/daily">
+          <Link href="/">
             <button className="btn-outline">
-              Daily
-            </button>
-          </Link>
-          <Link href="/map">
-            <button className="btn-outline">
-              Map
+              Home
             </button>
           </Link>
         </div>

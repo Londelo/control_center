@@ -2,14 +2,12 @@ import { StandardTask } from '@/types/standards';
 import StandardsDB from '@/backend/standards';
 
 type ToggleStandardTaskCompletionArgs = {
-  currentDate: string;
   currentStandardTasks: StandardTask[];
   setCurrentStandardTasks: (tasks: StandardTask[]) => void;
   isEditing: boolean;
 };
 
 const ToggleStandardTaskCompletion = ({
-  currentDate,
   currentStandardTasks,
   setCurrentStandardTasks,
   isEditing
@@ -21,7 +19,7 @@ const ToggleStandardTaskCompletion = ({
   );
 
   setCurrentStandardTasks(updatedTasks);
-  await StandardsDB.saveStandardsList(currentDate, updatedTasks);
+  await StandardsDB.saveList(updatedTasks);
 };
 
 export default ToggleStandardTaskCompletion;

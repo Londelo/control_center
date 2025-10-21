@@ -5,8 +5,8 @@ import { StandardTask } from '@/types/standards';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
-  PowerList: 'id, date',
-  Standards: 'id, date'
+  PowerList: 'date',
+  Standards: 'id, [date+text]'
 };
 
 export type DataBases = keyof typeof V1_DB;
@@ -17,13 +17,14 @@ type TableEntityMap = {
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
-  PowerList: EntityTable<PowerList, 'id'>;
+  PowerList: EntityTable<PowerList, 'date'>;
   Standards: EntityTable<StandardTask, 'id'>;
 };
 
 const handleOpenDatabase = async (): Promise<void> => {
-  indexDB.version(1).stores(V1_DB);
   try {
+    if (await indexDB.isOpen()) await indexDB.close();
+    await indexDB.version(1).stores(V1_DB);
     await indexDB.open();
   } catch (databaseOpenError: any) {
     // eslint-disable-next-line no-console
@@ -37,18 +38,19 @@ const getTable = <TableName extends DataBases>(tableName: TableName) =>
 
 const upsert = async <TableName extends DataBases>(
   tableName: TableName,
-  value: TableEntityMap[TableName]
+  value: TableEntityMap[TableName],
+  key: any
 ): Promise<void> => {
   const selectedTable = getTable(tableName);
-  await selectedTable.put(value, value.id as any);
+  await selectedTable.put(value, key);
 };
 
 const remove = async <TableName extends DataBases>(
   tableName: TableName,
-  id: any
+  key: any
 ): Promise<void> => {
   const selectedTable = getTable(tableName);
-  await selectedTable.delete(id);
+  await selectedTable.delete(key);
 };
 
 const getAll = async <TableName extends DataBases>(
@@ -58,11 +60,21 @@ const getAll = async <TableName extends DataBases>(
   return selectedTable.toArray()
 };
 
+const clearAll = async <TableName extends DataBases>(
+  tableName: TableName
+): Promise<void> => {
+  const selectedTable = getTable(tableName);
+  await selectedTable.clear()
+};
+
 const ControlCenterDB = {
+  ...indexDB,
   handleOpenDatabase,
   upsert,
   getAll,
-  remove
+  remove,
+  getTable,
+  clearAll
 };
 
 export default ControlCenterDB;

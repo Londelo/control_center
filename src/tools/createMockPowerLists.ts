@@ -57,10 +57,10 @@ const createMockPowerLists = async (today: string) => {
     powerList.isWin = isWin,
     powerList.isLoss = isLoss
 
-    await PowerListDB.saveList(powerList);
-
     const standardTasks = createMockStandardTasks(dateString);
-    await StandardsDB.saveStandardsList(dateString, standardTasks);
+
+    await PowerListDB.saveList(powerList);
+    await StandardsDB.saveList(standardTasks);
   }
 };
 

@@ -19,7 +19,7 @@ const getTodaysStandardsList = async ({
       today,
       recentStandardTasks.map(task => ({ ...task, date: today, completed: false }))
     );
-    await StandardsDB.saveStandardsList(today, standardsList);
+    await StandardsDB.saveList(standardsList);
     return standardsList;
   }
 

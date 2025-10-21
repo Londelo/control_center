@@ -35,7 +35,7 @@ const getCanNavigateBackward = (date: string, lists: PowerLists) => {
   return Boolean(lists[previousDateString]);
 };
 
-export function usePowerListService() {
+export function useDaily() {
   const [powerLists, setPowerLists] = useState<PowerLists>({});
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
   const [allStandards, setAllStandards] = useState<Standards>({});
@@ -182,7 +182,6 @@ export function usePowerListService() {
 
   const toggleStandardTaskCompletion = useCallback(
     ToggleStandardTaskCompletion({
-      currentDate,
       currentStandardTasks,
       setCurrentStandardTasks,
       isEditing
@@ -190,7 +189,7 @@ export function usePowerListService() {
     [currentDate, currentStandardTasks, setCurrentStandardTasks, isEditing]
   );
 
-  const saveStandardsList = useCallback(
+  const saveList = useCallback(
     SaveStandardsList({
       currentDate,
       currentStandardTasks
@@ -208,9 +207,9 @@ export function usePowerListService() {
         setIsEditing,
         updatePowerListsItem
       })();
-      await saveStandardsList();
+      await saveList();
     },
-    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveStandardsList]
+    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveList]
   );
 
   const toggleEditMode = useCallback(
