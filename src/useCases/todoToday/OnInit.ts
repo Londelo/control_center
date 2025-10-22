@@ -1,9 +1,9 @@
 import ToDoTodayDB from '@/backend/todoToday';
-import { ToDoTask, ToDoTasks } from '@/types/todoToday';
+import { ToDoTask, ToDoLists } from '@/types/todoToday';
 
 type OnInitArgs = {
   today: string;
-  setAllToDos: (todos: ToDoTasks) => void;
+  setAllToDos: (todos: ToDoLists) => void;
   setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
   setShowToDoSection: (show: boolean) => void;
 };

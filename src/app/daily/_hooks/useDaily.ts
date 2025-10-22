@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PowerList, PowerLists, Task } from '@/types/powerList';
 import { StandardTask, Standard } from '@/types/standards';
-import { ToDoTask, ToDoTasks } from '@/types/todoToday';
+import { ToDoTask, ToDoLists } from '@/types/todoToday';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import ControlCenterDB from '@/backend/indexedDB';
 import createMockPowerLists from '@/tools/createMockPowerLists';
@@ -49,7 +49,7 @@ export function useDaily() {
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
   const [allStandards, setAllStandards] = useState<Standard>({});
   const [currentStandardTasks, setCurrentStandardTasks] = useState<StandardTask[]>([]);
-  const [allToDos, setAllToDos] = useState<ToDoTasks>({});
+  const [allToDos, setAllToDos] = useState<ToDoLists>({});
   const [currentToDoTasks, setCurrentToDoTasks] = useState<ToDoTask[]>([]);
   const [showToDoSection, setShowToDoSection] = useState(false);
   const [currentDate, setCurrentDate] = useState<string>(today);

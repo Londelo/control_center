@@ -2,7 +2,7 @@
 
 import { PowerList } from '@/types/powerList';
 import { Standard } from '@/types/standards';
-import { ToDoTasks } from '@/types/todoToday';
+import { ToDoList } from '@/types/todoToday';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
@@ -16,13 +16,13 @@ export type DataBases = keyof typeof V1_DB;
 type TableEntityMap = {
   PowerList: PowerList
   Standard: Standard
-  ToDoToday: ToDoTasks
+  ToDoToday: ToDoList
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
   PowerList: EntityTable<PowerList, 'date'>;
   Standard: EntityTable<Standard, 'date'>;
-  ToDoToday: EntityTable<ToDoTasks, 'date'>;
+  ToDoToday: EntityTable<ToDoList, 'date'>;
 };
 
 const handleOpenDatabase = async (): Promise<void> => {

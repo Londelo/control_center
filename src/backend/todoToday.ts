@@ -1,33 +1,27 @@
 "use client"
 
-import { ToDoTask, ToDoTasks } from '@/types/todoToday';
+import { ToDoList, ToDoLists } from '@/types/todoToday';
 import ControlCenterDB from './indexedDB';
 
-const saveList = async (toDoTasks: ToDoTask[]): Promise<void> => {
-  for (const task of toDoTasks) {
-    await ControlCenterDB.upsert('ToDoToday', task, task.id);
+const saveList = async (toDoLists: ToDoList[]): Promise<void> => {
+  for (const task of toDoLists) {
+    await ControlCenterDB.upsert('ToDoToday', task, task.date);
   }
 };
 
-const getAllToDoLists = async (): Promise<ToDoTasks> => {
-  const toDoTasks = await ControlCenterDB.getAll('ToDoToday');
-  const normalizedToDos: ToDoTasks = {};
-
-  toDoTasks.forEach((task) => {
-    if (task.date) {
-      if (!normalizedToDos[task.date]) {
-        normalizedToDos[task.date] = [];
-      }
-      normalizedToDos[task.date].push(task);
-    }
-  });
-
-  return normalizedToDos;
+const getAllToDoLists = async (): Promise<ToDoLists> => {
+  const toDoLists = await ControlCenterDB.getAll('ToDoToday');
+  return toDoLists.reduce(
+    (acc, toDoList) => {
+      acc[toDoList.date] = toDoList;
+      return acc;
+    }, {} as ToDoLists
+  );
 };
 
 const clearAllData = async (): Promise<void> => {
-  const toDoTasks = await ControlCenterDB.getAll('ToDoToday');
-  await Promise.all(toDoTasks.map((task) => ControlCenterDB.remove('ToDoToday', task.id)));
+  const toDoLists = await ControlCenterDB.getAll('ToDoToday');
+  await Promise.all(toDoLists.map((task) => ControlCenterDB.remove('ToDoToday', task.id)));
 };
 
 const removeToDoTask = async (taskId: string): Promise<void> => {
@@ -35,8 +29,8 @@ const removeToDoTask = async (taskId: string): Promise<void> => {
 };
 
 export type ToDoTodayDBType = {
-  saveList: (toDoTasks: ToDoTask[]) => Promise<void>;
-  getAllToDoLists: () => Promise<ToDoTasks>;
+  saveList: (toDoLists: ToDoList[]) => Promise<void>;
+  getAllToDoLists: () => Promise<ToDoLists>;
   clearAllData: () => Promise<void>;
   removeToDoTask: (taskId: string) => Promise<void>;
 };

@@ -11,13 +11,12 @@ const saveList = async (standardTasks: Standard[]): Promise<void> => {
 
 const getAllStandardsLists = async (): Promise<Standards> => {
   const standards = await ControlCenterDB.getAll('Standard');
-  const normalizedStandards: Standards = standards.reduce(
+  return standards.reduce(
     (acc, standard) => {
       acc[standard.date] = standard;
       return acc;
     }, {} as Standards
   );
-  return normalizedStandards;
 };
 
 const getStandardsListByDate = async (date: string): Promise<StandardTask[]> => {

@@ -3,8 +3,12 @@ export interface ToDoTask {
   completed: boolean;
 }
 
-export type ToDoTasks = {
+export type ToDoList = {
   id: string;
   date: string;
   tasks: ToDoTask[]
+}
+
+export type ToDoLists = {
+  [date: string]: ToDoList
 }
