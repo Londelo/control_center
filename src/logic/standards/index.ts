@@ -1,4 +1,4 @@
-import { StandardTask, Standards } from '@/types/standards';
+import { StandardTask, Standard } from '@/types/standards';
 import { v4 } from 'uuid';
 
 //TODO: set up overrides, then reflext the change where this is being called
@@ -15,7 +15,7 @@ export function normalizeStandardsList(_date: string, standardTasks?: StandardTa
   return standardTasks || [];
 }
 
-export function getMostRecentStandardTasks(allStandards: Standards): StandardTask[] {
+export function getMostRecentStandardTasks(allStandards: Standard): StandardTask[] {
   const dates = Object.keys(allStandards).sort().reverse();
 
   for (const date of dates) {

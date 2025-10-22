@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { PowerList, PowerLists, Task } from '@/types/powerList';
-import { StandardTask, Standards } from '@/types/standards';
+import { StandardTask, Standard } from '@/types/standards';
 import { ToDoTask, ToDoTasks } from '@/types/todoToday';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import ControlCenterDB from '@/backend/indexedDB';
@@ -47,7 +47,7 @@ const getCanNavigateBackward = (date: string, lists: PowerLists) => {
 export function useDaily() {
   const [powerLists, setPowerLists] = useState<PowerLists>({});
   const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
-  const [allStandards, setAllStandards] = useState<Standards>({});
+  const [allStandards, setAllStandards] = useState<Standard>({});
   const [currentStandardTasks, setCurrentStandardTasks] = useState<StandardTask[]>([]);
   const [allToDos, setAllToDos] = useState<ToDoTasks>({});
   const [currentToDoTasks, setCurrentToDoTasks] = useState<ToDoTask[]>([]);

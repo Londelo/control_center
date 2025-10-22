@@ -1,10 +1,10 @@
 import { createStandardsList, getMostRecentStandardTasks } from '@/logic/standards';
 import StandardsDB from '@/backend/standards';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standard, StandardTask } from '@/types/standards';
 
 export type GetTodaysStandardsList = {
   today: string;
-  allStandards: Standards
+  allStandards: Standard
 };
 
 const getTodaysStandardsList = async ({

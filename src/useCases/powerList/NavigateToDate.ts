@@ -1,10 +1,10 @@
 import { PowerList, PowerLists } from '@/types/powerList';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standard, StandardTask } from '@/types/standards';
 
 type NavigateToDateArgs = {
   currentDate: string;
   powerLists: PowerLists;
-  allStandards: Standards;
+  allStandards: Standard;
   setCurrentDate: (date: string) => void;
   setCurrentPowerList: (PowerList: PowerList) => void;
   setCurrentStandardTasks: (tasks: StandardTask[]) => void;

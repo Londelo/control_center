@@ -1,13 +1,13 @@
 "use client"
 
 import { PowerList } from '@/types/powerList';
-import { Standards } from '@/types/standards';
+import { Standard } from '@/types/standards';
 import { ToDoTasks } from '@/types/todoToday';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
   PowerList: 'date',
-  Standards: 'date',
+  Standard: 'date',
   ToDoToday: 'date'
 };
 
@@ -15,13 +15,13 @@ export type DataBases = keyof typeof V1_DB;
 
 type TableEntityMap = {
   PowerList: PowerList
-  Standards: Standards
+  Standard: Standard
   ToDoToday: ToDoTasks
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
   PowerList: EntityTable<PowerList, 'date'>;
-  Standards: EntityTable<Standards, 'date'>;
+  Standard: EntityTable<Standard, 'date'>;
   ToDoToday: EntityTable<ToDoTasks, 'date'>;
 };
 
@@ -59,9 +59,9 @@ const remove = async <TableName extends DataBases>(
 
 const getAll = async <TableName extends DataBases>(
   tableName: TableName
-): Promise<TableEntityMap[TableName]> => {
+): Promise<TableEntityMap[TableName][]> => {
   const selectedTable = getTable(tableName);
-  return selectedTable.toCollection() as TableEntityMap[TableName]
+  return selectedTable.toArray()
 };
 
 const clearAll = async <TableName extends DataBases>(

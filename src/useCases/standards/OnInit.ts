@@ -1,13 +1,13 @@
 "use client"
 
 import StandardsDB from '@/backend/standards';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standard, StandardTask } from '@/types/standards';
 import getTodaysStandardsList from '@/logic/standards/getTodaysStandardsList';
 import handleMissedStandardsDays from '@/logic/standards/handleMissedStandardsDays';
 
 type OnInitArgs = {
   today: string;
-  setAllStandards: (standards: Standards) => void;
+  setAllStandards: (standards: Standard) => void;
   setCurrentStandardTasks: (tasks: StandardTask[]) => void;
   setIsLoading: (isLoading: boolean) => void;
 }

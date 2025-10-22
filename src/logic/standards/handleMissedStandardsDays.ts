@@ -1,11 +1,11 @@
 import StandardsDB from '@/backend/standards';
 import { getMostRecentStandardTasks, createStandardsList } from '@/logic/standards';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standard, StandardTask } from '@/types/standards';
 import PowerListDB from '@/backend/powerList';
 
 export type HandleMissedStandardsDays = {
   today: string;
-  allStandards: Standards
+  allStandards: Standard
 };
 
 export function generateMissedDays(lastDate: string, currentDate: string): string[] {
@@ -26,9 +26,9 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
 const handleMissedStandardsDays = async ({
   today,
   allStandards
-}: HandleMissedStandardsDays): Promise<Standards> => {
+}: HandleMissedStandardsDays): Promise<Standard> => {
   const lastViewedDate = PowerListDB.getLastViewedDate();
-  let updatedStandards: Standards = { ...allStandards };
+  let updatedStandards: Standard = { ...allStandards };
 
   if (lastViewedDate && lastViewedDate !== today) {
     const missedDays = generateMissedDays(lastViewedDate, today);
