@@ -1,34 +1,34 @@
 "use client"
 
 import { PowerList } from '@/types/powerList';
-import { StandardTask } from '@/types/standards';
-import { ToDoTask } from '@/types/todoToday';
+import { Standards } from '@/types/standards';
+import { ToDoTasks } from '@/types/todoToday';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
   PowerList: 'date',
-  Standards: 'id, [date+text]',
-  ToDoToday: 'id, [date+text]'
+  Standards: 'date',
+  ToDoToday: 'date'
 };
 
 export type DataBases = keyof typeof V1_DB;
 
 type TableEntityMap = {
   PowerList: PowerList
-  Standards: StandardTask
-  ToDoToday: ToDoTask
+  Standards: Standards
+  ToDoToday: ToDoTasks
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
   PowerList: EntityTable<PowerList, 'date'>;
-  Standards: EntityTable<StandardTask, 'id'>;
-  ToDoToday: EntityTable<ToDoTask, 'id'>;
+  Standards: EntityTable<Standards, 'date'>;
+  ToDoToday: EntityTable<ToDoTasks, 'date'>;
 };
 
 const handleOpenDatabase = async (): Promise<void> => {
   try {
     if (await indexDB.isOpen()) await indexDB.close();
-    await indexDB.version(2).stores(V1_DB);
+    await indexDB.version(3).stores(V1_DB).upgrade;
     await indexDB.open();
   } catch (databaseOpenError: any) {
     // eslint-disable-next-line no-console
@@ -59,9 +59,9 @@ const remove = async <TableName extends DataBases>(
 
 const getAll = async <TableName extends DataBases>(
   tableName: TableName
-): Promise<TableEntityMap[TableName][]> => {
+): Promise<TableEntityMap[TableName]> => {
   const selectedTable = getTable(tableName);
-  return selectedTable.toArray()
+  return selectedTable.toCollection() as TableEntityMap[TableName]
 };
 
 const clearAll = async <TableName extends DataBases>(
