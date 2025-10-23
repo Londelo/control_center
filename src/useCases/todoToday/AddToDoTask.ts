@@ -1,16 +1,15 @@
 import { createEmptyToDoTask } from '@/logic/todoToday';
-import { ToDoTask } from '@/types/todoToday';
+import { ToDoList } from '@/types/todoToday';
 
 type AddToDoTaskArgs = {
-  currentDate: string;
-  currentToDoTasks: ToDoTask[];
-  setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
+  currentToDoTasks: ToDoList;
+  setCurrentToDoTasks: (todoList: ToDoList) => void;
 };
 
-const AddToDoTask = ({ currentDate, currentToDoTasks, setCurrentToDoTasks }: AddToDoTaskArgs) => () => {
-  const newTask = createEmptyToDoTask(currentDate);
-  const updatedTasks = [...currentToDoTasks, newTask];
-  setCurrentToDoTasks(updatedTasks);
+const AddToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: AddToDoTaskArgs) => () => {
+  const newTask = createEmptyToDoTask();
+  const updatedTasks = [...currentToDoTasks.tasks, newTask];
+  setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };
 
 export default AddToDoTask;

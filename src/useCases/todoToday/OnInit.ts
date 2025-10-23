@@ -1,10 +1,11 @@
 import ToDoTodayDB from '@/backend/todoToday';
-import { ToDoTask, ToDoLists } from '@/types/todoToday';
+import { ToDoList, ToDoLists } from '@/types/todoToday';
+import { v4 } from 'uuid';
 
 type OnInitArgs = {
   today: string;
   setAllToDos: (todos: ToDoLists) => void;
-  setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
+  setCurrentToDoTasks: (todoList: ToDoList) => void;
   setShowToDoSection: (show: boolean) => void;
 };
 
@@ -17,10 +18,10 @@ const OnInit = ({
   const allToDos = await ToDoTodayDB.getAllToDoLists();
   setAllToDos(allToDos);
 
-  const todaysTasks = allToDos[today] || [];
-  setCurrentToDoTasks(todaysTasks);
+  const todaysToDoList = allToDos[today] || { id: v4(), date: today, tasks: [] };
+  setCurrentToDoTasks(todaysToDoList);
 
-  if (todaysTasks.length > 0) {
+  if (todaysToDoList.tasks.length > 0) {
     setShowToDoSection(true);
   }
 };

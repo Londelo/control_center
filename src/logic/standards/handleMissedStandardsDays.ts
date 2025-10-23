@@ -1,11 +1,11 @@
 import StandardsDB from '@/backend/standards';
-import { getMostRecentStandardTasks, createStandardsList } from '@/logic/standards';
-import { Standard, StandardTask } from '@/types/standards';
+import { getMostRecentStandardTasks, createStandard } from '@/logic/standards';
+import { Standards } from '@/types/standards';
 import PowerListDB from '@/backend/powerList';
 
 export type HandleMissedStandardsDays = {
   today: string;
-  allStandards: Standard
+  allStandards: Standards
 };
 
 export function generateMissedDays(lastDate: string, currentDate: string): string[] {
@@ -26,20 +26,17 @@ export function generateMissedDays(lastDate: string, currentDate: string): strin
 const handleMissedStandardsDays = async ({
   today,
   allStandards
-}: HandleMissedStandardsDays): Promise<Standard> => {
+}: HandleMissedStandardsDays): Promise<Standards> => {
   const lastViewedDate = PowerListDB.getLastViewedDate();
-  let updatedStandards: Standard = { ...allStandards };
+  let updatedStandards: Standards = { ...allStandards };
 
   if (lastViewedDate && lastViewedDate !== today) {
     const missedDays = generateMissedDays(lastViewedDate, today);
     for (const missedDay of missedDays) {
       const recentStandardTasks = getMostRecentStandardTasks(allStandards);
-      const missedList: StandardTask[] = createStandardsList(
-        missedDay,
-        recentStandardTasks.map(task => ({ ...task, date: missedDay, completed: false }))
-      );
-      await StandardsDB.saveList( missedList);
-      updatedStandards[missedDay] = missedList;
+      const missedStandard = createStandard(missedDay, recentStandardTasks);
+      await StandardsDB.save(missedStandard);
+      updatedStandards[missedDay] = missedStandard;
     }
   }
 

@@ -4,13 +4,11 @@ import { PowerList, PowerLists } from '@/types/powerList';
 import ControlCenterDB from './indexedDB';
 import LocalStore from './localStorage';
 
-const saveList = async (powerList: PowerList): Promise<void> => {
+const save = async (powerList: PowerList): Promise<void> => {
   await ControlCenterDB.upsert('PowerList', powerList, powerList.date);
 };
 
 const getAllPowerLists = async (): Promise<PowerLists> => {
-  //TODO: I think we can do .toCollection, so we need DB.getAll_ARR and DB.getAll_Obj
-  // powerList db is already stored by date
   const powerList = await ControlCenterDB.getAll('PowerList');
   const normalizedList: PowerLists = {};
   powerList.forEach((item) => {
@@ -35,7 +33,7 @@ const updateLastViewedDate = (date: string): void => {
 };
 
 export type PowerListType = {
-  saveList: (powerList: PowerList) => Promise<void>;
+  save: (powerList: PowerList) => Promise<void>;
   getAllPowerLists: () => Promise<Record<string, PowerList>>;
   getLastViewedDate: () => string;
   updateLastViewedDate: (date: string) => void;
@@ -43,7 +41,7 @@ export type PowerListType = {
 };
 
 const PowerListDB: PowerListType = {
-  saveList,
+  save,
   getAllPowerLists,
   getLastViewedDate,
   updateLastViewedDate,

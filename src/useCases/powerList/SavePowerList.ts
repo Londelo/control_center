@@ -23,7 +23,7 @@ const SavePowerList = ({
 
   const updatedList = updatePowerListStatus(currentPowerList, currentDate === today);
   setCurrentPowerList(updatedList);
-  await PowerListDB.saveList(updatedList);
+  await PowerListDB.save(updatedList);
   updatePowerListsItem(currentDate, updatedList);
   setIsEditing(false);
 };

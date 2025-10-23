@@ -23,7 +23,7 @@ const handleLostDays = async ({
         isComplete: true,
         updatedAt: new Date().toISOString(),
       };
-      await PowerListDB.saveList(updatedPowerList);
+      await PowerListDB.save(updatedPowerList);
       updatedPowerLists[date] = updatedPowerList;
     }
   }

@@ -40,7 +40,7 @@ const handleMissedDays = async ({
       );
       missedList.isLoss = true;
       missedList.isComplete = true;
-      await PowerListDB.saveList(missedList);
+      await PowerListDB.save(missedList);
       updatedPowerLists[missedDay] = missedList;
     }
   }

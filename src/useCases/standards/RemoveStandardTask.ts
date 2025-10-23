@@ -1,16 +1,14 @@
-import { StandardTask } from '@/types/standards';
-import StandardsDB from '@/backend/standards';
+import { Standard } from '@/types/standards';
 
 type RemoveStandardTaskArgs = {
-  currentStandardTasks: StandardTask[];
-  setCurrentStandardTasks: (tasks: StandardTask[]) => void;
+  currentStandardTasks: Standard;
+  setCurrentStandardTasks: (standard: Standard) => void;
 };
 
 const RemoveStandardTask = ({ currentStandardTasks, setCurrentStandardTasks }: RemoveStandardTaskArgs) =>
-  async (taskId: string) => {
-    const updatedTasks = currentStandardTasks.filter(task => task.id !== taskId);
-    setCurrentStandardTasks(updatedTasks);
-    await StandardsDB.removeStandardTask(taskId);
+  (taskIndex: number) => {
+    const updatedTasks = currentStandardTasks.tasks.filter((_, index) => index !== taskIndex);
+    setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
   };
 
 export default RemoveStandardTask;

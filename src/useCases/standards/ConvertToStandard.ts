@@ -1,29 +1,24 @@
 import { createEmptyStandardTask } from '@/logic/standards';
-import { StandardTask } from '@/types/standards';
+import { Standard } from '@/types/standards';
 import { Task } from '@/types/powerList';
-import StandardsDB from '@/backend/standards';
 
 type ConvertToStandardArgs = {
-  currentDate: string;
-  currentStandardTasks: StandardTask[];
-  setCurrentStandardTasks: (tasks: StandardTask[]) => void;
+  currentStandardTasks: Standard;
+  setCurrentStandardTasks: (standard: Standard) => void;
 };
 
 const ConvertToStandard = ({
-  currentDate,
   currentStandardTasks,
   setCurrentStandardTasks
 }: ConvertToStandardArgs) =>
-  async (task: Task) => {
-    const newStandardTask: StandardTask = {
-      ...createEmptyStandardTask(currentDate),
-      text: task.text,
-      date: currentDate
+  (task: Task) => {
+    const newStandardTask = {
+      ...createEmptyStandardTask(),
+      text: task.text
     };
 
-    const updatedTasks = [...currentStandardTasks, newStandardTask];
-    setCurrentStandardTasks(updatedTasks);
-    await StandardsDB.saveList(updatedTasks);
+    const updatedTasks = [...currentStandardTasks.tasks, newStandardTask];
+    setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
   };
 
 export default ConvertToStandard;

@@ -8,10 +8,10 @@ interface StandardsListProps {
   tasks: StandardTask[];
   isEditing: boolean;
   showCheckboxes: boolean;
-  onTaskUpdate: (taskId: string, text: string) => void;
-  onTaskToggle: (taskId: string) => void;
+  onTaskUpdate: (taskIndex: number, text: string) => void;
+  onTaskToggle: (taskIndex: number) => void;
   onAddTask: () => void;
-  onRemoveTask: (taskId: string) => void;
+  onRemoveTask: (taskIndex: number) => void;
 }
 
 function StandardsList({
@@ -29,18 +29,18 @@ function StandardsList({
       <div className="max-w-md mx-auto">
         <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
         <div className="space-y-3">
-          {tasks.map((task) => (
-            <div key={task.id} className="flex items-start gap-2">
+          {tasks.map((task, index) => (
+            <div key={index} className="flex items-start gap-2">
               <StandardTaskCard
                 task={task}
                 isEditing={isEditing}
                 showCheckbox={showCheckboxes}
-                onTextChange={(text: string) => onTaskUpdate(task.id, text)}
-                onToggleComplete={() => onTaskToggle(task.id)}
+                onTextChange={(text: string) => onTaskUpdate(index, text)}
+                onToggleComplete={() => onTaskToggle(index)}
               />
               {isEditing && (
                 <button
-                  onClick={() => onRemoveTask(task.id)}
+                  onClick={() => onRemoveTask(index)}
                   className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-2"
                 >
                   <X size={14} />

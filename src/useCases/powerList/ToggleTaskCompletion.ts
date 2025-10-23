@@ -46,7 +46,7 @@ const ToggleTaskCompletion = ({
     tasks: updatedTasks,
   }, currentDate === today);
 
-  await PowerListDB.saveList(updatedList);
+  await PowerListDB.save(updatedList);
 
   setCurrentPowerList(updatedList);
   updatePowerListsItem(currentDate, updatedList);

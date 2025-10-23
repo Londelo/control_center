@@ -105,7 +105,7 @@ export default function DailyPage() {
 
           {/* Right Column - Standard Tasks */}
           <StandardsList
-            tasks={state.currentStandardTasks}
+            tasks={state.currentStandardTasks.tasks || []}
             isEditing={state.isEditing}
             showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
             onTaskUpdate={updateStandardTask}
@@ -118,7 +118,7 @@ export default function DailyPage() {
         {/* Full Width - ToDo List */}
         {state.showToDoSection && (
           <ToDoList
-            tasks={state.currentToDoTasks}
+            tasks={state.currentToDoTasks.tasks || []}
             isEditing={state.isEditing}
             showCheckboxes={!state.isEditing && state.currentPowerList.isComplete}
             onTaskUpdate={updateToDoTask}

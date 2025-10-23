@@ -3,10 +3,8 @@
 import { StandardTask, Standard, Standards } from '@/types/standards';
 import ControlCenterDB from './indexedDB';
 
-const saveList = async (standardTasks: Standard[]): Promise<void> => {
-  for (const task of standardTasks) {
-    await ControlCenterDB.upsert('Standard', task, task.date);
-  }
+const save = async (standard: Standard): Promise<void> => {
+  await ControlCenterDB.upsert('Standard', standard, standard.date);
 };
 
 const getAllStandardsLists = async (): Promise<Standards> => {
@@ -34,7 +32,7 @@ const removeStandardTask = async (taskId: string): Promise<void> => {
 };
 
 export type StandardsDBType = {
-  saveList: (standardTasks: Standard[]) => Promise<void>;
+  save: (standardTasks: Standard) => Promise<void>;
   getAllStandardsLists: () => Promise<Standards>;
   getStandardsListByDate: (date: string) => Promise<StandardTask[]>;
   clearAllData: () => Promise<void>;
@@ -42,7 +40,7 @@ export type StandardsDBType = {
 };
 
 const StandardsDB: StandardsDBType = {
-  saveList,
+  save,
   getAllStandardsLists,
   getStandardsListByDate,
   clearAllData,

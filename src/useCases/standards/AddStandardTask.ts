@@ -1,16 +1,15 @@
 import { createEmptyStandardTask } from '@/logic/standards';
-import { StandardTask } from '@/types/standards';
+import { Standard } from '@/types/standards';
 
 type AddStandardTaskArgs = {
-  currentDate: string;
-  currentStandardTasks: StandardTask[];
-  setCurrentStandardTasks: (tasks: StandardTask[]) => void;
+  currentStandardTasks: Standard;
+  setCurrentStandardTasks: (standard: Standard) => void;
 };
 
-const AddStandardTask = ({ currentDate, currentStandardTasks, setCurrentStandardTasks }: AddStandardTaskArgs) => () => {
-  const newTask = createEmptyStandardTask(currentDate);
-  const updatedTasks = [...currentStandardTasks, newTask];
-  setCurrentStandardTasks(updatedTasks);
+const AddStandardTask = ({ currentStandardTasks, setCurrentStandardTasks }: AddStandardTaskArgs) => () => {
+  const newTask = createEmptyStandardTask();
+  const updatedTasks = [...currentStandardTasks.tasks, newTask];
+  setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
 };
 
 export default AddStandardTask;

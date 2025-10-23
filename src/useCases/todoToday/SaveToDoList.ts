@@ -1,21 +1,14 @@
 import ToDoTodayDB from '@/backend/todoToday';
-import { ToDoTask } from '@/types/todoToday';
+import { ToDoList } from '@/types/todoToday';
 
 type SaveToDoListArgs = {
-  currentDate: string;
-  currentToDoTasks: ToDoTask[];
+  currentToDoList: ToDoList;
 };
 
 const SaveToDoList = ({
-  currentDate,
-  currentToDoTasks
+  currentToDoList
 }: SaveToDoListArgs) => async () => {
-  const tasksWithDate = currentToDoTasks.map(task => ({
-    ...task,
-    date: currentDate
-  }));
-
-  await ToDoTodayDB.saveList(tasksWithDate);
+  await ToDoTodayDB.save(currentToDoList);
 };
 
 export default SaveToDoList;

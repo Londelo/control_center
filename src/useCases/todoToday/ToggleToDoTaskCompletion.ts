@@ -1,8 +1,8 @@
-import { ToDoTask } from '@/types/todoToday';
+import { ToDoList } from '@/types/todoToday';
 
 type ToggleToDoTaskCompletionArgs = {
-  currentToDoTasks: ToDoTask[];
-  setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
+  currentToDoTasks: ToDoList;
+  setCurrentToDoTasks: (todoList: ToDoList) => void;
   isEditing: boolean;
 };
 
@@ -10,13 +10,13 @@ const ToggleToDoTaskCompletion = ({
   currentToDoTasks,
   setCurrentToDoTasks,
   isEditing
-}: ToggleToDoTaskCompletionArgs) => (taskId: string) => {
+}: ToggleToDoTaskCompletionArgs) => (taskIndex: number) => {
   if (isEditing) return;
 
-  const updatedTasks = currentToDoTasks.map(task =>
-    task.id === taskId ? { ...task, completed: !task.completed } : task
+  const updatedTasks = currentToDoTasks.tasks.map((task, index) =>
+    index === taskIndex ? { ...task, completed: !task.completed } : task
   );
-  setCurrentToDoTasks(updatedTasks);
+  setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };
 
 export default ToggleToDoTaskCompletion;

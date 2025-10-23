@@ -19,7 +19,7 @@ const getTodaysPowerList = async ({
       today,
       recentTasks.map(task => ({ ...task, completed: false }))
     );
-    await PowerListDB.saveList(powerList);
+    await PowerListDB.save(powerList);
     return powerList
   }
 

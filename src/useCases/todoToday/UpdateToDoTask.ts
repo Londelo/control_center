@@ -1,15 +1,15 @@
-import { ToDoTask } from '@/types/todoToday';
+import { ToDoList } from '@/types/todoToday';
 
 type UpdateToDoTaskArgs = {
-  currentToDoTasks: ToDoTask[];
-  setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
+  currentToDoTasks: ToDoList;
+  setCurrentToDoTasks: (todoList: ToDoList) => void;
 };
 
-const UpdateToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: UpdateToDoTaskArgs) => (taskId: string, text: string) => {
-  const updatedTasks = currentToDoTasks.map(task =>
-    task.id === taskId ? { ...task, text } : task
+const UpdateToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: UpdateToDoTaskArgs) => (taskIndex: number, text: string) => {
+  const updatedTasks = currentToDoTasks.tasks.map((task, index) =>
+    index === taskIndex ? { ...task, text } : task
   );
-  setCurrentToDoTasks(updatedTasks);
+  setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };
 
 export default UpdateToDoTask;

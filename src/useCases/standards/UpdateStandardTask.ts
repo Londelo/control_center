@@ -1,16 +1,16 @@
-import { StandardTask } from '@/types/standards';
+import { Standard } from '@/types/standards';
 
 type UpdateStandardTaskArgs = {
-  currentStandardTasks: StandardTask[];
-  setCurrentStandardTasks: (tasks: StandardTask[]) => void;
+  currentStandardTasks: Standard;
+  setCurrentStandardTasks: (standard: Standard) => void;
 };
 
 const UpdateStandardTask = ({ currentStandardTasks, setCurrentStandardTasks }: UpdateStandardTaskArgs) =>
-  (taskId: string, text: string) => {
-    const updatedTasks = currentStandardTasks.map(task =>
-      task.id === taskId ? { ...task, text } : task
+  (taskIndex: number, text: string) => {
+    const updatedTasks = currentStandardTasks.tasks.map((task, index) =>
+      index === taskIndex ? { ...task, text } : task
     );
-    setCurrentStandardTasks(updatedTasks);
+    setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
   };
 
 export default UpdateStandardTask;

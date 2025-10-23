@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { PowerList, PowerLists, Task } from '@/types/powerList';
-import { StandardTask, Standard } from '@/types/standards';
-import { ToDoTask, ToDoLists } from '@/types/todoToday';
+import { Standard, Standards } from '@/types/standards';
+import { ToDoLists, ToDoList } from '@/types/todoToday';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import ControlCenterDB from '@/backend/indexedDB';
 import createMockPowerLists from '@/tools/createMockPowerLists';
@@ -46,15 +46,26 @@ const getCanNavigateBackward = (date: string, lists: PowerLists) => {
 
 export function useDaily() {
   const [powerLists, setPowerLists] = useState<PowerLists>({});
-  const [currentPowerList, setCurrentPowerList] = useState<PowerList | null>(null);
-  const [allStandards, setAllStandards] = useState<Standard>({});
-  const [currentStandardTasks, setCurrentStandardTasks] = useState<StandardTask[]>([]);
+  const [currentPowerList, setCurrentPowerList] = useState<PowerList>({
+    id: '',
+    date: '',
+    tasks: [],
+    isWin: false,
+    isLoss: false,
+    isComplete: false
+  });
+
+  const [allStandards, setAllStandards] = useState<Standards>({});
+  const [currentStandardTasks, setCurrentStandardTasks] = useState<Standard>({ id: '', date: '', tasks: [] });
+
   const [allToDos, setAllToDos] = useState<ToDoLists>({});
-  const [currentToDoTasks, setCurrentToDoTasks] = useState<ToDoTask[]>([]);
+  const [currentToDoTasks, setCurrentToDoTasks] = useState<ToDoList>({ id: '', date: '', tasks: [] });
   const [showToDoSection, setShowToDoSection] = useState(false);
+
   const [currentDate, setCurrentDate] = useState<string>(today);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [selectedTaskForDetails, setSelectedTaskForDetails] = useState<Task | null>(null);
@@ -145,10 +156,10 @@ export function useDaily() {
         ? new Date(new Date(currentDate).getTime() + 86400000).toLocaleDateString()
         : new Date(new Date(currentDate).getTime() - 86400000).toLocaleDateString();
 
-      const targetToDoTasks = allToDos[targetDate] || [];
-      setCurrentToDoTasks(targetToDoTasks);
+      const targetToDoList = allToDos[targetDate] || { id: '', date: targetDate, tasks: [] };
+      setCurrentToDoTasks(targetToDoList);
 
-      if (targetDate === today && targetToDoTasks.length > 0) {
+      if (targetDate === today && targetToDoList.tasks.length > 0) {
         setShowToDoSection(true);
       } else if (targetDate !== today) {
         setShowToDoSection(false);
@@ -175,11 +186,10 @@ export function useDaily() {
 
   const addStandardTask = useCallback(
     AddStandardTask({
-      currentDate,
       currentStandardTasks,
       setCurrentStandardTasks
     }),
-    [currentDate, currentStandardTasks, setCurrentStandardTasks]
+    [currentStandardTasks, setCurrentStandardTasks]
   );
 
   const removeStandardTask = useCallback(
@@ -200,11 +210,10 @@ export function useDaily() {
 
   const addToDoTask = useCallback(
     AddToDoTask({
-      currentDate,
       currentToDoTasks,
       setCurrentToDoTasks
     }),
-    [currentDate, currentToDoTasks, setCurrentToDoTasks]
+    [currentToDoTasks, setCurrentToDoTasks]
   );
 
   const removeToDoTask = useCallback(
@@ -234,11 +243,10 @@ export function useDaily() {
 
   const convertToStandard = useCallback(
     ConvertToStandard({
-      currentDate,
       currentStandardTasks,
       setCurrentStandardTasks
     }),
-    [currentDate, currentStandardTasks, setCurrentStandardTasks]
+    [currentStandardTasks, setCurrentStandardTasks]
   );
 
   const toggleTaskCompletion = useCallback(
@@ -262,20 +270,18 @@ export function useDaily() {
     [currentDate, currentStandardTasks, setCurrentStandardTasks, isEditing]
   );
 
-  const saveList = useCallback(
+  const saveStandards = useCallback(
     SaveStandardsList({
-      currentDate,
-      currentStandardTasks
+      currentStandard: currentStandardTasks
     }),
-    [currentDate, currentStandardTasks]
+    [currentStandardTasks]
   );
 
   const saveToDoList = useCallback(
     SaveToDoList({
-      currentDate,
-      currentToDoTasks
+      currentToDoList: currentToDoTasks
     }),
-    [currentDate, currentToDoTasks]
+    [currentToDoTasks]
   );
 
   const savePowerList = useCallback(
@@ -288,10 +294,11 @@ export function useDaily() {
         setIsEditing,
         updatePowerListsItem
       })();
-      await saveList();
+      //TODO: these need to be moved
+      await saveStandards();
       await saveToDoList();
     },
-    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveList, saveToDoList]
+    [currentPowerList, currentDate, today, setCurrentPowerList, setIsEditing, updatePowerListsItem, saveStandards, saveToDoList]
   );
 
   const toggleEditMode = useCallback(

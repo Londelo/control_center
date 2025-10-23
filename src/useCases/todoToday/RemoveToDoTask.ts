@@ -1,15 +1,13 @@
-import { ToDoTask } from '@/types/todoToday';
-import ToDoTodayDB from '@/backend/todoToday';
+import { ToDoList } from '@/types/todoToday';
 
 type RemoveToDoTaskArgs = {
-  currentToDoTasks: ToDoTask[];
-  setCurrentToDoTasks: (tasks: ToDoTask[]) => void;
+  currentToDoTasks: ToDoList;
+  setCurrentToDoTasks: (todoList: ToDoList) => void;
 };
 
-const RemoveToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: RemoveToDoTaskArgs) => async (taskId: string) => {
-  const updatedTasks = currentToDoTasks.filter(task => task.id !== taskId);
-  setCurrentToDoTasks(updatedTasks);
-  await ToDoTodayDB.removeToDoTask(taskId);
+const RemoveToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: RemoveToDoTaskArgs) => (taskIndex: number) => {
+  const updatedTasks = currentToDoTasks.tasks.filter((_, index) => index !== taskIndex);
+  setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };
 
 export default RemoveToDoTask;
