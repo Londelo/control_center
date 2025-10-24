@@ -1,6 +1,6 @@
 import ToDoTodayDB from '@/backend/todoToday';
 import { ToDoList, ToDoLists } from '@/types/todoToday';
-import { v4 } from 'uuid';
+import { createEmptyToDoList, handleIncompleteTasks } from '@/logic/todoToday';
 
 type OnInitArgs = {
   today: string;
@@ -18,7 +18,12 @@ const OnInit = ({
   const allToDos = await ToDoTodayDB.getAllToDoLists();
   setAllToDos(allToDos);
 
-  const todaysToDoList = allToDos[today] || { id: v4(), date: today, tasks: [] };
+  const todaysToDoTasks = allToDos[today]?.tasks || [];
+  const incompleteTodoList = handleIncompleteTasks(allToDos, today);
+  console.log(incompleteTodoList)
+  const todaysToDoList = createEmptyToDoList(today, { tasks: [ ...todaysToDoTasks, ...incompleteTodoList ] })
+
+  await ToDoTodayDB.save(todaysToDoList)
   setCurrentToDoTasks(todaysToDoList);
 
   if (todaysToDoList.tasks.length > 0) {

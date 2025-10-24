@@ -10,6 +10,7 @@ TODO:
   - CC-(?): Implement proper Server vs Client rendering
   - CC-(?): We need some instructions
   - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easially visualize the types, then I can make changes to those and the AI can do the work on the logic.
+  - CC-(?): Centralize Date logic
 
 IDEAS:
   - id love to have it so this app is as cheap to run as possible
@@ -17,4 +18,4 @@ IDEAS:
 
 
 BUGS:
-  - click standard switch date, switch back, result = standard not clicked
+

@@ -1,22 +1,27 @@
 import { ToDoList } from '@/types/todoToday';
+import ToDoTodayDB from '@/backend/todoToday';
 
 type ToggleToDoTaskCompletionArgs = {
   currentToDoTasks: ToDoList;
-  setCurrentToDoTasks: (todoList: ToDoList) => void;
   isEditing: boolean;
+  updateToDoListState: (ToDoList: ToDoList) => void;
 };
 
 const ToggleToDoTaskCompletion = ({
   currentToDoTasks,
-  setCurrentToDoTasks,
-  isEditing
-}: ToggleToDoTaskCompletionArgs) => (taskId: string) => {
+  isEditing,
+  updateToDoListState
+}: ToggleToDoTaskCompletionArgs) => async (taskId: string) => {
   if (isEditing) return;
 
   const updatedTasks = currentToDoTasks.tasks.map((task) =>
     task.id === taskId ? { ...task, completed: !task.completed } : task
   );
-  setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
+  const updatedToDoList = { ...currentToDoTasks, tasks: updatedTasks }
+
+  await ToDoTodayDB.save(updatedToDoList)
+
+  updateToDoListState(updatedToDoList)
 };
 
 export default ToggleToDoTaskCompletion;

@@ -7,8 +7,7 @@ type ToggleTaskCompletionArgs = {
   isEditing: boolean;
   currentDate: string;
   today: string;
-  setCurrentPowerList: (powerList: PowerList) => void;
-  updatePowerListsItem: (date: string, powerList: PowerList) => void;
+  updatePowerListState: (powerList: PowerList) => void;
 };
 
 const ToggleTaskCompletion = ({
@@ -16,8 +15,7 @@ const ToggleTaskCompletion = ({
   isEditing,
   currentDate,
   today,
-  setCurrentPowerList,
-  updatePowerListsItem
+  updatePowerListState
 }: ToggleTaskCompletionArgs) => async (taskId: string) => {
   if (!currentPowerList || isEditing) return;
 
@@ -47,9 +45,7 @@ const ToggleTaskCompletion = ({
   }, currentDate === today);
 
   await PowerListDB.save(updatedList);
-
-  setCurrentPowerList(updatedList);
-  updatePowerListsItem(currentDate, updatedList);
+  updatePowerListState(updatedList);
 };
 
 export default ToggleTaskCompletion;
