@@ -10,11 +10,11 @@ const ToggleToDoTaskCompletion = ({
   currentToDoTasks,
   setCurrentToDoTasks,
   isEditing
-}: ToggleToDoTaskCompletionArgs) => (taskIndex: number) => {
+}: ToggleToDoTaskCompletionArgs) => (taskId: string) => {
   if (isEditing) return;
 
-  const updatedTasks = currentToDoTasks.tasks.map((task, index) =>
-    index === taskIndex ? { ...task, completed: !task.completed } : task
+  const updatedTasks = currentToDoTasks.tasks.map((task) =>
+    task.id === taskId ? { ...task, completed: !task.completed } : task
   );
   setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };

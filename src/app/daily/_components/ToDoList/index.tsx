@@ -8,10 +8,10 @@ interface ToDoListProps {
   tasks: ToDoTask[];
   isEditing: boolean;
   showCheckboxes: boolean;
-  onTaskUpdate: (taskIndex: number, text: string) => void;
-  onTaskToggle: (taskIndex: number) => void;
+  onTaskUpdate: (taskId: string, text: string) => void;
+  onTaskToggle: (taskId: string) => void;
   onAddTask: () => void;
-  onRemoveTask: (taskIndex: number) => void;
+  onRemoveTask: (taskId: string) => void;
 }
 
 function ToDoList({
@@ -28,18 +28,18 @@ function ToDoList({
       <div className="max-w-4xl mx-auto">
         <h2 className="text-lg font-mono font-bold mb-6 text-center">TODO LIST:</h2>
         <div className="space-y-3">
-          {tasks.map((task, index) => (
-            <div key={index} className="flex items-start gap-2">
+          {tasks.map((task) => (
+            <div key={task.id} className="flex items-start gap-2">
               <ToDoTaskCard
                 task={task}
                 isEditing={isEditing}
                 showCheckbox={showCheckboxes}
-                onTextChange={(text: string) => onTaskUpdate(index, text)}
-                onToggleComplete={() => onTaskToggle(index)}
+                onTextChange={(text: string) => onTaskUpdate(task.id, text)}
+                onToggleComplete={() => onTaskToggle(task.id)}
               />
               {isEditing && (
                 <button
-                  onClick={() => onRemoveTask(index)}
+                  onClick={() => onRemoveTask(task.id)}
                   className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-2"
                 >
                   <X size={14} />

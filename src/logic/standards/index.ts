@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 
 export function createEmptyStandardTask(): StandardTask {
   return {
+    id: v4(),
     text: '',
     completed: false
   };
@@ -17,6 +18,7 @@ export function getMostRecentStandardTasks(allStandards: Standards): StandardTas
       const hasCompleteData = standard.tasks.every(task => task.text.trim() !== '');
       if (hasCompleteData) {
         return standard.tasks.map(task => ({
+          id: v4(),
           text: task.text,
           completed: false
         }));
@@ -33,6 +35,7 @@ export function createStandard(date: string, tasks?: StandardTask[]): Standard {
     id: v4(),
     date,
     tasks: defaultTasks.map(task => ({
+      id: task.id || v4(),
       text: task.text,
       completed: false
     }))

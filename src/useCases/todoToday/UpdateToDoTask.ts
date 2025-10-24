@@ -5,9 +5,9 @@ type UpdateToDoTaskArgs = {
   setCurrentToDoTasks: (todoList: ToDoList) => void;
 };
 
-const UpdateToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: UpdateToDoTaskArgs) => (taskIndex: number, text: string) => {
-  const updatedTasks = currentToDoTasks.tasks.map((task, index) =>
-    index === taskIndex ? { ...task, text } : task
+const UpdateToDoTask = ({ currentToDoTasks, setCurrentToDoTasks }: UpdateToDoTaskArgs) => (taskId: string, text: string) => {
+  const updatedTasks = currentToDoTasks.tasks.map((task) =>
+    task.id === taskId ? { ...task, text } : task
   );
   setCurrentToDoTasks({ ...currentToDoTasks, tasks: updatedTasks });
 };

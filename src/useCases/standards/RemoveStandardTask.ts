@@ -6,8 +6,8 @@ type RemoveStandardTaskArgs = {
 };
 
 const RemoveStandardTask = ({ currentStandardTasks, setCurrentStandardTasks }: RemoveStandardTaskArgs) =>
-  (taskIndex: number) => {
-    const updatedTasks = currentStandardTasks.tasks.filter((_, index) => index !== taskIndex);
+  (taskId: string) => {
+    const updatedTasks = currentStandardTasks.tasks.filter((task) => task.id !== taskId);
     setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
   };
 

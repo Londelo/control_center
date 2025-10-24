@@ -10,11 +10,11 @@ const ToggleStandardTaskCompletion = ({
   currentStandardTasks,
   setCurrentStandardTasks,
   isEditing
-}: ToggleStandardTaskCompletionArgs) => (taskIndex: number) => {
+}: ToggleStandardTaskCompletionArgs) => (taskId: string) => {
   if (isEditing) return;
 
-  const updatedTasks = currentStandardTasks.tasks.map((task, index) =>
-    index === taskIndex ? { ...task, completed: !task.completed } : task
+  const updatedTasks = currentStandardTasks.tasks.map((task) =>
+    task.id === taskId ? { ...task, completed: !task.completed } : task
   );
 
   setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });

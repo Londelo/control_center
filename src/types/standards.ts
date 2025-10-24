@@ -1,4 +1,5 @@
 export interface StandardTask {
+  id: string;
   text: string;
   completed: boolean;
 }

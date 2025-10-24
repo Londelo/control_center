@@ -6,9 +6,9 @@ type UpdateStandardTaskArgs = {
 };
 
 const UpdateStandardTask = ({ currentStandardTasks, setCurrentStandardTasks }: UpdateStandardTaskArgs) =>
-  (taskIndex: number, text: string) => {
-    const updatedTasks = currentStandardTasks.tasks.map((task, index) =>
-      index === taskIndex ? { ...task, text } : task
+  (taskId: string, text: string) => {
+    const updatedTasks = currentStandardTasks.tasks.map((task) =>
+      task.id === taskId ? { ...task, text } : task
     );
     setCurrentStandardTasks({ ...currentStandardTasks, tasks: updatedTasks });
   };
