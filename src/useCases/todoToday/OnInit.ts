@@ -20,7 +20,7 @@ const OnInit = ({
 
   const todaysToDoTasks = allToDos[today]?.tasks || [];
   const incompleteTodoList = handleIncompleteTasks(allToDos, today);
-  console.log(incompleteTodoList)
+
   const todaysToDoList = createEmptyToDoList(today, { tasks: [ ...todaysToDoTasks, ...incompleteTodoList ] })
 
   await ToDoTodayDB.save(todaysToDoList)

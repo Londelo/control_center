@@ -7,7 +7,6 @@ import { ToDoLists, ToDoList } from '@/types/todoToday';
 import { calculatePowerListStats, isPowerListComplete } from '@/logic/powerList';
 import ControlCenterDB from '@/backend/indexedDB';
 import createMockPowerLists from '@/tools/createMockPowerLists';
-
 import {
   NavigateToDate,
   RemoveTask,
