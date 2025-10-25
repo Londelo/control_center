@@ -4,13 +4,16 @@ TODO:
   - CC-(6): Create a just for today to do list
     - refactor db so standards and todos are stored in an array so the order can be dictated
 
+  - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easially visualize the types, then I can make changes to those and the AI can do the work on the logic.
+  - CC-(?): Centralize Date logic
+  - CC-(?): Set up a failure button to restart the count and display when you failed, as well as somehow show that in the stats
   - CC-(?): Add a drag and drop reordering system
   - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering
   - CC-(?): We need some instructions
-  - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easially visualize the types, then I can make changes to those and the AI can do the work on the logic.
-  - CC-(?): Centralize Date logic
+
+
 
 IDEAS:
   - id love to have it so this app is as cheap to run as possible
