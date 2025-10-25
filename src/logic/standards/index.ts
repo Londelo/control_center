@@ -1,31 +1,25 @@
-import { StandardTask, Standards } from '@/types/standards';
+import { StandardTask, Standards, Standard } from '@/types/standards';
 import { v4 } from 'uuid';
 
-//TODO: set up overrides, then reflext the change where this is being called
-export function createEmptyStandardTask(date: string): StandardTask {
+export function createEmptyStandardTask(): StandardTask {
   return {
     id: v4(),
-    date,
     text: '',
     completed: false
   };
-}
-
-export function normalizeStandardsList(_date: string, standardTasks?: StandardTask[]): StandardTask[] {
-  return standardTasks || [];
 }
 
 export function getMostRecentStandardTasks(allStandards: Standards): StandardTask[] {
   const dates = Object.keys(allStandards).sort().reverse();
 
   for (const date of dates) {
-    const standardTasks = allStandards[date];
-    if (standardTasks && standardTasks.length > 0) {
-      const hasCompleteData = standardTasks.every(task => task.text.trim() !== '');
+    const standard = allStandards[date];
+    if (standard?.tasks && standard.tasks.length > 0) {
+      const hasCompleteData = standard.tasks.every(task => task.text.trim() !== '');
       if (hasCompleteData) {
-        return standardTasks.map(task => ({
-          ...task,
+        return standard.tasks.map(task => ({
           id: v4(),
+          text: task.text,
           completed: false
         }));
       }
@@ -35,11 +29,15 @@ export function getMostRecentStandardTasks(allStandards: Standards): StandardTas
   return [];
 }
 
-export function createStandardsList(date: string, standardTasks?: StandardTask[]): StandardTask[] {
-  const defaultStandardTasks = standardTasks || [];
-  return defaultStandardTasks.map(task => ({
-    ...task,
+export function createStandard(date: string, tasks?: StandardTask[]): Standard {
+  const defaultTasks = tasks || [];
+  return {
+    id: v4(),
     date,
-    completed: false
-  }));
+    tasks: defaultTasks.map(task => ({
+      id: task.id || v4(),
+      text: task.text,
+      completed: false
+    }))
+  };
 }

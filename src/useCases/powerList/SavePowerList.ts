@@ -6,25 +6,22 @@ type SavePowerListArgs = {
   currentPowerList: PowerList | null;
   currentDate: string;
   today: string;
-  setCurrentPowerList: (powerList: PowerList) => void;
   setIsEditing: (isEditing: boolean) => void;
-  updatePowerListsItem: (date: string, powerList: PowerList) => void;
+  updatePowerListState: (powerList: PowerList) => void;
 };
 
 const SavePowerList = ({
   currentPowerList,
   currentDate,
   today,
-  setCurrentPowerList,
   setIsEditing,
-  updatePowerListsItem
+  updatePowerListState
 }: SavePowerListArgs) => async () => {
   if (!currentPowerList) return;
 
   const updatedList = updatePowerListStatus(currentPowerList, currentDate === today);
-  setCurrentPowerList(updatedList);
-  await PowerListDB.saveList(updatedList);
-  updatePowerListsItem(currentDate, updatedList);
+  await PowerListDB.save(updatedList);
+  updatePowerListState(updatedList);
   setIsEditing(false);
 };
 

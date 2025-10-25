@@ -1,27 +1,21 @@
 
 TODO:
-  - CC-(4): Add a indexDB system
-    - done centralize/optimize css
-    - done make new indexDB file
-    - done create export btn
-    - done update all the calls to support indexDB
-    - done set up db and logic for standards list, separated from the power lists
-    - done clean up css
-    - done test to see how easy it is to switch from different DB's, it should be easy
-    - done remove HandleKeyDown
-    - done test the limits for how much data we can store on indexDB
 
-  - CC-(5): Separate the concerns of powerlist and standard in app
-    - done re organize routes and files
-    - done prevent duplication on DB
+  - CC-(6): Create a just for today to do list
+    - refactor db so standards and todos are stored in an array so the order can be dictated
 
-  - CC-(?): Create a just for today to do list
-  - CC-(?): Look into routing + fix stats page
+  - CC-(?): Add a drag and drop reordering system
   - CC-(?): Create Google Sign in and Excel DB, and a way to switch from Excel DB to IndexDB
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering
   - CC-(?): We need some instructions
+  - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easially visualize the types, then I can make changes to those and the AI can do the work on the logic.
+  - CC-(?): Centralize Date logic
 
 IDEAS:
   - id love to have it so this app is as cheap to run as possible
     - the plan: have two options, 1 is to host your own data using indexDB but you can only use the service from one device, and 2 is to host your own data on google sheets if you have an account or want to make one
+
+
+BUGS:
+

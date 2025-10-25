@@ -1,13 +1,19 @@
 import { PowerList, PowerLists } from '@/types/powerList';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standard, Standards } from '@/types/standards';
+import { ToDoList, ToDoLists } from '@/types/todoToday';
 
+//TODO: Reconfigure UseCases Folder structure to be useCases/daily/.../...
+//this but this file in /daily
 type NavigateToDateArgs = {
   currentDate: string;
   powerLists: PowerLists;
   allStandards: Standards;
+  allToDos: ToDoLists;
   setCurrentDate: (date: string) => void;
   setCurrentPowerList: (PowerList: PowerList) => void;
-  setCurrentStandardTasks: (tasks: StandardTask[]) => void;
+  setCurrentStandardTasks: (standard: Standard) => void;
+  setCurrentToDoTasks: (toDoList: ToDoList) => void;
+  setShowToDoSection: (show: boolean) => void;
   canNavigateForward: boolean;
   canNavigateBackward: boolean;
 };
@@ -17,8 +23,11 @@ const NavigateToDate = ({
   setCurrentDate,
   powerLists,
   allStandards,
+  allToDos,
   setCurrentPowerList,
   setCurrentStandardTasks,
+  setCurrentToDoTasks,
+  setShowToDoSection,
   canNavigateForward,
   canNavigateBackward
 }: NavigateToDateArgs) => (direction: 'prev' | 'next') => {
@@ -36,9 +45,12 @@ const NavigateToDate = ({
   const newDate = currentDateObject.toLocaleDateString();
   const currentPowerList = powerLists[newDate];
   const currentStandards = allStandards[newDate];
+  const currentToDos = allToDos[newDate];
   setCurrentDate(newDate);
   setCurrentPowerList(currentPowerList);
   setCurrentStandardTasks(currentStandards);
+  setCurrentToDoTasks(currentToDos);
+  setShowToDoSection(currentToDos?.tasks?.length > 0);
 };
 
 export default NavigateToDate;

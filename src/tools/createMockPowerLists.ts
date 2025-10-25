@@ -1,9 +1,10 @@
 import PowerListDB from '@/backend/powerList';
 import StandardsDB from '@/backend/standards';
 import { createPowerList, createEmptyTask, calculateWinLoss } from '@/logic/powerList';
-import { createEmptyStandardTask } from '@/logic/standards';
+import { createStandard } from '@/logic/standards';
 import { Task } from '@/types/powerList';
 import { StandardTask } from '@/types/standards';
+import { v4 } from 'uuid';
 
 const NUM_POWER_LISTS = 30
 const DATE_OFFSET = 0
@@ -18,12 +19,13 @@ const createMockTasks = (): Task[] => {
   });
 };
 
-const createMockStandardTasks = (dateString: string): StandardTask[] => {
+const createMockStandardTasks = (): StandardTask[] => {
   return Array.from({ length: 2 }, () => {
-    const task = createEmptyStandardTask(dateString);
-    task.text = 'standard item';
-    task.completed = true
-    return task;
+    return {
+      id: v4(),
+      text: 'standard item',
+      completed: true
+    };
   });
 };
 
@@ -57,10 +59,11 @@ const createMockPowerLists = async (today: string) => {
     powerList.isWin = isWin,
     powerList.isLoss = isLoss
 
-    const standardTasks = createMockStandardTasks(dateString);
+    const mockTasks = createMockStandardTasks();
+    const standard = createStandard(dateString, mockTasks);
 
-    await PowerListDB.saveList(powerList);
-    await StandardsDB.saveList(standardTasks);
+    await PowerListDB.save(powerList);
+    await StandardsDB.save(standard);
   }
 };
 

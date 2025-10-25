@@ -1,6 +1,6 @@
-import { createStandardsList, getMostRecentStandardTasks } from '@/logic/standards';
+import { createStandard, getMostRecentStandardTasks } from '@/logic/standards';
 import StandardsDB from '@/backend/standards';
-import { Standards, StandardTask } from '@/types/standards';
+import { Standards, Standard } from '@/types/standards';
 
 export type GetTodaysStandardsList = {
   today: string;
@@ -10,20 +10,17 @@ export type GetTodaysStandardsList = {
 const getTodaysStandardsList = async ({
   today,
   allStandards
-}: GetTodaysStandardsList): Promise<StandardTask[]> => {
-  let standardsList = allStandards[today];
+}: GetTodaysStandardsList): Promise<Standard> => {
+  let todaysStandard = allStandards[today];
 
-  if (!standardsList) {
+  if (!todaysStandard) {
     const recentStandardTasks = getMostRecentStandardTasks(allStandards);
-    standardsList = createStandardsList(
-      today,
-      recentStandardTasks.map(task => ({ ...task, date: today, completed: false }))
-    );
-    await StandardsDB.saveList(standardsList);
-    return standardsList;
+    todaysStandard = createStandard(today, recentStandardTasks);
+    await StandardsDB.save(todaysStandard);
+    return todaysStandard;
   }
 
-  return standardsList;
+  return todaysStandard;
 };
 
 export default getTodaysStandardsList;

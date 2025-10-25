@@ -1,30 +1,34 @@
 "use client"
 
 import { PowerList } from '@/types/powerList';
-import { StandardTask } from '@/types/standards';
+import { Standard } from '@/types/standards';
+import { ToDoList } from '@/types/todoToday';
 import Dexie, { type EntityTable } from 'dexie';
 
 const V1_DB = {
   PowerList: 'date',
-  Standards: 'id, [date+text]'
+  Standard: 'date',
+  ToDoToday: 'date'
 };
 
 export type DataBases = keyof typeof V1_DB;
 
 type TableEntityMap = {
   PowerList: PowerList
-  Standards: StandardTask
+  Standard: Standard
+  ToDoToday: ToDoList
 };
 
 const indexDB = new Dexie('ControlCenterDB') as Dexie & {
   PowerList: EntityTable<PowerList, 'date'>;
-  Standards: EntityTable<StandardTask, 'id'>;
+  Standard: EntityTable<Standard, 'date'>;
+  ToDoToday: EntityTable<ToDoList, 'date'>;
 };
 
 const handleOpenDatabase = async (): Promise<void> => {
   try {
     if (await indexDB.isOpen()) await indexDB.close();
-    await indexDB.version(1).stores(V1_DB);
+    await indexDB.version(3).stores(V1_DB).upgrade;
     await indexDB.open();
   } catch (databaseOpenError: any) {
     // eslint-disable-next-line no-console

@@ -1,21 +1,17 @@
 import StandardsDB from '@/backend/standards';
-import { StandardTask } from '@/types/standards';
+import { Standard } from '@/types/standards';
 
 type SaveStandardsListArgs = {
-  currentDate: string;
-  currentStandardTasks: StandardTask[];
+  currentStandard: Standard;
+  updateStandardState: (standard: Standard) => void;
 };
 
 const SaveStandardsList = ({
-  currentDate,
-  currentStandardTasks
+  currentStandard,
+  updateStandardState
 }: SaveStandardsListArgs) => async () => {
-  const tasksWithDate = currentStandardTasks.map(task => ({
-    ...task,
-    date: currentDate
-  }));
-
-  await StandardsDB.saveList(tasksWithDate);
+  await StandardsDB.save(currentStandard);
+  updateStandardState(currentStandard)
 };
 
 export default SaveStandardsList;
