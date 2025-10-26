@@ -9,6 +9,11 @@ const handleIncompleteTasks = (
   const yesterdayStr = yesterday.toLocaleDateString();
 
   const yesterdayToDoList = allToDos[yesterdayStr];
+  const todaysToDoList = allToDos[today];
+
+  if(todaysToDoList) {
+    return []
+  }
 
   if (!yesterdayToDoList) {
     return [];
