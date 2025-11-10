@@ -1,6 +1,6 @@
 import ToDoTodayDB from '@/backend/todoToday';
 import { ToDoList, ToDoLists } from '@/types/todoToday';
-import { createEmptyToDoList, handleIncompleteTasks } from '@/logic/todoToday';
+import { createEmptyToDoList, getIncompleteTasks } from '@/logic/todoToday';
 
 type OnInitArgs = {
   today: string;
@@ -18,17 +18,15 @@ const OnInit = ({
   const allToDos = await ToDoTodayDB.getAllToDoLists();
   setAllToDos(allToDos);
 
-  const todaysToDoTasks = allToDos[today]?.tasks || [];
-  const incompleteTodoList = handleIncompleteTasks(allToDos, today);
-
-  const todaysToDoList = createEmptyToDoList(today, { tasks: [ ...todaysToDoTasks, ...incompleteTodoList ] })
-
-  await ToDoTodayDB.save(todaysToDoList)
-  setCurrentToDoTasks(todaysToDoList);
-
-  if (todaysToDoList.tasks.length > 0) {
-    setShowToDoSection(true);
+  let todaysToDoList = allToDos[today];
+  if(!todaysToDoList?.tasks) {
+    const incompleteTodoList = getIncompleteTasks(allToDos, today);
+    todaysToDoList = createEmptyToDoList(today, { tasks: incompleteTodoList })
+    await ToDoTodayDB.save(todaysToDoList)
   }
+
+  setCurrentToDoTasks(todaysToDoList);
+  setShowToDoSection(true);
 };
 
 export default OnInit;
