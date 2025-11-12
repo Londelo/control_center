@@ -20,12 +20,11 @@ const calculateHabitCompletion = ({allPowerLists}:CalculateHabitCompletion): Pow
 
     for (const task of powerList.tasks) {
       const { count, lastDayWon, losingStreak, resetDates } = taskCompletionMap.get(task.id) || defaultTaskTracker;
-      const onWinStreak = task.completed && (day - 1 === lastDayWon || lastDayWon === -1)
 
       let newTaskTracker: TaskTracker = {
         count: task.completed ? count + 1 : count,
         lastDayWon: task.completed ? day : lastDayWon,
-        losingStreak: onWinStreak ? 0 : losingStreak + 1,
+        losingStreak: task.completed ? 0 : losingStreak + 1,
         resetDates
       }
 

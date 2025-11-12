@@ -1,4 +1,4 @@
-const getTaskBackgroundColor = (timeNeeded: number, timeLeft: number): string => {
+const getTaskCompletionColor = (timeNeeded: number, timeLeft: number): string => {
   // Handle edge cases
   if (timeNeeded <= 0) return 'hsl(0, 98%, 54%, 1.00)'; // Red for invalid data
   if (timeLeft <= 0) return 'hsla(123, 98%, 54%, 1.00)'; // Green for completed
@@ -14,4 +14,4 @@ const getTaskBackgroundColor = (timeNeeded: number, timeLeft: number): string =>
   return `hsl(${hue}, 98%, 54%, 1.00)`;
 };
 
-export default getTaskBackgroundColor;
+export default getTaskCompletionColor;

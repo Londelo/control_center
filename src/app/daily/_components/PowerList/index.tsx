@@ -26,6 +26,7 @@ function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskT
               <TaskCard
                 key={task.id}
                 task={task}
+                date={powerList.date}
                 isEditing={isEditing}
                 showCheckbox={showCheckboxes}
                 onTextChange={(text:string ) => onTaskUpdate(task.id, text)}

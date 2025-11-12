@@ -2,10 +2,11 @@
 
 import { Task } from '@/types/powerList';
 import { Check, Settings } from 'lucide-react';
-import { getTaskBackgroundColor } from '@/useCases/powerList';
+import { getTaskCompletionColor } from '@/useCases/powerList';
 
 interface TaskCardProps {
   task: Task;
+  date: string
   isEditing: boolean;
   showCheckbox: boolean;
   onTextChange: (text: string) => void;
@@ -14,8 +15,21 @@ interface TaskCardProps {
   onTaskClick?: () => void;
 }
 
-export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick }: TaskCardProps) {
-  const circleColor = !isEditing ? getTaskBackgroundColor(task.time.needed, task.time.left) : '#e5e7eb';
+const getTaskBackgroundColor = (task: Task, date: string) => {
+
+  if(task.time.resettingNext) {
+    return 'bg-orange-200'
+  }
+
+  if(task.time.resetDates?.includes(date)) {
+    return 'bg-red-200'
+  }
+
+  return 'bg-stone-200'
+}
+
+export function TaskCard({ task, date, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick }: TaskCardProps) {
+  const circleColor = !isEditing ? getTaskCompletionColor(task.time.needed, task.time.left) : '#e5e7eb';
 
   return (
     <div className="task-card-container relative">
@@ -52,9 +66,7 @@ export function TaskCard({ task, isEditing, showCheckbox, onTextChange, onToggle
         <div className="flex-1 relative">
           <button
             onClick={onTaskClick}
-            className={`task-text-display ${
-              task.completed ? 'task-text-completed' : 'task-text-pending'
-            }`}
+            className={`task-text-display ${getTaskBackgroundColor(task, date)}`}
           >
             {task.text ? task.text : 'Enter your task'}
           </button>

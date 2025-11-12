@@ -44,7 +44,6 @@ describe('calculateHabitCompletion', () => {
       '11/13/2025': makePowerList('11/13/2025', [makeTask('a', true)]),
     };
     const result = calculateHabitCompletion({ allPowerLists });
-    console.log(JSON.stringify(result, null, 2))
     expect(result['11/11/2025'].tasks[0].time.left).toBe(8);
     expect(result['11/11/2025'].tasks[0].time.resettingNext).toBe(false);
 
@@ -64,6 +63,7 @@ describe('calculateHabitCompletion', () => {
       '11/13/2025': makePowerList('11/13/2025', [makeTask('a', true)]),
     };
     const result = calculateHabitCompletion({ allPowerLists });
+
     expect(result['11/13/2025'].tasks[0].time.left).toBe(8);
     expect(result['11/13/2025'].tasks[0].time.resetDates?.length).toBe(0);
   });
