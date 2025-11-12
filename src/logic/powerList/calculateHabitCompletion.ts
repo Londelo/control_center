@@ -5,26 +5,44 @@ export type CalculateHabitCompletion = {
 };
 
 const calculateHabitCompletion = ({allPowerLists}:CalculateHabitCompletion): PowerLists => {
-  // Track completion count for each unique task text
-  const taskCompletionMap = new Map<string, number>();
+  type TaskTracker = { count: number, lastDayWon: number, losingStreak: number, resetDates: string[] }
+  const defaultTaskTracker = { count: 0, lastDayWon: -1, losingStreak: 0, resetDates: [] }
+  const taskCompletionMap = new Map<string, TaskTracker>();
   const updatedPowerLists: PowerLists = {...allPowerLists};
 
-  // Sort dates to process PowerLists chronologically
   const sortedDates = Object.keys(updatedPowerLists).sort((a, b) =>
     new Date(a).getTime() - new Date(b).getTime()
   );
 
-  // First pass: count completions for each task text
   for (const date of sortedDates) {
     const powerList = updatedPowerLists[date];
+    const day = Number(new Date(date).getDate())
 
     for (const task of powerList.tasks) {
-      if (task.text.trim() && task.completed) {
-        const currentCount = taskCompletionMap.get(task.id) || 0;
-        taskCompletionMap.set(task.id, currentCount + 1);
+      const { count, lastDayWon, losingStreak, resetDates } = taskCompletionMap.get(task.id) || defaultTaskTracker;
+      const onWinStreak = task.completed && (day - 1 === lastDayWon || lastDayWon === -1)
+
+      let newTaskTracker: TaskTracker = {
+        count: task.completed ? count + 1 : count,
+        lastDayWon: task.completed ? day : lastDayWon,
+        losingStreak: onWinStreak ? 0 : losingStreak + 1,
+        resetDates
       }
 
-      task.time.left = task.time.needed - ( taskCompletionMap.get(task.id) || 0 )
+      if(losingStreak >= 3) {
+        task.time.left = task.time.needed
+        task.time.resettingNext = false
+        newTaskTracker = { ...defaultTaskTracker, resetDates: [ ...resetDates, date ] }
+      } else if(losingStreak === 2) {
+        task.time.left = task.time.needed - newTaskTracker.count
+        task.time.resettingNext = true
+      } else {
+        task.time.left = task.time.needed - newTaskTracker.count
+        task.time.resettingNext = false
+      }
+
+      task.time.resetDates = newTaskTracker.resetDates
+      taskCompletionMap.set(task.id, newTaskTracker);
     }
   }
 
