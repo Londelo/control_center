@@ -25,6 +25,10 @@ const getTaskBackgroundColor = (task: Task, date: string) => {
     return 'bg-red-200 hover:bg-red-300'
   }
 
+  if(task.time.left === 0 || task.time.left - 1 === 0 && task.completed) {
+    return 'bg-green-200 hover:bg-green-300'
+  }
+
   return 'bg-stone-200 hover:bg-stone-300'
 }
 
