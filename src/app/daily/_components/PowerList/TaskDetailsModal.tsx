@@ -26,15 +26,18 @@ export function TaskDetailsModal({ task, isOpen, onClose, onEdit }: TaskDetailsM
     >
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full mx-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-1">
           <h2 className="text-lg font-mono font-bold">TASK DETAILS</h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded"
-          >
+            >
             <X size={20} />
           </button>
         </div>
+
+        {/* RESET WARNING */}
+        {task.time.resettingNext && <h3  className="mb-5 text-orange-600 text-m font-mono font-bold;" >RESETTING IF YOU FAIL AGAIN</h3>}
 
         {/* Content */}
         <div className="space-y-4">

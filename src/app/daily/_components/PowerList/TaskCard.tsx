@@ -18,14 +18,14 @@ interface TaskCardProps {
 const getTaskBackgroundColor = (task: Task, date: string) => {
 
   if(task.time.resettingNext) {
-    return 'bg-orange-200'
+    return 'bg-orange-200 hover:bg-orange-300'
   }
 
   if(task.time.resetDates?.includes(date)) {
-    return 'bg-red-200'
+    return 'bg-red-200 hover:bg-red-300'
   }
 
-  return 'bg-stone-200'
+  return 'bg-stone-200 hover:bg-stone-300'
 }
 
 export function TaskCard({ task, date, isEditing, showCheckbox, onTextChange, onToggleComplete, onSettingsClick, onTaskClick }: TaskCardProps) {
