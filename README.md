@@ -1,7 +1,9 @@
 
 TODO:
 
-  - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easially visualize the types, then I can make changes to those and the AI can do the work on the logic.
+  - CC-(?): Make function types more centralized. The idea is basically the app is a set of types and then the functionality underneath. This will allow me to easily visualize the types, then I can make changes to those and the AI can do the work on the logic.
+  - CC-(?): Set up a absolute date instead of a total number of days.
+  - CC-(?): Set up a way to control the reset failure window, you should be able to make it longer or short as well as turn it off.
   - CC-(?): Centralize Date logic
   - CC-(?): Set up a failure button to restart the count and display when you failed, as well as somehow show that in the stats
   - CC-(?): Add a drag and drop reordering system
@@ -9,8 +11,6 @@ TODO:
   - CC-(?): We need this to be live
   - CC-(?): Implement proper Server vs Client rendering
   - CC-(?): We need some instructions
-
-
 
 IDEAS:
   - id love to have it so this app is as cheap to run as possible

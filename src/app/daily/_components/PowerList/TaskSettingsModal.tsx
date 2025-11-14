@@ -142,6 +142,7 @@ export function TaskSettingsModal({ task, isOpen, onClose, onUpdate, onMakeStand
 
           {/* Make Standard Button - only show when time.left is 0 */}
           {task.time.left === 0 && (
+            //TODO: Move this to TaskDetails Modal
             <div className="pt-4 border-t border-gray-200">
               <button
                 onClick={() => onMakeStandard?.(task.id)}
