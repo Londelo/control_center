@@ -3,6 +3,7 @@
 import { Task } from '@/types/powerList';
 import { Check, Settings } from 'lucide-react';
 import { getTaskCompletionColor } from '@/useCases/powerList';
+import { SOFT_WARNING_LOSING, WARNING_RESETTING_SOON_NUM } from '@/enums/powerList';
 
 interface TaskCardProps {
   task: Task;
@@ -17,15 +18,19 @@ interface TaskCardProps {
 
 const getTaskBackgroundColor = (task: Task, date: string) => {
 
-  if(task.time.resettingNext) {
-    return 'bg-orange-200 hover:bg-orange-300'
+  if(!task.completed && task.time.losingStreak === WARNING_RESETTING_SOON_NUM) {
+    return 'bg-orange-200 hover:bg-orange-300 font-bold'
   }
 
-  if(task.time.resetDates?.includes(date)) {
-    return 'bg-red-200 hover:bg-red-300'
+  if(!task.completed && task.time.losingStreak === SOFT_WARNING_LOSING) {
+    return 'bg-stone-200 hover:bg-stone-300 font-bold'
   }
 
-  if(task.time.left === 0 || task.time.left - 1 === 0 && task.completed) {
+  if(!task.completed && task.time.resetDates?.includes(date)) {
+    return 'bg-red-200 hover:bg-red-300 font-bold'
+  }
+
+  if((task.completed && task.time.left === 0 || task.time.left - 1 === 0)) {
     return 'bg-green-200 hover:bg-green-300'
   }
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { WARNING_RESETTING_SOON_NUM } from '@/enums/powerList';
 import { Task } from '@/types/powerList';
 import { X } from 'lucide-react';
 
@@ -37,7 +38,10 @@ export function TaskDetailsModal({ task, isOpen, onClose, onEdit }: TaskDetailsM
         </div>
 
         {/* RESET WARNING */}
-        {task.time.resettingNext && <h3  className="mb-5 text-orange-600 text-m font-mono font-bold;" >RESETTING IF YOU FAIL AGAIN</h3>}
+        {
+          task.time.losingStreak === WARNING_RESETTING_SOON_NUM &&
+          <h3  className="mb-5 text-orange-600 text-m font-mono font-bold;" >RESETTING IF YOU FAIL AGAIN</h3>
+        }
 
         {/* Content */}
         <div className="space-y-4">

@@ -30,16 +30,14 @@ const calculateHabitCompletion = ({allPowerLists}:CalculateHabitCompletion): Pow
 
       if(losingStreak >= 3) {
         task.time.left = task.time.needed
-        task.time.resettingNext = false
         newTaskTracker = { ...defaultTaskTracker, resetDates: [ ...resetDates, date ] }
       } else if(losingStreak === 2) {
         task.time.left = task.time.needed - newTaskTracker.count
-        task.time.resettingNext = true
       } else {
         task.time.left = task.time.needed - newTaskTracker.count
-        task.time.resettingNext = false
       }
 
+      task.time.losingStreak = losingStreak
       task.time.resetDates = newTaskTracker.resetDates
       taskCompletionMap.set(task.id, newTaskTracker);
     }

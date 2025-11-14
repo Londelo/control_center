@@ -2,3 +2,7 @@
 const THIRTY_DAYS = 30
 
 export const DEFAULT_TIME_NEEDED = THIRTY_DAYS
+
+export const WARNING_RESETTING_SOON_NUM = 2
+
+export const SOFT_WARNING_LOSING = 1
