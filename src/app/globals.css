@@ -26,7 +26,6 @@
 
   --color-task-complete-text: #6b7280;
   --color-task-complete-bg: #e5e7eb;
-  --color-task-pending-bg: #e7e5e4;
   --color-task-pending-hover: #d6d3d1;
   --color-task-default: #000000;
 
@@ -160,14 +159,9 @@
 .task-text-display {
   width: 100%;
   text-align: left;
-  background-color: var(--color-task-pending-bg);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
   transition: background-color 150ms;
-}
-
-.task-text-display:hover {
-  background-color: var(--color-task-pending-hover);
 }
 
 .task-text-completed {

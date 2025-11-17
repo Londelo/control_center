@@ -5,4 +5,4 @@ export { default as ToggleTaskCompletion } from './ToggleTaskCompletion';
 export { default as SavePowerList } from './SavePowerList';
 export { default as ToggleEditMode } from './ToggleEditMode';
 export { default as OnInit } from './OnInit';
-export { default as getTaskBackgroundColor } from './getTaskBackgroundColor';
+export { default as getTaskCompletionColor } from './getTaskCompletionColor';

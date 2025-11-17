@@ -4,7 +4,7 @@ export interface Task {
   text: string;
   description?: string;
   reason?: string;
-  time: { needed: number, left: number}
+  time: { needed: number, left: number, resetDates?: string[], losingStreak?: number }
   completed: boolean;
 }
 

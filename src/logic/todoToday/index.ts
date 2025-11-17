@@ -1,7 +1,7 @@
 import { ToDoList, ToDoTask } from '@/types/todoToday';
 import { v4 } from 'uuid';
 
-export { default as handleIncompleteTasks } from './handleIncompleteTasks';
+export { default as getIncompleteTasks } from './getIncompleteTasks';
 
 export function createEmptyToDoTask(): ToDoTask {
   return {

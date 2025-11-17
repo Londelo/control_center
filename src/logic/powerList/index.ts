@@ -71,14 +71,16 @@ export function updatePowerListStatus(powerList: PowerList, isToday: boolean = f
   };
 }
 
-export function getMostRecentTasks(taskHistory: Record<string, PowerList>): Task[] {
-  const dates = Object.keys(taskHistory).sort().reverse();
+export function sortDateDescending(dates: string[]): string[] {
+  return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+}
 
-  for (const date of dates) {
-    const powerList = normalizePowerList(taskHistory[date]);
-    if (powerList && isPowerListComplete(powerList)) {
-      return powerList.tasks;
-    }
+export function getMostRecentTasks(taskHistory: Record<string, PowerList>): Task[] {
+  const dates = sortDateDescending(Object.keys(taskHistory));
+
+  const powerList = normalizePowerList(taskHistory[dates[0]]);
+  if (powerList && isPowerListComplete(powerList)) {
+    return powerList.tasks;
   }
 
   return Array.from({ length: 5 }, () => createEmptyTask());
@@ -94,7 +96,7 @@ export function calculatePowerListStats(taskHistory: Record<string, PowerList>):
   const winRate = completeLists.length > 0 ? (totalWins / completeLists.length) * 100 : 0;
 
   // Calculate current streak
-  const sortedDates = Object.keys(taskHistory).sort().reverse();
+  const sortedDates = sortDateDescending(Object.keys(taskHistory));
   let currentStreak = 0;
 
   for (const date of sortedDates) {
