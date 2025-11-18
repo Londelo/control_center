@@ -24,16 +24,13 @@ const OnInit = ({
   setIsEditing
 }: OnInitArgs) => async () => {
   let allPowerLists = await PowerListDB.getAllPowerLists();
+  const todaysPowerList = await getTodaysPowerList({ today, allPowerLists });
+  allPowerLists = { ...allPowerLists, [today]: todaysPowerList}
   allPowerLists = await handleMissedDays({ allPowerLists, today })
   allPowerLists = await handleLostDays({ allPowerLists, today })
   allPowerLists = await calculateHabitCompletion({ allPowerLists })
 
-  const todaysPowerList = await getTodaysPowerList({
-    today,
-    allPowerLists,
-  });
-
-  setPowerLists({ ...allPowerLists, [today]: todaysPowerList});
+  setPowerLists(allPowerLists);
 
   await PowerListDB.updateLastViewedDate(today);
   setCurrentPowerList(todaysPowerList);

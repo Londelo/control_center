@@ -1,5 +1,6 @@
 import { DEFAULT_TIME_NEEDED } from '@/enums/powerList';
 import { Task, PowerList, PowerListStats } from '@/types/powerList';
+import { sortDateDescending } from '@/utils/dates';
 import { v4 } from 'uuid'
 
 export function normalizePowerList(powerList: PowerList): PowerList {
@@ -71,16 +72,14 @@ export function updatePowerListStatus(powerList: PowerList, isToday: boolean = f
   };
 }
 
-export function sortDateDescending(dates: string[]): string[] {
-  return dates.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-}
-
 export function getMostRecentTasks(taskHistory: Record<string, PowerList>): Task[] {
   const dates = sortDateDescending(Object.keys(taskHistory));
 
-  const powerList = normalizePowerList(taskHistory[dates[0]]);
-  if (powerList && isPowerListComplete(powerList)) {
-    return powerList.tasks;
+  for (const date of dates) {
+    const powerList = normalizePowerList(taskHistory[date]);
+    if (powerList && isPowerListComplete(powerList)) {
+      return powerList.tasks;
+    }
   }
 
   return Array.from({ length: 5 }, () => createEmptyTask());
