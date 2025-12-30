@@ -52,7 +52,9 @@ export default function DailyPage() {
     handleModalClose,
     handleTaskClick,
     handleTaskSettings,
-    handleAddToDoList
+    handleAddToDoList,
+    reorderStandardTasks,
+    reorderToDoTasks
   } = useDaily();
 
   if (state.isLoading) {
@@ -112,6 +114,7 @@ export default function DailyPage() {
             onTaskToggle={toggleStandardTaskCompletion}
             onAddTask={addStandardTask}
             onRemoveTask={removeStandardTask}
+            onReorder={reorderStandardTasks}
           />
         </div>
 
@@ -125,6 +128,7 @@ export default function DailyPage() {
             onTaskToggle={toggleToDoTaskCompletion}
             onAddTask={addToDoTask}
             onRemoveTask={removeToDoTask}
+            onReorder={reorderToDoTasks}
           />
         )}
       </main>

@@ -354,6 +354,26 @@ export function useDaily() {
     setShowToDoSection(true);
   }, []);
 
+  const reorderStandardTasks = useCallback(async (reorderedTasks: typeof currentStandardTasks.tasks) => {
+    const updatedStandard = {
+      ...currentStandardTasks,
+      tasks: reorderedTasks
+    };
+    setCurrentStandardTasks(updatedStandard);
+    updateStandardState(updatedStandard);
+    await saveStandards();
+  }, [currentStandardTasks, updateStandardState, saveStandards]);
+
+  const reorderToDoTasks = useCallback(async (reorderedTasks: typeof currentToDoTasks.tasks) => {
+    const updatedToDoList = {
+      ...currentToDoTasks,
+      tasks: reorderedTasks
+    };
+    setCurrentToDoTasks(updatedToDoList);
+    updateToDoListState(updatedToDoList);
+    await saveToDoList();
+  }, [currentToDoTasks, updateToDoListState, saveToDoList]);
+
   return {
     state: {
       today,
@@ -397,6 +417,8 @@ export function useDaily() {
     handleModalClose,
     handleTaskClick,
     handleTaskSettings,
-    handleAddToDoList
+    handleAddToDoList,
+    reorderStandardTasks,
+    reorderToDoTasks
   };
 }
