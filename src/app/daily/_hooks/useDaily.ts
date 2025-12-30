@@ -359,9 +359,11 @@ export function useDaily() {
       ...currentStandardTasks,
       tasks: reorderedTasks
     };
-    setCurrentStandardTasks(updatedStandard);
-    updateStandardState(updatedStandard);
-    await saveStandards();
+    updateStandardState(updatedStandard)
+    await SaveStandardsList({
+      currentStandard: updatedStandard,
+      updateStandardState
+    })
   }, [currentStandardTasks, updateStandardState, saveStandards]);
 
   const reorderToDoTasks = useCallback(async (reorderedTasks: typeof currentToDoTasks.tasks) => {
@@ -369,9 +371,11 @@ export function useDaily() {
       ...currentToDoTasks,
       tasks: reorderedTasks
     };
-    setCurrentToDoTasks(updatedToDoList);
-    updateToDoListState(updatedToDoList);
-    await saveToDoList();
+    updateToDoListState(updatedToDoList)
+    await SaveToDoList({
+      currentToDoList: updatedToDoList,
+      updateToDoListState
+    })
   }, [currentToDoTasks, updateToDoListState, saveToDoList]);
 
   return {
