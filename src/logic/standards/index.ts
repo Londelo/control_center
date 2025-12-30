@@ -1,4 +1,5 @@
 import { StandardTask, Standards, Standard } from '@/types/standards';
+import { sortDateDescending } from '@/utils/dates';
 import { v4 } from 'uuid';
 
 export function createEmptyStandardTask(): StandardTask {
@@ -10,7 +11,7 @@ export function createEmptyStandardTask(): StandardTask {
 }
 
 export function getMostRecentStandardTasks(allStandards: Standards): StandardTask[] {
-  const dates = Object.keys(allStandards).sort().reverse();
+  const dates = sortDateDescending(Object.keys(allStandards));
 
   for (const date of dates) {
     const standard = allStandards[date];

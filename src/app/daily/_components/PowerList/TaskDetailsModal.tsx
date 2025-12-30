@@ -39,7 +39,7 @@ export function TaskDetailsModal({ task, isOpen, onClose, onEdit }: TaskDetailsM
 
         {/* RESET WARNING */}
         {
-          task.time.losingStreak === WARNING_RESETTING_SOON_NUM &&
+          task.time.losingStreak === WARNING_RESETTING_SOON_NUM && task.time.left !== task.time.needed &&
           <h3  className="mb-5 text-orange-600 text-m font-mono font-bold;" >RESETTING IF YOU FAIL AGAIN</h3>
         }
 
