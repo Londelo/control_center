@@ -3,6 +3,7 @@
 import { StandardTask } from '@/types/standards';
 import { StandardTaskCard } from './StandardTaskCard';
 import { Plus, X } from 'lucide-react';
+import { DraggableList } from '@/app/_components/DraggableList';
 
 interface StandardsListProps {
   tasks: StandardTask[];
@@ -12,6 +13,7 @@ interface StandardsListProps {
   onTaskToggle: (taskId: string) => void;
   onAddTask: () => void;
   onRemoveTask: (taskId: string) => void;
+  onReorder: (tasks: StandardTask[]) => void;
 }
 
 function StandardsList({
@@ -21,16 +23,21 @@ function StandardsList({
   onTaskUpdate,
   onTaskToggle,
   onAddTask,
-  onRemoveTask
+  onRemoveTask,
+  onReorder
 }: StandardsListProps) {
   return (
 
     <div className="flex-1 p-8">
       <div className="max-w-md mx-auto">
         <h2 className="text-lg font-mono font-bold mb-6 text-center">STANDARD TASKS:</h2>
-        <div className="space-y-3">
-          {tasks.map((task) => (
-            <div key={task.id} className="flex items-start gap-2">
+        <DraggableList
+          items={tasks}
+          onReorder={onReorder}
+          getItemId={(task) => task.id}
+          disabled={isEditing}
+          renderItem={(task) => (
+            <div className="flex items-start gap-2">
               <StandardTaskCard
                 task={task}
                 isEditing={isEditing}
@@ -47,18 +54,18 @@ function StandardsList({
                 </button>
               )}
             </div>
-          ))}
-
-          {isEditing && (
-            <button
-              onClick={onAddTask}
-              className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm"
-            >
-              <Plus size={16} />
-              Add task
-            </button>
           )}
-        </div>
+        />
+
+        {isEditing && (
+          <button
+            onClick={onAddTask}
+            className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm mt-3"
+          >
+            <Plus size={16} />
+            Add task
+          </button>
+        )}
       </div>
     </div>
 
