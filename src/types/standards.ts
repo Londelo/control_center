@@ -1,14 +1,8 @@
-export interface StandardTask {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+import { BaseTask, BaseTaskList } from './shared';
 
-export type Standard = {
-  id: string;
-  date: string;
-  tasks: StandardTask[]
-}
+export interface StandardTask extends BaseTask {}
+
+export interface Standard extends BaseTaskList<StandardTask> {}
 
 export type Standards = {
   [date: string]: Standard

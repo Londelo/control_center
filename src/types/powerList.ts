@@ -1,17 +1,12 @@
+import { BaseTask, BaseTaskList } from './shared';
 
-export interface Task {
-  id: string;
-  text: string;
+export interface Task extends BaseTask {
   description?: string;
   reason?: string;
   time: { needed: number, left: number, resetDates?: string[], losingStreak?: number }
-  completed: boolean;
 }
 
-export interface PowerList {
-  id: string;
-  date: string;
-  tasks: Task[];
+export interface PowerList extends BaseTaskList<Task> {
   isWin: boolean;
   isLoss: boolean;
   isComplete: boolean;

@@ -1,14 +1,8 @@
-export interface ToDoTask {
-  id: string;
-  text: string;
-  completed: boolean;
-}
+import { BaseTask, BaseTaskList } from './shared';
 
-export type ToDoList = {
-  id: string;
-  date: string;
-  tasks: ToDoTask[]
-}
+export interface ToDoTask extends BaseTask {}
+
+export interface ToDoList extends BaseTaskList<ToDoTask> {}
 
 export type ToDoLists = {
   [date: string]: ToDoList
