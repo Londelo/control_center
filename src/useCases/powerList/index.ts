@@ -1,6 +1,7 @@
 export { default as NavigateToDate } from './NavigateToDate';
 export { default as UpdateTask } from './UpdateTask';
 export { default as RemoveTask } from './RemoveTask';
+export { default as AddTask } from './AddTask';
 export { default as ToggleTaskCompletion } from './ToggleTaskCompletion';
 export { default as SavePowerList } from './SavePowerList';
 export { default as ToggleEditMode } from './ToggleEditMode';
