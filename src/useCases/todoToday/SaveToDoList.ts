@@ -7,7 +7,7 @@ type SaveToDoListArgs = {
 };
 
 //TODO: update this functionality to get the todoList from the returned function
-//and do this for all similar functions
+//and do this for all similar functions. Meaning put the var in the params of the return function
 const SaveToDoList = ({
   currentToDoList,
   updateToDoListState
