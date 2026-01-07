@@ -91,7 +91,7 @@ export function getMostRecentTasks(taskHistory: Record<string, PowerList>): Task
     }
   }
 
-  return Array.from({ length: 5 }, () => createEmptyTask());
+  return [createEmptyTask()];
 }
 
 export function calculatePowerListStats(taskHistory: Record<string, PowerList>): PowerListStats {
