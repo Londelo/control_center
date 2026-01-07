@@ -43,9 +43,19 @@ export function isPowerListComplete(powerList: PowerList): boolean {
 }
 
 export function calculateWinLoss(powerList: PowerList, isToday: boolean = false): { isWin: boolean; isLoss: boolean } {
+  // Filter to only tasks that have text (actual tasks, not empty placeholders)
+  const tasksWithText = powerList.tasks.filter(task => task.text.trim() !== '');
 
-  const completedTasks = powerList.tasks.filter(task => task.completed).length;
-  const isWin = completedTasks === 5;
+  // If no tasks exist, it's a loss (unless it's today, then in progress)
+  if (tasksWithText.length === 0) {
+    if (isToday) {
+      return { isWin: false, isLoss: false };
+    }
+    return { isWin: false, isLoss: true };
+  }
+
+  const completedTasks = tasksWithText.filter(task => task.completed).length;
+  const isWin = completedTasks === tasksWithText.length;
 
   if (!isWin) {
     // Only today can be "in progress", other dates are losses if incomplete
@@ -56,8 +66,7 @@ export function calculateWinLoss(powerList: PowerList, isToday: boolean = false)
     }
   }
 
-  const isLoss = !isWin;
-  return { isWin, isLoss };
+  return { isWin, isLoss: false };
 }
 
 export function updatePowerListStatus(powerList: PowerList, isToday: boolean = false): PowerList {
