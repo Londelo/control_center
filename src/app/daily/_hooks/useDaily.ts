@@ -15,6 +15,7 @@ import {
   SavePowerList,
   ToggleEditMode,
   OnInit as PowerListOnInit,
+  AddTask,
 } from '@/useCases/powerList';
 import {
   AddStandardTask,
@@ -238,6 +239,14 @@ export function useDaily() {
     [currentPowerList, setCurrentPowerList]
   );
 
+  const addTask = useCallback(
+    AddTask({
+      currentPowerList,
+      setCurrentPowerList
+    }),
+    [currentPowerList, setCurrentPowerList]
+  );
+
   const convertToStandard = useCallback(
     ConvertToStandard({
       currentStandardTasks,
@@ -380,6 +389,7 @@ export function useDaily() {
     addStandardTask,
     removeStandardTask,
     removeTask,
+    addTask,
     convertToStandard,
     toggleTaskCompletion,
     toggleStandardTaskCompletion,
