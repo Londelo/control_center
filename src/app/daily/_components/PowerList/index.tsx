@@ -2,7 +2,7 @@
 
 import { PowerList as PowerListType } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
-import { Plus, X } from 'lucide-react';
+import { AddTaskButton, RemoveTaskButton } from '../shared';
 
 interface PowerListProps {
   powerList: PowerListType;
@@ -47,26 +47,11 @@ function PowerList({
                 onSettingsClick={() => onTaskSettings?.(task.id)}
                 onTaskClick={() => onTaskClick?.(task.id)}
               />
-              {isEditing && onRemoveTask && (
-                <button
-                  onClick={() => onRemoveTask(task.id)}
-                  className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-2"
-                >
-                  <X size={14} />
-                </button>
-              )}
+              {isEditing && onRemoveTask && <RemoveTaskButton onClick={() => onRemoveTask(task.id)} />}
             </div>
           ))}
 
-          {isEditing && onAddTask && (
-            <button
-              onClick={onAddTask}
-              className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm"
-            >
-              <Plus size={16} />
-              Add task
-            </button>
-          )}
+          {isEditing && onAddTask && <AddTaskButton onClick={onAddTask} />}
         </div>
 
       </div>

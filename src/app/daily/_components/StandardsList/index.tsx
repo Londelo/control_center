@@ -2,7 +2,7 @@
 
 import { StandardTask } from '@/types/standards';
 import { StandardTaskCard } from './StandardTaskCard';
-import { Plus, X } from 'lucide-react';
+import { AddTaskButton, RemoveTaskButton } from '../shared';
 
 interface StandardsListProps {
   tasks: StandardTask[];
@@ -38,26 +38,11 @@ function StandardsList({
                 onTextChange={(text: string) => onTaskUpdate(task.id, text)}
                 onToggleComplete={() => onTaskToggle(task.id)}
               />
-              {isEditing && (
-                <button
-                  onClick={() => onRemoveTask(task.id)}
-                  className="w-5 h-5 flex items-center justify-center text-gray-400 hover:text-red-500 flex-shrink-0 mt-2"
-                >
-                  <X size={14} />
-                </button>
-              )}
+              {isEditing && <RemoveTaskButton onClick={() => onRemoveTask(task.id)} />}
             </div>
           ))}
 
-          {isEditing && (
-            <button
-              onClick={onAddTask}
-              className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm"
-            >
-              <Plus size={16} />
-              Add task
-            </button>
-          )}
+          {isEditing && <AddTaskButton onClick={onAddTask} />}
         </div>
       </div>
     </div>
