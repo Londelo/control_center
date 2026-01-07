@@ -3,6 +3,7 @@
 import { ToDoTask } from '@/types/todoToday';
 import { ToDoTaskCard } from './ToDoTaskCard';
 import { Plus, X } from 'lucide-react';
+import { DraggableList } from '@/app/_components/DraggableList';
 
 interface ToDoListProps {
   tasks: ToDoTask[];
@@ -12,6 +13,7 @@ interface ToDoListProps {
   onTaskToggle: (taskId: string) => void;
   onAddTask: () => void;
   onRemoveTask: (taskId: string) => void;
+  onReorder: (tasks: ToDoTask[]) => void;
 }
 
 function ToDoList({
@@ -21,15 +23,20 @@ function ToDoList({
   onTaskUpdate,
   onTaskToggle,
   onAddTask,
-  onRemoveTask
+  onRemoveTask,
+  onReorder
 }: ToDoListProps) {
   return (
     <div className="w-full p-8 border-t border-ui">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-lg font-mono font-bold mb-6 text-center">TODO LIST:</h2>
-        <div className="space-y-3">
-          {tasks.map((task) => (
-            <div key={task.id} className="flex items-start gap-2">
+        <DraggableList
+          items={tasks}
+          onReorder={onReorder}
+          getItemId={(task) => task.id}
+          disabled={isEditing}
+          renderItem={(task) => (
+            <div className="flex items-start gap-2">
               <ToDoTaskCard
                 task={task}
                 isEditing={isEditing}
@@ -46,18 +53,18 @@ function ToDoList({
                 </button>
               )}
             </div>
-          ))}
-
-          {isEditing && (
-            <button
-              onClick={onAddTask}
-              className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm"
-            >
-              <Plus size={16} />
-              Add task
-            </button>
           )}
-        </div>
+        />
+
+        {isEditing && (
+          <button
+            onClick={onAddTask}
+            className="flex items-center gap-2 text-gray-500 hover:text-black font-mono text-sm mt-3"
+          >
+            <Plus size={16} />
+            Add task
+          </button>
+        )}
       </div>
     </div>
   );
