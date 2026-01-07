@@ -37,16 +37,18 @@ function PowerList({
         <div className="space-y-3 max-w-md mx-auto">
           {powerList.tasks.map((task) => (
             <div key={task.id} className="flex items-start gap-2">
-              <TaskCard
-                task={task}
-                date={powerList.date}
-                isEditing={isEditing}
-                showCheckbox={showCheckboxes}
-                onTextChange={(text: string) => onTaskUpdate(task.id, text)}
-                onToggleComplete={() => onTaskToggle(task.id)}
-                onSettingsClick={() => onTaskSettings?.(task.id)}
-                onTaskClick={() => onTaskClick?.(task.id)}
-              />
+              <div className="flex-1">
+                <TaskCard
+                  task={task}
+                  date={powerList.date}
+                  isEditing={isEditing}
+                  showCheckbox={showCheckboxes}
+                  onTextChange={(text: string) => onTaskUpdate(task.id, text)}
+                  onToggleComplete={() => onTaskToggle(task.id)}
+                  onSettingsClick={() => onTaskSettings?.(task.id)}
+                  onTaskClick={() => onTaskClick?.(task.id)}
+                />
+              </div>
               {isEditing && onRemoveTask && <RemoveTaskButton onClick={() => onRemoveTask(task.id)} />}
             </div>
           ))}

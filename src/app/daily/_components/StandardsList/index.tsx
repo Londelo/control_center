@@ -38,13 +38,15 @@ function StandardsList({
           disabled={isEditing}
           renderItem={(task) => (
             <div className="flex items-start gap-2">
-              <StandardTaskCard
-                task={task}
-                isEditing={isEditing}
-                showCheckbox={showCheckboxes}
-                onTextChange={(text: string) => onTaskUpdate(task.id, text)}
-                onToggleComplete={() => onTaskToggle(task.id)}
-              />
+              <div className="flex-1">
+                <StandardTaskCard
+                  task={task}
+                  isEditing={isEditing}
+                  showCheckbox={showCheckboxes}
+                  onTextChange={(text: string) => onTaskUpdate(task.id, text)}
+                  onToggleComplete={() => onTaskToggle(task.id)}
+                />
+              </div>
               {isEditing && <RemoveTaskButton onClick={() => onRemoveTask(task.id)} />}
             </div>
           )}
