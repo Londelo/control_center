@@ -10,7 +10,7 @@ const NUM_POWER_LISTS = 30
 const DATE_OFFSET = 0
 
 const createMockTasks = (): Task[] => {
-  return Array.from({ length: 5 }, () => {
+  return Array.from({ length: 3 }, () => {
     const task = createEmptyTask();
     task.text = 'power list item';
     task.description = 'a description'
