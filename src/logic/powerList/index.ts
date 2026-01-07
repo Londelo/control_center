@@ -21,7 +21,7 @@ export function createEmptyTask(): Task {
 
 //TODO: set up overrides, then reflext the change where this is being called
 export function createPowerList(date: string, tasks?: Task[]): PowerList {
-  const defaultTasks = tasks || Array.from({ length: 5 }, () => createEmptyTask());
+  const defaultTasks = tasks || [createEmptyTask()];
   let powerList = {
     id: v4(),
     date,
