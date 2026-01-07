@@ -6,7 +6,7 @@ import { v4 } from 'uuid'
 export function normalizePowerList(powerList: PowerList): PowerList {
   return {
     ...powerList,
-    tasks: powerList.tasks || Array.from({ length: 5 }, () => createEmptyTask()),
+    tasks: powerList.tasks || [createEmptyTask()],
   };
 }
 
