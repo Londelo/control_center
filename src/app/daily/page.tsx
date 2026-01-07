@@ -37,6 +37,7 @@ export default function DailyPage() {
     addStandardTask,
     removeStandardTask,
     removeTask,
+    addTask,
     convertToStandard,
     toggleTaskCompletion,
     toggleStandardTaskCompletion,
@@ -103,6 +104,8 @@ export default function DailyPage() {
             onTaskToggle={toggleTaskCompletion}
             onTaskSettings={handleTaskSettings}
             onTaskClick={handleTaskClick}
+            onAddTask={addTask}
+            onRemoveTask={removeTask}
           />
 
           {/* Right Column - Standard Tasks */}
