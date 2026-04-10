@@ -2,6 +2,7 @@
 
 import { PowerList as PowerListType } from '@/types/powerList';
 import { TaskCard } from './TaskCard';
+import { AddTaskButton, RemoveTaskButton } from '../shared';
 
 interface PowerListProps {
   powerList: PowerListType;
@@ -11,9 +12,21 @@ interface PowerListProps {
   onTaskToggle: (taskId: string) => void;
   onTaskSettings?: (taskId: string) => void;
   onTaskClick?: (taskId: string) => void;
+  onAddTask?: () => void;
+  onRemoveTask?: (taskId: string) => void;
 }
 
-function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskToggle, onTaskSettings, onTaskClick }: PowerListProps) {
+function PowerList({
+  powerList,
+  isEditing,
+  showCheckboxes,
+  onTaskUpdate,
+  onTaskToggle,
+  onTaskSettings,
+  onTaskClick,
+  onAddTask,
+  onRemoveTask
+}: PowerListProps) {
   return (
     <div className="flex-1 p-8 border-r border-ui">
       <div className="mx-auto">
@@ -21,21 +34,27 @@ function PowerList({ powerList, isEditing, showCheckboxes, onTaskUpdate, onTaskT
           <h1 className="text-lg font-mono font-bold text-center">POWER LIST:</h1>
         </div>
 
-          <div className="space-y-3 max-w-md mx-auto">
-            {powerList.tasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                date={powerList.date}
-                isEditing={isEditing}
-                showCheckbox={showCheckboxes}
-                onTextChange={(text:string ) => onTaskUpdate(task.id, text)}
-                onToggleComplete={() => onTaskToggle(task.id)}
-                onSettingsClick={() => onTaskSettings?.(task.id)}
-                onTaskClick={() => onTaskClick?.(task.id)}
-              />
-            ))}
-          </div>
+        <div className="space-y-3 max-w-md mx-auto">
+          {powerList.tasks.map((task) => (
+            <div key={task.id} className="flex items-start gap-2">
+              <div className="flex-1">
+                <TaskCard
+                  task={task}
+                  date={powerList.date}
+                  isEditing={isEditing}
+                  showCheckbox={showCheckboxes}
+                  onTextChange={(text: string) => onTaskUpdate(task.id, text)}
+                  onToggleComplete={() => onTaskToggle(task.id)}
+                  onSettingsClick={() => onTaskSettings?.(task.id)}
+                  onTaskClick={() => onTaskClick?.(task.id)}
+                />
+              </div>
+              {isEditing && onRemoveTask && <RemoveTaskButton onClick={() => onRemoveTask(task.id)} />}
+            </div>
+          ))}
+
+          {isEditing && onAddTask && <AddTaskButton onClick={onAddTask} />}
+        </div>
 
       </div>
     </div>

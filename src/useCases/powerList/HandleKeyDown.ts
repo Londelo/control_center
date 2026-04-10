@@ -1,16 +1,16 @@
 import React from 'react';
 
 type HandleKeyDownArgs = {
+  powerListLength: number;
   standardTaskLength: number;
   powerListRefs: React.RefObject<HTMLInputElement>[];
   standardTaskRefs: React.RefObject<HTMLInputElement>[];
 };
 
-const HandleKeyDown = ({ standardTaskLength, powerListRefs, standardTaskRefs }: HandleKeyDownArgs) =>
-  ( listType: 'power' | 'standard', index: number, e: React.KeyboardEvent) => {
+const HandleKeyDown = ({ powerListLength, standardTaskLength, powerListRefs, standardTaskRefs }: HandleKeyDownArgs) =>
+  (listType: 'power' | 'standard', index: number, e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
-      const powerListLength = 5;
       const totalInputs = powerListLength + standardTaskLength;
       let currentGlobalIndex: number;
       if (listType === 'power') {
