@@ -32,7 +32,7 @@
 - Full user workflows (complete a PowerList task, see progress update)
 - Page navigation (dashboard to map to detail pages)
 - Dashboard interactions (widget drag/drop, date navigation)
-- 3D map interactions (click nodes, zoom, search)
+- Map interactions (click nodes, focus rings, view toggle, search)
 - Cross-feature flows (complete tasks → WIN/LOSS update → stats change)
 - First launch flow (welcome modal, default data creation)
 

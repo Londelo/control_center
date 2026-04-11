@@ -8,8 +8,11 @@
 
 ## Visualization
 - **D3.js** - 2D visualization library for the map view
-- Force simulations, orbital calculations, and SVG/Canvas rendering
-- Supports two map views: Tree (static) and Magnitude (orbital motion)
+- Supports two distinct map views:
+  - **Tree View:** Static layout with hierarchy-based rings and connector lines
+  - **Magnitude View:** Orbital motion with percentile-based rings (no connectors)
+- Rendering: SVG for < 500 nodes, Canvas fallback for 500+ nodes
+- Custom force calculations for orbital physics in Magnitude View
 
 ## Data Layer
 - **SQLite** - Primary database (via Next.js API routes)

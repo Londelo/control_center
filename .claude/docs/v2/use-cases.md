@@ -175,7 +175,7 @@ daily_completions:
 
 ## Module: Todo System
 
-A recursive, infinitely-nested goal and task management system structured as a **directed graph** (many-to-many relationships). Every node can contain its own child todo list. Two views: a 3D map visualization and flat detail pages.
+A recursive, infinitely-nested goal and task management system structured as a **directed graph** (many-to-many relationships). Every node can contain its own child todo list. Two views: a 2D map visualization (with two view modes) and flat detail pages.
 
 ### Graph Structure
 
@@ -248,7 +248,10 @@ One `todo_nodes` table with a `type` discriminator column. Relationships use a *
 - When a node is set active: store the date it was activated
 - When removed from active: set `activatedAt` to null
 - To query active tasks: `WHERE activatedAt IS NOT NULL AND activatedAt <= currentDate AND completedAt IS NULL`
-- Redundant tracking: Active todo completions also recorded in `daily_completions.activeTodosCompletedIds` for WIN/LOSS calculations
+- **Dual tracking (intentional):** Active todo completions also recorded in `daily_completions.activeTodosCompletedIds` for WIN/LOSS calculations
+  - `activatedAt`: Current state (which tasks are active now?)
+  - `activeTodosCompletedIds`: Historical record (which active tasks were completed on date X?)
+  - Different purposes: state vs. history
 
 **Types (Discriminated Union):**
 
@@ -312,46 +315,40 @@ interface TodoComment {
 
 ---
 
-### Map View (3D Visualization)
+### Map View (2D Visualization)
 
-A 3D force-directed graph rendered with **React Three Fiber / Three.js**. The map is meant to be **visually striking and immersive** - not the practical workspace. It's the "wow" view.
+A 2D visualization rendered with **D3.js** featuring two distinct views. The map is meant to be **visually striking and immersive** - not the practical workspace. It's the "wow" view.
+
+**Two View Modes:**
+
+1. **Tree/Connectivity View** - Understand relationships and structure
+   - Static layout with nodes arranged in rings by hierarchy depth
+   - Connector lines visible showing parent-child relationships
+   - Ring 0: Serve God (center, largest)
+   - Ring 1+: Children at increasing depths (decreasing size)
+   - Multi-parent nodes positioned at midpoint ring between parents
+
+2. **Magnitude View** - Understand importance by volume of work
+   - Orbital motion (slow, continuous)
+   - Rings represent percentile buckets of descendant todo count
+   - Inner rings = nodes with most todos (top 10%, 10-20%, etc.)
+   - No connector lines
+   - Dynamic repositioning as todo counts change
+
+**Core Interaction (Both Views):**
+- **Middle-mouse-button drag** to pan
+- **Focus system**: Click a ring to enlarge all nodes in that ring, others shrink
+- **Node selection**: 1st click selects (node grows), 2nd click navigates to detail page
+- **View toggle button** (top-right) to switch between Tree and Magnitude views
 
 **Visual Design:**
-- **Solar system / big bang metaphor** - Serve God is the sun at the center, cornerstones are planets orbiting it, todo nodes expand outward like branches shooting from the core
-- Serve God: Glowing gold sphere
-- Cornerstones: Spheres colored by health status (green/yellow/red), orbiting slowly around Serve God at uniform speed
-- Todo nodes: Spheres colored by deadline proximity (green/yellow/red/gray/gold)
-- All connections: Straight black lines
-- Deeper hierarchy = further from center, smaller nodes
-- Zooming in makes distant small nodes grow larger (fractal-like detail revelation)
-- Pulse/glow animations: Red (overdue) nodes pulse subtly, gold (completed) nodes shimmer
-- Entire subtrees orbit with their parent cornerstone as a unit
-- Orphan nodes: Small asteroids floating at random positions in space, not connected to anything, not orbiting
+- All nodes are **squares**
+- Serve God: 96x96px gold square (#e9c349) with light bulb icon and glow effect
+- Cornerstones: Squares colored by health status (green/yellow/red)
+- Todo nodes: Squares colored by deadline proximity (green/yellow/red/gray/gold shimmer)
+- Orphan nodes: Gray diamonds (rotated 45°) floating in outer space with slow drift
 
-**Camera & Navigation:**
-- Camera starts focused on Serve God
-- Full orbit freedom including flipping upside down
-- Zoom in/out manually (no auto-zoom-back)
-- Pan in any direction
-- No collapse/expand - just zoom in to isolate sections
-
-**Interaction:**
-- **Hover** a node: Shows its title
-- **Toggle labels**: Can turn on all labels globally from a map view control
-- **Single click** a node: Camera flies toward it (zoom in)
-- **Double click** a node: Opens that node's detail page
-
-**Connection Management:**
-- **Lock/unlock toggle button** in the map view controls
-- When **locked** (default): Clicking navigates, no accidental edits
-- When **unlocked**:
-  - Click a line between two nodes: Removes that connection
-  - Click one node then click another: Creates a parent-child connection (first click = child, second click = parent; system infers direction when hierarchy makes it obvious)
-- **Connection rules:**
-  - Serve God connections are untouchable
-  - Cornerstones cannot connect to each other
-  - Cornerstones cannot be disconnected from Serve God
-  - Todo nodes can connect to other todo nodes and to cornerstones freely
+**For complete map design specification, see:** `.claude/docs/v2/designs/mapview.md`
 
 **Node creation is NOT available from the map view.** Nodes are created from a node's detail page or via the Active Tasks dashboard component (which creates orphan nodes).
 
@@ -538,7 +535,7 @@ The dashboard displays data for a specific date (default: today). All widgets re
 
 ### Full Pages (via sidebar navigation)
 
-- **Map** (3D todo system visualization)
+- **Map** (2D todo system visualization with Tree and Magnitude views)
 - **Priorities** (automatic priority list)
 - **History & Stats** (timeline of activity and computed metrics)
 - **Node Detail Pages** (accessed by clicking into nodes from map, pages, or other detail pages)
@@ -688,7 +685,7 @@ _All outstanding design questions have been resolved._
 - Visual design system (colors, typography, spacing)
 - Component library and reusable patterns
 - Dashboard grid system and responsive behavior
-- 3D map view visual effects and performance
+- Map view visual effects and performance (D3.js, SVG/Canvas)
 - Widget design patterns
 - Modal and overlay design
 - Animation and transitions

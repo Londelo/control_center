@@ -50,11 +50,15 @@ The Map View consists of **two distinct views** with shared interaction mechanic
 - Cornerstones typically on inner rings (they have most descendants)
 
 ### Node Sizing
-- Size correlates with ring position
-- Ring 1: ~48px
-- Ring 2: ~40px
-- Ring 3: ~32px
-- Gradual decrease as rings expand outward
+Size correlates with ring position using exponential decay:
+- **Formula**: `size = 48px × (0.85 ^ (ring - 1))`
+- Ring 1 (top 10%): 48px
+- Ring 2 (10-20%): 41px
+- Ring 3 (20-30%): 35px
+- Ring 4 (30-40%): 30px
+- Ring 5 (40-50%): 25px
+- Ring 6+: Continues decreasing to minimum 16px
+- Minimum size enforced: No node smaller than 16px regardless of ring
 
 ---
 
@@ -306,12 +310,57 @@ The Map View consists of **two distinct views** with shared interaction mechanic
 
 ---
 
-## Open Questions / TBD
+## Resolved Design Decisions
 
-1. **Exact ring spacing formula**: What's the optimal radius increment for readability?
-2. **Multi-parent fractional rings**: How to handle Ring 2.5 visually? Offset slightly?
-3. **Orphan drift bounds**: Infinite space, or bounded area with bounce?
-4. **Label positioning**: Always horizontal, or rotate with orbital motion in View 2?
-5. **Percentile bucket edge cases**: What if only 3 nodes exist? Still create 10 rings?
-6. **Dynamic repositioning animation**: Smooth transition when node jumps rings, or instant?
-7. **Mobile responsiveness**: Touch gestures for pan, focus, and selection?
+### Ring Spacing Formula (Tree View)
+**Decision:** Exponential spacing with base increment
+- Ring 0 (Serve God): radius = 0
+- Ring 1: radius = 200px
+- Ring N: radius = 200px + (N-1) × 150px
+- Spacing increases linearly to maintain readability as nodes multiply
+
+### Multi-Parent Node Ring Calculation
+**Decision:** Weighted average based on depth, rounded to nearest 0.5
+- Formula: `ring = round(average(parent_depths) + 1, to_nearest_0.5)`
+- Example: Parents at depth 2 and 4 → child at depth 3.5 (ring 3.5)
+- Visual treatment: Fractional rings render between their integer neighbors
+- Node positioned at exact fractional radius (e.g., Ring 2.5 = 275px from center)
+
+### Orphan Node Drift Physics
+**Decision:** Bounded area with soft bounce
+- Drift bounds: Rectangular area extending 300px beyond outermost occupied ring
+- Drift velocity: 5-15px per second (randomized per node)
+- Drift direction: Random walk with directional persistence (70% chance to continue direction)
+- Soft bounce: When hitting bounds, velocity reverses with 80% damping
+- Initial placement: Random position within drift bounds at spawn time
+
+### Label Positioning (Both Views)
+**Decision:** Always horizontal (no rotation)
+- Labels remain upright and readable regardless of node position or orbital motion
+- Labels appear on hover only (to reduce visual clutter)
+- Label placement: Centered above node with 8px gap
+- Semi-transparent black background panel for readability
+
+### Percentile Bucket Edge Cases (Magnitude View)
+**Decision:** Minimum 1 ring, maximum 10 rings, dynamic bucketing
+- If < 10 nodes: Create 1 ring per node (no bucketing)
+- If 10-99 nodes: Create N/10 rings (rounded up)
+- If 100+ nodes: Create exactly 10 rings (percentile buckets as designed)
+- Ensures meaningful visualization at any node count
+
+### Dynamic Repositioning Animation (Magnitude View)
+**Decision:** Smooth transition with easing
+- When node's descendant count changes and causes ring jump:
+  - Animate radius change over 800ms with ease-out curve
+  - Maintain angular position (no rotation during transition)
+  - Maintain orbital velocity of destination ring after arrival
+- When multiple nodes reposition simultaneously: Stagger animations by 50ms per node
+
+### Mobile Responsiveness
+**Decision:** Touch gesture mapping
+- **Pan**: Single-finger drag (replaces middle-mouse-button drag)
+- **Ring focus**: Single tap on ring outline
+- **Node selection**: Single tap on node (1st tap = select/grow, 2nd tap = navigate)
+- **View toggle**: Standard button tap (top-right)
+- **Pinch-to-zoom**: Disabled (use focus system instead)
+- Bottom sheet overlay: Filter/search panel slides up from bottom on mobile instead of top-left positioning

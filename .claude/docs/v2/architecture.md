@@ -113,7 +113,10 @@ This approach enables:
 ```
 src/
 ├── app/                          # Presentation (Next.js pages)
-├── components/                   # Presentation (shared UI)
+├── components/                   # Presentation (UI components)
+│   ├── shared/                  # Reusable UI primitives
+│   ├── layout/                  # App layout components
+│   └── features/                # Feature-specific components
 ├── hooks/                        # Application (React integration)
 ├── stores/                       # Application (state management)
 ├── services/                     # Application (API clients)
@@ -125,12 +128,17 @@ src/
 │   ├── database/
 │   └── repositories/
 ├── shared/                      # Cross-cutting utilities
-└── styles/                      # Theming
+└── styles/                      # Design tokens and theming
+    ├── theme.ts                 # Single source of truth
+    ├── GlobalStyles.tsx
+    └── animations.ts
 ```
 
 **Rationale:**
 - Features are grouped together in the domain layer
 - Each layer is physically separated
+- Component organization by reusability (shared → layout → features)
+- Design tokens centralized in styles/theme.ts
 - Easy to navigate: "Where's the business logic for PowerList?" → `domain/daily-ritual/`
 - Easy to test: Mock repositories, test domain logic in isolation
 
@@ -302,6 +310,215 @@ Source of truth for:
 
 ---
 
+## Design System Architecture
+
+### Philosophy: Zero Duplication, Single Source of Truth
+
+**Core Principle**: No visual property (color, spacing, typography, sizing) should ever be hardcoded or duplicated. Everything flows from a centralized theme definition.
+
+**Goal**: Change one value in the theme file and see it update everywhere in real-time.
+
+### Design Token System
+
+**Location:** `src/styles/theme.ts`
+
+All visual design properties are defined once in a single theme object:
+
+```typescript
+export const theme = {
+  colors: {
+    // Semantic color names (what they mean, not what they are)
+    background: '#131313',
+    backgroundAlt: '#1a1a1a',
+    surface: '#20201f',
+    surfaceHigh: '#2a2a2a',
+    
+    primary: '#c9c6c5',
+    primaryDark: '#5f5e5e',
+    
+    secondary: '#b8c3ff',
+    secondaryContainer: '#0043eb',
+    
+    tertiary: '#e9c349',        // Gold/accent
+    tertiaryContainer: '#cca730',
+    
+    error: '#ffb4ab',
+    errorContainer: '#93000a',
+    
+    success: '#4ade80',         // Green
+    warning: '#facc15',         // Yellow
+    
+    textPrimary: '#e5e2e1',
+    textSecondary: '#c4c7c7',
+    textTertiary: '#8e9192',
+    
+    border: '#444748',
+    borderSubtle: 'rgba(142, 145, 146, 0.1)',
+    
+    overlay: 'rgba(0, 0, 0, 0.6)',
+  },
+  
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '16px',
+    lg: '24px',
+    xl: '32px',
+    xxl: '48px',
+  },
+  
+  typography: {
+    fontFamily: {
+      body: 'Inter, sans-serif',
+      heading: 'Space Grotesk, sans-serif',
+      mono: 'monospace',
+    },
+    fontSize: {
+      xs: '10px',
+      sm: '12px',
+      base: '14px',
+      lg: '16px',
+      xl: '20px',
+      xxl: '24px',
+    },
+    fontWeight: {
+      light: 300,
+      normal: 400,
+      medium: 500,
+      bold: 700,
+    },
+    letterSpacing: {
+      tight: '-0.02em',
+      normal: '0',
+      wide: '0.2em',
+      wider: '0.3em',
+    },
+  },
+  
+  sizing: {
+    buttonHeight: {
+      sm: '32px',
+      md: '40px',
+      lg: '48px',
+    },
+    inputHeight: {
+      sm: '32px',
+      md: '40px',
+    },
+    iconSize: {
+      sm: '16px',
+      md: '24px',
+      lg: '32px',
+      xl: '48px',
+    },
+    nodeSize: {
+      level0: '96px',  // Serve God
+      level1: '48px',  // Cornerstones
+      level2: '32px',
+      level3: '24px',
+      level4: '16px',
+      level5: '12px',  // minimum
+    },
+  },
+  
+  borderRadius: {
+    none: '0px',
+    sm: '2px',
+    md: '4px',
+    lg: '8px',
+    full: '9999px',
+  },
+  
+  shadows: {
+    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+    md: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    lg: '0 10px 20px rgba(0, 0, 0, 0.2)',
+    glow: {
+      gold: '0 0 60px rgba(233, 195, 73, 0.3)',
+      blue: '0 0 40px rgba(184, 195, 255, 0.2)',
+      tertiary: '0 0 20px rgba(233, 195, 73, 0.2)',
+    },
+  },
+  
+  effects: {
+    blur: {
+      glass: 'blur(12px)',
+      atmospheric: 'blur(120px)',
+    },
+    transition: {
+      fast: '150ms ease-out',
+      base: '300ms ease-out',
+      slow: '500ms ease-out',
+    },
+  },
+};
+
+export type Theme = typeof theme;
+```
+
+**Benefits:**
+- Change `tertiary` color once → updates all buttons, accents, glows, badges automatically
+- TypeScript autocomplete guides developers to valid theme values
+- Impossible to have inconsistent colors/spacing across the app
+- Theme can be swapped (light mode, different color schemes) by changing this one file
+
+### Component Reusability Strategy
+
+**Philosophy:** If two UI elements look similar, they should share the same component. No duplicate button/input/panel implementations.
+
+**Shared Component Library:**
+All reusable UI primitives live in `src/components/shared/`:
+- Buttons (all variants: primary, secondary, ghost, sizes)
+- Inputs (text, search, all variants)
+- Panels (glass morphism cards, containers)
+- Icons (Material icon wrapper with consistent sizing)
+- Badges (filter chips, status indicators)
+- Tooltips
+- Modals
+- Progress bars
+
+**Component Design Principle:**
+- Each component uses theme values exclusively (no hardcoded properties)
+- Accepts `variant` and `size` props for flexibility
+- Extends existing components rather than creating duplicates
+
+**Example:** One `Button` component with variants (`primary`, `secondary`, `tertiary`, `ghost`) and sizes (`sm`, `md`, `lg`) serves all button needs across the entire app.
+
+### Component Organization
+
+```
+src/
+├── styles/
+│   ├── theme.ts              // Single source of truth for all design tokens
+│   ├── GlobalStyles.tsx      // CSS reset, body styles
+│   └── animations.ts         // Shared keyframe animations
+│
+├── components/
+│   ├── shared/               // Reusable UI primitives (buttons, inputs, panels)
+│   │                         // Used throughout the app, highly generic
+│   │
+│   ├── layout/               // Layout components (TopBar, Sidebar, MobileNav)
+│   │                         // App shell structure
+│   │
+│   └── features/             // Feature-specific components
+│       ├── MapView/          // Map visualization components
+│       ├── Dashboard/        // Dashboard widgets
+│       ├── NodeDetails/      // Node detail page components
+│       └── ...
+```
+
+**Directory Rules:**
+- `shared/`: Generic, reusable across any feature
+- `layout/`: App-level structural components
+- `features/`: Feature-specific, not intended for cross-feature reuse
+
+**Before creating a new component:**
+1. Check if it exists in `shared/`
+2. If 80% similar, extend existing component with new variant
+3. Only create new component for truly unique functionality
+
+---
+
 ## API Route Organization
 
 **Structure:** Mirror domain structure in API routes.
@@ -378,9 +595,16 @@ Progress, WIN/LOSS, and health calculations are expensive. Cache results in:
 - Memoized selectors
 - API response headers (cache control)
 
+**WIN/LOSS Retroactive Computation:**
+- Changing WIN/LOSS configuration recalculates all historical days on-demand
+- Computation is expensive for large date ranges
+- Strategy: Compute only visible date range (e.g., current month view in History page)
+- Use lazy loading: Compute additional ranges as user scrolls/navigates
+- Consider background worker for full recalculation when config changes
+
 ### Lazy Loading
-- 3D map only loads when user navigates to Map page
-- Three.js/React Three Fiber bundled separately
+- 2D map only loads when user navigates to Map page
+- D3.js bundled separately
 - Widgets load their data independently
 
 ### Optimistic Updates
