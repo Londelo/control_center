@@ -7,9 +7,9 @@
 - **Zustand** - State management
 
 ## Visualization
-- **React Three Fiber** - React wrapper for Three.js
-- **Three.js** - 3D rendering engine for the map view
-- Instanced meshes for performance (supports ~10,000-50,000 nodes)
+- **D3.js** - 2D visualization library for the map view
+- Force simulations, orbital calculations, and SVG/Canvas rendering
+- Supports two map views: Tree (static) and Magnitude (orbital motion)
 
 ## Data Layer
 - **SQLite** - Primary database (via Next.js API routes)

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CONTROL_CTR_V2 // MISSION_CONTROL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#0e0e0e",
+                    "outline": "#8e9192",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#241a00",
+                    "tertiary-fixed": "#ffe088",
+                    "background": "#131313",
+                    "secondary-container": "#0043eb",
+                    "inverse-surface": "#e5e2e1",
+                    "on-surface": "#e5e2e1",
+                    "primary-fixed-dim": "#c9c6c5",
+                    "outline-variant": "#444748",
+                    "surface-variant": "#353535",
+                    "surface-tint": "#c9c6c5",
+                    "on-secondary-fixed-variant": "#0035be",
+                    "surface-container-high": "#2a2a2a",
+                    "tertiary": "#e9c349",
+                    "on-tertiary-fixed-variant": "#574500",
+                    "error": "#ffb4ab",
+                    "secondary-fixed": "#dde1ff",
+                    "inverse-on-surface": "#313030",
+                    "on-background": "#e5e2e1",
+                    "on-primary-fixed-variant": "#474646",
+                    "on-surface-variant": "#c4c7c7",
+                    "on-secondary-container": "#c6ceff",
+                    "secondary": "#b8c3ff",
+                    "on-primary-container": "#848282",
+                    "inverse-primary": "#5f5e5e",
+                    "on-secondary-fixed": "#001356",
+                    "surface-container": "#20201f",
+                    "surface-container-low": "#1c1b1b",
+                    "on-secondary": "#002388",
+                    "on-tertiary": "#3c2f00",
+                    "on-primary-fixed": "#1c1b1b",
+                    "surface-dim": "#131313",
+                    "on-primary": "#313030",
+                    "primary": "#c9c6c5",
+                    "surface": "#131313",
+                    "surface-bright": "#393939",
+                    "primary-fixed": "#e5e2e1",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#353535",
+                    "primary-container": "#1a1a1a",
+                    "on-error": "#690005",
+                    "secondary-fixed-dim": "#b8c3ff",
+                    "tertiary-fixed-dim": "#e9c349",
+                    "on-tertiary-container": "#4f3e00",
+                    "tertiary-container": "#cca730"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #131313; color: #e5e2e1; }
+        .font-mono { font-family: 'Space Grotesk', monospace; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .ghost-border { border: 1px solid rgba(142, 145, 146, 0.15); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0e0e0e; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #353535; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-[0.2em] text-neutral-100 font-mono uppercase">CONTROL_CTR_V2</span>
+<!-- Date Navigation Overlay -->
+<div class="flex items-center gap-4 bg-surface-container px-4 py-1.5 border border-outline-variant/20">
+<button class="text-neutral-500 hover:text-blue-300 transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<div class="flex flex-col items-center min-w-[120px]">
+<span class="text-[10px] font-mono tracking-widest text-neutral-500 uppercase">CURRENT_CYCLE</span>
+<span class="text-sm font-mono text-blue-300">OCT_24_2023 // TODAY</span>
+</div>
+<button class="text-neutral-500 hover:text-blue-300 transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 px-4 py-1 bg-surface-container-high/50 border border-outline-variant/10">
+<span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(184,195,255,0.6)]"></span>
+<span class="font-mono text-xs tracking-widest text-blue-300">STATUS: NOMINAL</span>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-neutral-500 cursor-pointer hover:text-blue-200 transition-colors">calendar_today</span>
+<span class="material-symbols-outlined text-neutral-500 cursor-pointer hover:text-blue-200 transition-colors">data_exploration</span>
+<span class="material-symbols-outlined text-neutral-500 cursor-pointer hover:text-blue-200 transition-colors">radio_button_checked</span>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-20 pb-8 px-4 bg-neutral-950 w-64 border-r border-neutral-900 z-40">
+<div class="mb-10 px-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest border border-outline-variant/30 flex items-center justify-center">
+<img alt="COSMIC_NAVIGATOR_PROFILE" class="opacity-80" data-alt="Cyberpunk style minimalist profile avatar, tactical gear silhouette, deep blue and obsidian lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAQKSePQIIqdp__9A3pX-TRVdk8Z0hjF1UajKLgJYKOtJ02Z9Qyu1YpnNhLGboS0oWAruB4yrSWXxaXQsnUmNR14x5JGoAe6ko4uIfkIdOAsfPDnaVaSJloIAiJL4yJlXCnPa1HLaxoGZGA6R9LuQPaSKvhrnf7CoSONYV1KVs1_4KKcZUp6aascKN64KC9uoOUefr3gkTvlo6FZ1sVmMCmIgblDD2zAuR7aCXTxT5jXm8iQiwT2qKfrbWhEmLM66t-bAN7eU-IU4"/>
+</div>
+<div class="flex flex-col">
+<span class="font-mono text-xs font-black text-neutral-50 tracking-tighter">DATA_REF // 09X</span>
+<span class="font-mono text-[9px] text-neutral-500 tracking-[0.2em]">STATUS: NOMINAL</span>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 text-blue-300 font-bold bg-neutral-900/50 group transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-mono text-xs tracking-widest">DASHBOARD</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 group transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span class="font-mono text-xs tracking-widest">MAP_VIEW</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 group transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">priority_high</span>
+<span class="font-mono text-xs tracking-widest">PRIORITIES</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 group transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="font-mono text-xs tracking-widest">HISTORY</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 group transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-mono text-xs tracking-widest">SETTINGS</span>
+</a>
+</nav>
+<button class="mt-auto mx-2 bg-neutral-900 border border-outline-variant/20 py-3 px-4 font-mono text-[10px] tracking-[0.3em] text-neutral-400 hover:bg-neutral-800 hover:text-blue-300 transition-all uppercase">
+            QUICK_CAPTURE
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Header Identity -->
+<div class="flex justify-between items-end border-b border-outline-variant/10 pb-6">
+<div>
+<span class="font-mono text-[10px] tracking-[0.4em] text-tertiary uppercase">MISSION_PROTOCOL // 24_A</span>
+<h1 class="text-4xl font-black font-mono tracking-tighter text-neutral-50 mt-1 uppercase">DASHBOARD_CORE</h1>
+</div>
+<div class="text-right">
+<span class="font-mono text-[10px] tracking-[0.4em] text-neutral-500 uppercase">SYSTEM_LOAD</span>
+<div class="flex gap-1 mt-2">
+<div class="w-8 h-1 bg-blue-400/50"></div>
+<div class="w-8 h-1 bg-blue-400/50"></div>
+<div class="w-8 h-1 bg-blue-400/50"></div>
+<div class="w-8 h-1 bg-neutral-800"></div>
+<div class="w-8 h-1 bg-neutral-800"></div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Left Column: Daily Rituals -->
+<section class="col-span-12 lg:col-span-7 space-y-6">
+<!-- PowerList Widget -->
+<div class="bg-surface-container-low border border-outline-variant/10 p-4 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-5">
+<span class="material-symbols-outlined text-8xl">list_alt</span>
+</div>
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">bolt</span>
+<span class="font-mono text-xs tracking-[0.3em] font-bold text-neutral-50 uppercase">POWER_LIST // CRITICAL_5</span>
+</div>
+<span class="font-mono text-[10px] text-neutral-500">COMPLETE: 02/07</span>
+</div>
+<div class="space-y-1">
+<!-- Task 1: Completed -->
+<div class="flex items-center gap-3 bg-surface-container p-2 border border-tertiary/20">
+<input checked="" class="w-4 h-4 bg-tertiary/20 border-tertiary text-tertiary focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-tertiary/60 tracking-widest mb-0.5">TASK_ID: PL-01</span>
+<span class="font-mono text-xs text-tertiary line-through opacity-80 uppercase">SYNCHRONIZE_SYSTEM_MATRICES</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-tertiary/60">0800_HRS</span>
+</div>
+<!-- Task 2: Completed -->
+<div class="flex items-center gap-3 bg-surface-container p-2 border border-tertiary/20">
+<input checked="" class="w-4 h-4 bg-tertiary/20 border-tertiary text-tertiary focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-tertiary/60 tracking-widest mb-0.5">TASK_ID: PL-02</span>
+<span class="font-mono text-xs text-tertiary line-through opacity-80 uppercase">DEEP_WORK_01 // ARCHITECTURE</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-tertiary/60">0930_HRS</span>
+</div>
+<!-- Task 3: Active -->
+<div class="flex items-center gap-3 bg-surface-container-high p-2 border border-outline-variant/30 group-hover:border-blue-400/30 transition-colors">
+<input class="w-4 h-4 bg-transparent border-outline-variant hover:border-blue-400 text-blue-400 focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-blue-400 tracking-widest mb-0.5">TASK_ID: PL-03</span>
+<span class="font-mono text-xs text-neutral-200 uppercase">DATA_REPLICATION_STRATEGY_REVIEW</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-neutral-500">1300_HRS</span>
+</div>
+<!-- Task 4: Inactive -->
+<div class="flex items-center gap-3 bg-surface-container/50 p-2 border border-outline-variant/10">
+<input class="w-4 h-4 bg-transparent border-outline-variant/30 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-neutral-600 tracking-widest mb-0.5">TASK_ID: PL-04</span>
+<span class="font-mono text-xs text-neutral-600 uppercase">STAKEHOLDER_COMM_LINK</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-neutral-700">1600_HRS</span>
+</div>
+<!-- Task 5 -->
+<div class="flex items-center gap-3 bg-surface-container/50 p-2 border border-outline-variant/10">
+<input class="w-4 h-4 bg-transparent border-outline-variant/30 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-neutral-600 tracking-widest mb-0.5">TASK_ID: PL-05</span>
+<span class="font-mono text-xs text-neutral-600 uppercase">CORE_ENGINE_OPTIMIZATION</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-neutral-700">1800_HRS</span>
+</div>
+<!-- Task 6 -->
+<div class="flex items-center gap-3 bg-surface-container/50 p-2 border border-outline-variant/10">
+<input class="w-4 h-4 bg-transparent border-outline-variant/30 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/>
+<div class="flex-1 flex flex-col">
+<span class="font-mono text-[10px] text-neutral-600 tracking-widest mb-0.5">TASK_ID: PL-06</span>
+<span class="font-mono text-xs text-neutral-600 uppercase">EVENING_REFLECT_POST_MORTEM</span>
+</div>
+<span class="ml-4 font-mono text-[10px] text-neutral-700">2000_HRS</span>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-outline-variant/10 font-mono text-[10px] tracking-widest text-neutral-500 hover:text-tertiary transition-all uppercase">
+    EXPAND_TASK_LIST
+</button>
+</div>
+<!-- Standards Widget -->
+<div class="bg-surface-container-low border border-outline-variant/10 p-4">
+<div class="flex justify-between items-center mb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<span class="font-mono text-xs tracking-[0.3em] font-bold text-neutral-50 uppercase">NON_NEGOTIABLES // STANDARDS</span>
+</div>
+<div class="flex gap-1">
+<div class="w-2 h-2 bg-tertiary"></div>
+<div class="w-2 h-2 bg-tertiary"></div>
+<div class="w-2 h-2 bg-neutral-800"></div>
+<div class="w-2 h-2 bg-neutral-800"></div>
+<div class="w-2 h-2 bg-neutral-800"></div>
+<div class="w-2 h-2 bg-neutral-800"></div>
+<div class="w-2 h-2 bg-neutral-800"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="flex items-center gap-3 p-2 bg-surface-container-highest border-l-2 border-tertiary">
+<span class="font-mono text-[10px] text-neutral-400 uppercase">HYDRATION_OPTIMAL</span>
+<span class="material-symbols-outlined text-tertiary text-xs ml-auto">check_circle</span>
+</div>
+<div class="flex items-center gap-3 p-2 bg-surface-container-highest border-l-2 border-tertiary">
+<span class="font-mono text-[10px] text-neutral-400 uppercase">MEDITATION_SYNC</span>
+<span class="material-symbols-outlined text-tertiary text-xs ml-auto">check_circle</span>
+</div>
+<div class="flex items-center gap-3 p-2 bg-surface-container border-l-2 border-neutral-700">
+<span class="font-mono text-[10px] text-neutral-500 uppercase">EXERTION_LOAD</span>
+<span class="material-symbols-outlined text-neutral-700 text-xs ml-auto">radio_button_unchecked</span>
+</div>
+<div class="flex items-center gap-3 p-2 bg-surface-container border-l-2 border-neutral-700">
+<span class="font-mono text-[10px] text-neutral-500 uppercase">READING_PROTOCOL</span>
+<span class="material-symbols-outlined text-neutral-700 text-xs ml-auto">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Active Tasks & Metrics -->
+<section class="col-span-12 lg:col-span-5 space-y-6">
+<!-- Active Tasks Pinned -->
+<div class="bg-surface-container-high border border-outline-variant/20 p-4">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-blue-400" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+<span class="font-mono text-xs tracking-[0.3em] font-bold text-neutral-50 uppercase">IMMEDIATE_FOCUS // PINNED</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-3 relative pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-blue-400"><div class="mt-1"><input class="w-4 h-4 bg-transparent border-blue-400/30 text-blue-400 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/></div><div class="flex-1"><span class="font-mono text-[10px] text-blue-400 uppercase tracking-widest">TASK_ID: XA-99</span><p class="text-neutral-100 font-medium mt-0.5 text-sm">Review Neural Link Latency Reports for Sector 7G</p></div></div>
+<div class="flex items-start gap-3 relative pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-neutral-800"><div class="mt-1"><input class="w-4 h-4 bg-transparent border-neutral-800 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/></div><div class="flex-1"><span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">TASK_ID: QM-12</span><p class="text-neutral-400 font-medium mt-0.5 text-sm">Quarterly Trajectory Adjustment Meeting</p></div></div>
+<div class="flex items-start gap-3 relative pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-neutral-800"><div class="mt-1"><input class="w-4 h-4 bg-transparent border-neutral-800 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/></div><div class="flex-1"><span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">TASK_ID: SY-44</span><p class="text-neutral-400 font-medium mt-0.5 text-sm">Infrastructure Resource Scaling Evaluation</p></div></div>
+<div class="flex items-start gap-3 relative pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-[2px] before:bg-neutral-800"><div class="mt-1"><input class="w-4 h-4 bg-transparent border-neutral-800 text-neutral-600 focus:ring-0 focus:ring-offset-0 cursor-pointer" type="checkbox"/></div><div class="flex-1"><span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">TASK_ID: PR-08</span><p class="text-neutral-400 font-medium mt-0.5 text-sm">Prepare Deployment Manifest v2.4</p></div></div>
+</div>
+<button class="w-full mt-6 py-2 border border-outline-variant/10 font-mono text-[10px] tracking-widest text-neutral-500 hover:text-blue-300 hover:bg-neutral-900 transition-all uppercase">
+    VIEW_ALL_LOGS
+</button>
+</div>
+<!-- Constellation Progress -->
+<!-- Atmospheric Detail Image -->
+</section>
+</div>
+</div>
+</main>
+<!-- System Toasts (Floating Pods) -->
+</body></html>

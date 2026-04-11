@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #131313;
+            color: #e5e2e1;
+            margin: 0;
+        }
+        .mono { font-family: 'Space Grotesk', monospace; }
+        .ghost-border { border: 1px solid rgba(68, 71, 72, 0.15); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#0e0e0e",
+                        "outline": "#8e9192",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#241a00",
+                        "tertiary-fixed": "#ffe088",
+                        "background": "#131313",
+                        "secondary-container": "#0043eb",
+                        "inverse-surface": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "outline-variant": "#444748",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#c9c6c5",
+                        "on-secondary-fixed-variant": "#0035be",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary": "#e9c349",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#dde1ff",
+                        "inverse-on-surface": "#313030",
+                        "on-background": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-surface-variant": "#c4c7c7",
+                        "on-secondary-container": "#c6ceff",
+                        "secondary": "#b8c3ff",
+                        "on-primary-container": "#848282",
+                        "inverse-primary": "#5f5e5e",
+                        "on-secondary-fixed": "#001356",
+                        "surface-container": "#20201f",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary": "#002388",
+                        "on-tertiary": "#3c2f00",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-dim": "#131313",
+                        "on-primary": "#313030",
+                        "primary": "#c9c6c5",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "primary-fixed": "#e5e2e1",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353535",
+                        "primary-container": "#1a1a1a",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#b8c3ff",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "on-tertiary-container": "#4f3e00",
+                        "tertiary-container": "#cca730"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-neutral-950/80 backdrop-blur-xl border-b border-neutral-800/50">
+<div class="text-lg font-bold tracking-[0.2em] text-neutral-100 mono">CONTROL_CTR_V2</div>
+<nav class="hidden md:flex space-x-8">
+<a class="text-neutral-500 hover:text-blue-200 transition-colors duration-300 font-mono tracking-tighter uppercase text-xs" href="#">DASHBOARD</a>
+<a class="text-yellow-400 border-b border-yellow-400 font-mono tracking-tighter uppercase text-xs" href="#">NODE_DETAIL</a>
+<a class="text-neutral-500 hover:text-blue-200 transition-colors duration-300 font-mono tracking-tighter uppercase text-xs" href="#">RESOURCES</a>
+</nav>
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-blue-300 cursor-pointer">calendar_today</span>
+<span class="material-symbols-outlined text-blue-300 cursor-pointer">data_exploration</span>
+<span class="material-symbols-outlined text-blue-300 cursor-pointer">radio_button_checked</span>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col pt-20 pb-8 px-4 bg-neutral-950 w-64 border-r border-neutral-900 hidden lg:flex">
+<div class="mb-8 px-2">
+<div class="text-xl font-black text-neutral-50 mono mb-1">DATA_REF // 09X</div>
+<div class="text-[10px] text-blue-400 font-mono tracking-widest">STATUS: NOMINAL</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-3 py-2 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 transition-all font-mono text-xs tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3">grid_view</span> DASHBOARD
+            </a>
+<a class="flex items-center px-3 py-2 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 transition-all font-mono text-xs tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3">explore</span> MAP_VIEW
+            </a>
+<a class="flex items-center px-3 py-2 text-blue-300 font-bold bg-neutral-900/50 font-mono text-xs tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3">priority_high</span> PRIORITIES
+            </a>
+<a class="flex items-center px-3 py-2 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 transition-all font-mono text-xs tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3">history</span> HISTORY
+            </a>
+<a class="flex items-center px-3 py-2 text-neutral-600 hover:bg-neutral-900 hover:text-neutral-200 transition-all font-mono text-xs tracking-widest" href="#">
+<span class="material-symbols-outlined mr-3">settings</span> SETTINGS
+            </a>
+</nav>
+<div class="mt-auto px-2">
+<button class="w-full py-3 bg-primary text-on-primary font-mono text-xs font-bold tracking-widest hover:shadow-[0_0_15px_rgba(233,195,73,0.3)] transition-all">
+                QUICK_CAPTURE
+            </button>
+<div class="mt-6 flex items-center space-x-3">
+<div class="w-8 h-8 bg-surface-container-highest border border-outline-variant">
+<img class="w-full h-full object-cover grayscale" data-alt="Portrait of a technical operator in low blue light with digital interface reflections" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEYoS2vlbVBgHKAjGFUGtEuOtXhHHsN5e0YdgmpbahQrH-I1oubdlwb2xxq7CiIvfiuJuy3QkXAyNpyl9M6L2zpJxonVl0C4rz_3q9F1DHnZH1N0N9kXTvzTrzZq8DWjJmpIbSAsGrkmCrXZCysgjgY8WQXiCkzBnc_os6DiOzCg5WzbktWzcZjSSKLv9HNSJjJNlaQ6nOd2_FHNi2MXS5d0E5kMbV9EPkDd_O_c3K0gkOx3XgzCAL1kT9yiVLvX2BkH2wm_Nzsqs"/>
+</div>
+<div class="text-[10px] mono text-neutral-400 uppercase tracking-tighter">COSMIC_NAVIGATOR_PROFILE</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="lg:ml-64 pt-24 pb-12 px-6 max-w-5xl mx-auto">
+<!-- Breadcrumbs -->
+<div class="mb-10 space-y-2 border-l-2 border-outline-variant/30 pl-4">
+<!-- Path 1 -->
+<nav class="flex items-center space-x-2 mono text-[9px] tracking-[0.15em] text-neutral-500 uppercase">
+<a class="hover:text-secondary transition-colors" href="#">ROOT_NODE</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<a class="hover:text-secondary transition-colors" href="#">ORBITAL_VECTORS</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<span class="text-secondary font-bold">CURRENT_REF_09X</span>
+</nav>
+<!-- Path 2 -->
+<nav class="flex items-center space-x-2 mono text-[9px] tracking-[0.15em] text-neutral-500 uppercase">
+<a class="hover:text-secondary transition-colors" href="#">STRATEGIC_CMD</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<a class="hover:text-secondary transition-colors" href="#">LUNAR_APPROACH</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<span class="text-secondary font-bold">CURRENT_REF_09X</span>
+</nav>
+<!-- Path 3 -->
+<nav class="flex items-center space-x-2 mono text-[9px] tracking-[0.15em] text-neutral-500 uppercase">
+<a class="hover:text-secondary transition-colors" href="#">MISSION_CTRL</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<a class="hover:text-secondary transition-colors" href="#">SECTOR_07</a>
+<span class="material-symbols-outlined !text-[10px] opacity-40">chevron_right</span>
+<span class="text-secondary font-bold">CURRENT_REF_09X</span>
+</nav>
+</div>
+<!-- Node Header -->
+<section class="mb-10">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-outline-variant/20 pb-8">
+<div>
+<div class="mono text-xs text-tertiary mb-2 tracking-widest uppercase">ID // NODE_ALPHA_SEQUENCE</div>
+<div class="flex items-center gap-4 mb-4">
+<h1 class="text-4xl md:text-5xl font-black mono tracking-tighter uppercase text-neutral-100">Synchronize Orbital Deceleration</h1>
+<button class="mono text-neutral-500 hover:text-secondary hover:drop-shadow-[0_0_5px_rgba(184,195,255,0.6)] transition-all cursor-pointer border border-transparent hover:border-secondary/30 px-2 py-1 flex items-center justify-center w-8 h-8"><span class="material-symbols-outlined !text-[16px]">tune</span></button>
+</div>
+<div class="flex items-start gap-3 group">
+<p class="text-on-surface-variant max-w-2xl leading-relaxed text-sm">
+        Calculated manual override for the propulsion sub-systems to align with the lunar-stationary station. Requires precise timing based on the current atmospheric density telemetry.
+    </p>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity mt-1 cursor-pointer">
+<span class="material-symbols-outlined !text-[14px] text-neutral-500 hover:text-secondary">tune</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col items-start md:items-end">
+<div class="mono text-[10px] text-neutral-500 uppercase tracking-[0.3em] mb-1">DUE_THRESHOLD</div>
+<div class="text-2xl mono font-bold text-neutral-100">2024.11.12 // 04:00</div>
+<div class="mt-4 flex space-x-2">
+<span class="px-3 py-1 bg-secondary/10 border border-secondary/20 text-secondary text-[10px] mono uppercase tracking-widest font-bold">STATUS: ACTIVE</span>
+<span class="px-3 py-1 bg-surface-container-high border border-outline-variant text-neutral-400 text-[10px] mono uppercase tracking-widest font-bold">PRIORITY: CRITICAL</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Row -->
+<div class="flex flex-wrap gap-4 mb-10">
+<button class="px-6 py-2 bg-secondary text-on-secondary font-mono text-[10px] font-black tracking-[0.2em] uppercase hover:shadow-[0_0_15px_rgba(184,195,255,0.4)] transition-all">
+                SET ACTIVE
+            </button>
+<button class="px-6 py-2 bg-surface-container-highest text-tertiary border border-tertiary/30 font-mono text-[10px] font-black tracking-[0.2em] uppercase hover:bg-tertiary hover:text-on-tertiary transition-all">
+                COMPLETE NODE
+            </button>
+<button class="px-6 py-2 bg-surface-container-low text-error border border-error/20 font-mono text-[10px] font-black tracking-[0.2em] uppercase hover:bg-error/10 transition-all">
+                DELETE
+            </button>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
+<!-- Task List Column -->
+<div class="xl:col-span-2 space-y-6">
+<div class="bg-surface-container-low p-6 ghost-border">
+<div class="flex justify-between items-center mb-6">
+<h3 class="mono text-xs font-bold tracking-widest text-neutral-400 uppercase">CHILD_TASKS // 04_REMAINING</h3>
+<span class="material-symbols-outlined text-neutral-600">checklist</span>
+</div>
+<div class="space-y-4">
+<!-- Task Item -->
+<div class="flex items-start group">
+<div class="mt-1 mr-4">
+<div class="w-5 h-5 border border-secondary bg-secondary/10 flex items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined !text-[16px] text-secondary">check</span>
+</div>
+</div>
+<div class="flex-1 pb-4 border-b border-outline-variant/10">
+<div class="mono text-xs text-neutral-200 uppercase tracking-wide line-through opacity-50">Calibrate Vector Sensors</div>
+<div class="mono text-[10px] text-neutral-500 mt-1 uppercase">COMPLETED BY // SYSTEM_AUTH</div>
+</div>
+</div>
+<!-- Task Item -->
+<div class="flex items-start group">
+<div class="mt-1 mr-4">
+<div class="w-5 h-5 border border-outline-variant hover:border-secondary transition-colors cursor-pointer"></div>
+</div>
+<div class="flex-1 pb-4 border-b border-outline-variant/10">
+<div class="mono text-xs text-neutral-100 uppercase tracking-wide">Validate Fuel-Ratio Mixing</div>
+<div class="mono text-[10px] text-secondary mt-1 uppercase">PENDING // MANUAL_OVERRIDE_REQUIRED</div>
+</div>
+</div>
+<!-- Task Item -->
+<div class="flex items-start group">
+<div class="mt-1 mr-4">
+<div class="w-5 h-5 border border-outline-variant hover:border-secondary transition-colors cursor-pointer"></div>
+</div>
+<div class="flex-1 pb-4 border-b border-outline-variant/10">
+<div class="mono text-xs text-neutral-100 uppercase tracking-wide">Initiate Cold-Gas Thruster Pulse</div>
+<div class="mono text-[10px] text-neutral-500 mt-1 uppercase">SEQUENTIAL_LOCK // WAITING_FOR_02</div>
+</div>
+</div>
+<!-- Add Task Input -->
+<div class="pt-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-neutral-600 !text-sm">add</span>
+<input class="w-full bg-surface-container-lowest border-none border-b border-outline-variant focus:border-secondary focus:ring-0 mono text-xs uppercase tracking-widest pl-10 py-3 text-neutral-300" placeholder="ADD_NEW_CHILD_TASK..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Environmental Context (Decorative/Data Viz) -->
+</div>
+<!-- Activity Log Column -->
+<div class="space-y-6">
+<div class="bg-surface-container-high p-6 ghost-border">
+<div class="flex justify-between items-center mb-6">
+<h3 class="mono text-xs font-bold tracking-widest text-neutral-100 uppercase">ACTIVITY_LOG</h3>
+<span class="material-symbols-outlined text-neutral-500">history</span>
+</div>
+<div class="space-y-6 relative">
+<!-- Vertical Thread -->
+<div class="absolute left-2 top-0 bottom-0 w-[1px] bg-outline-variant/30"></div>
+<!-- Log Entry -->
+<div class="relative pl-8">
+<div class="absolute left-[3px] top-1.5 w-2 h-2 bg-tertiary rounded-full shadow-[0_0_8px_rgba(233,195,73,0.6)]"></div>
+<div class="mono text-[9px] text-neutral-500 uppercase mb-1">2024.11.11 // 22:45:12</div>
+<div class="text-xs text-neutral-200">
+<span class="mono font-bold text-tertiary">STATUS_CHANGE:</span> Node moved to <span class="text-secondary">ACTIVE</span> by system supervisor.
+                            </div>
+</div>
+<!-- Log Entry -->
+<div class="relative pl-8">
+<div class="absolute left-[3px] top-1.5 w-2 h-2 bg-outline-variant rounded-full"></div>
+<div class="mono text-[9px] text-neutral-500 uppercase mb-1">2024.11.11 // 19:12:05</div>
+<div class="text-xs text-neutral-400 italic">
+<span class="mono font-bold text-neutral-200 not-italic">COMMENT // NAV_CMD:</span> Atmosphere resistance is 4% higher than projected. Adjust thruster intensity by factor 1.04.
+                            </div>
+</div>
+<!-- Log Entry -->
+<div class="relative pl-8">
+<div class="absolute left-[3px] top-1.5 w-2 h-2 bg-outline-variant rounded-full"></div>
+<div class="mono text-[9px] text-neutral-500 uppercase mb-1">2024.11.11 // 08:30:00</div>
+<div class="text-xs text-neutral-200">
+<span class="mono font-bold text-neutral-200">SUBTASK_COMPLETE:</span> "Calibrate Vector Sensors" verified by AUTO_LOGIC.
+                            </div>
+</div>
+<!-- Log Entry -->
+<div class="relative pl-8">
+<div class="absolute left-[3px] top-1.5 w-2 h-2 bg-outline-variant rounded-full"></div>
+<div class="mono text-[9px] text-neutral-500 uppercase mb-1">2024.11.10 // 23:59:59</div>
+<div class="text-xs text-neutral-200">
+<span class="mono font-bold text-neutral-200">NODE_CREATED:</span> Sequence initiated for ORBITAL_STATION_APPROACH.
+                            </div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/20">
+<div class="flex items-center space-x-3">
+<input class="flex-1 bg-surface-container-lowest border border-outline-variant focus:border-secondary focus:ring-0 mono text-[10px] uppercase tracking-widest p-2 text-neutral-400" placeholder="LOG_COMMS..." type="text"/>
+<button class="bg-surface-container-highest p-2 border border-outline-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Reference Card -->
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden as per suppression logic for detail screens) -->
+<!-- The FAB is suppressed on Details and Transactional screens -->
+</body></html>

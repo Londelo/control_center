@@ -1,0 +1,96 @@
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CONTROL_CTR_V2 // MAP_VIEW</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&amp;family=Space+Grotesk:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#0e0e0e",
+                        "outline": "#8e9192",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#241a00",
+                        "tertiary-fixed": "#ffe088",
+                        "background": "#131313",
+                        "secondary-container": "#0043eb",
+                        "inverse-surface": "#e5e2e1",
+                        "on-surface": "#e5e2e1",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "outline-variant": "#444748",
+                        "surface-variant": "#353535",
+                        "surface-tint": "#c9c6c5",
+                        "on-secondary-fixed-variant": "#0035be",
+                        "surface-container-high": "#2a2a2a",
+                        "tertiary": "#e9c349",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#dde1ff",
+                        "inverse-on-surface": "#313030",
+                        "on-background": "#e5e2e1",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-surface-variant": "#c4c7c7",
+                        "on-secondary-container": "#c6ceff",
+                        "secondary": "#b8c3ff",
+                        "on-primary-container": "#848282",
+                        "inverse-primary": "#5f5e5e",
+                        "on-secondary-fixed": "#001356",
+                        "surface-
+… +203 lines …
+ta-icon="3d_rotation">3d_rotation</span>
+</button>
+</div>
+<button class="p-3 bg-tertiary text-on-tertiary hover:scale-105 transition-transform active:scale-95 shadow-[0_0_20px_rgba(233,195,73,0.2)]">
+<span class="material-symbols-outlined font-bold" data-icon="add">add</span>
+</button>
+</div>
+<!-- Status Readout (Bottom Left) -->
+<div class="absolute bottom-8 left-8 font-mono">
+<div class="text-[10px] text-neutral-500 tracking-[0.2em] mb-2 uppercase">Current Vector: Sector_09_Alpha</div>
+<div class="space-y-1">
+<div class="flex items-center space-x-4">
+<div class="w-48 h-1 bg-neutral-900 overflow-hidden">
+<div class="w-[68%] h-full bg-blue-400"></div>
+</div>
+<span class="text-[10px] text-blue-400">ALIGNMENT: 68%</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="w-48 h-1 bg-neutral-900 overflow-hidden">
+<div class="w-[42%] h-full bg-tertiary"></div>
+</div>
+<span class="text-[10px] text-tertiary">HARVEST: 42%</span>
+</div>
+</div>
+</div>
+<!-- Background Atmospheric Element -->
+<div class="absolute -bottom-48 -right-48 w-96 h-96 bg-blue-900/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute -top-48 -left-48 w-96 h-96 bg-tertiary/5 rounded-full blur-[120px] pointer-events-none"></div>
+</main>
+<!-- Mobile Navigation (Hidden on LG) -->
+<nav class="fixed bottom-0 w-full z-50 bg-neutral-950/90 backdrop-blur-lg flex justify-around items-center h-16 lg:hidden border-t border-neutral-900">
+<button class="flex flex-col items-center text-neutral-500">
+<span class="material-symbols-outlined text-xl" data-icon="grid_view">grid_view</span>
+<span class="text-[8px] font-label mt-1">DASH</span>
+</button>
+<button class="flex flex-col items-center text-blue-300">
+<span class="material-symbols-outlined text-xl" data-icon="explore">explore</span>
+<span class="text-[8px] font-label mt-1">MAP</span>
+</button>
+<button class="flex flex-col items-center -mt-8 bg-tertiary text-on-tertiary p-3 rounded-full shadow-lg">
+<span class="material-symbols-outlined text-2xl" data-icon="add">add</span>
+</button>
+<button class="flex flex-col items-center text-neutral-500">
+<span class="material-symbols-outlined text-xl" data-icon="priority_high">priority_high</span>
+<span class="text-[8px] font-label mt-1">PRIO</span>
+</button>
+<button class="flex flex-col items-center text-neutral-500">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="text-[8px] font-label mt-1">SET</span>
+</button>
+</nav>
+</body></html>
