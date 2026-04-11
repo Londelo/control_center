@@ -1,7 +1,7 @@
 # Control Center V2 - Technology Stack
 
 ## Framework
-- **Next.js** - React framework with built-in API routes
+- **Next.js** - React framework (client-side rendering, static export)
 - **TypeScript** - Type safety throughout
 - **Styled Components** - CSS-in-JS styling
 - **Zustand** - State management
@@ -15,8 +15,9 @@
 - Custom force calculations for orbital physics in Magnitude View
 
 ## Data Layer
-- **SQLite** - Primary database (via Next.js API routes)
-- **Local Storage** - Fallback/supplementary storage when needed
+- **IndexedDB** - Native browser database (NoSQL, key-value store)
+- **Dexie.js** - Promise-based IndexedDB wrapper with TypeScript support
+- **LocalStorage** - User identity only (userId, username)
 
 ## Testing
 - **Jest** - Unit and integration testing

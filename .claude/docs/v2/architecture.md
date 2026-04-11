@@ -4,11 +4,11 @@
 
 **Strict separation of concerns with strong type boundaries between layers.**
 
-The architecture follows a layered approach where each layer has a single, well-defined responsibility. Frontend never directly touches the database. Backend never directly manipulates UI state. Business logic lives in a pure domain layer that knows nothing about HTTP, databases, or React.
+The architecture follows a layered approach where each layer has a single, well-defined responsibility. UI never directly touches the database. Business logic lives in a pure domain layer that knows nothing about IndexedDB, React, or browser APIs.
 
 This approach enables:
 - Easy testing through mocking
-- Swappable implementations (e.g., LocalStorage → API)
+- Swappable implementations (e.g., IndexedDB → Cloud API)
 - Clear contracts between layers
 - Independent evolution of each layer
 - Strong adherence to SOLID principles
@@ -32,38 +32,22 @@ This approach enables:
 ---
 
 ### Layer 2: Application Layer
-**Purpose:** Coordinate between UI and backend, manage application state
+**Purpose:** Coordinate between UI and domain logic, manage application state
 
 **Characteristics:**
 - Custom React hooks for component logic
 - Zustand stores for global state
-- Service modules that call API routes
-- Transforms data between UI format and API format
+- Directly instantiates and calls domain use cases
+- Transforms data between UI format and domain entities
 - Orchestrates workflows but doesn't contain business rules
 
-**Location:** `hooks/`, `stores/`, `services/`
+**Location:** `hooks/`, `stores/`
 
-**Key Concept:** This layer is the glue. It knows about React (hooks) and HTTP (API calls) but delegates all business decisions to the domain layer.
-
----
-
-### Layer 3: API Routes (HTTP Boundary)
-**Purpose:** Accept HTTP requests, route to domain logic, return responses
-
-**Characteristics:**
-- Thin routing layer
-- Validates incoming requests
-- Calls domain use cases
-- Serializes responses
-- No business logic lives here
-
-**Location:** `app/api/`
-
-**Key Concept:** This is just a translation layer between HTTP and the domain. It should be almost boring - just routing.
+**Key Concept:** This layer is the glue. It knows about React (hooks) and application state (Zustand) but delegates all business decisions to the domain layer. Hooks directly call use cases with dependency injection.
 
 ---
 
-### Layer 4: Domain Layer
+### Layer 3: Domain Layer
 **Purpose:** Business logic, rules, computations
 
 **Characteristics:**
@@ -85,22 +69,22 @@ This approach enables:
 
 ---
 
-### Layer 5: Data Access Layer
-**Purpose:** Interact with external data sources (database, localStorage)
+### Layer 4: Data Access Layer
+**Purpose:** Interact with external data sources (IndexedDB, localStorage)
 
 **Characteristics:**
 - Implements repository interfaces defined by domain layer
-- Only layer that touches SQLite and localStorage directly
-- Converts between database rows and domain entities
+- Only layer that touches IndexedDB and localStorage directly
+- Converts between IndexedDB objects and domain entities
 - No business logic - just CRUD operations
 
 **Location:** `infrastructure/`
 
 **Sub-structure:**
-- **Database:** SQLite client, migrations
+- **Database:** Dexie.js schema definition, version management
 - **Repositories:** Abstract data access patterns
-  - **Interfaces:** Contracts (what operations are available)
-  - **Implementations:** Concrete implementations (how to do it)
+  - **Interfaces:** Contracts (what operations are available) - defined in domain layer
+  - **Implementations:** Concrete implementations using Dexie/IndexedDB
 
 **Key Concept:** The domain layer defines what data operations it needs (interfaces). This layer provides the implementation. Swap implementations without touching business logic.
 
@@ -117,16 +101,15 @@ src/
 │   ├── shared/                  # Reusable UI primitives
 │   ├── layout/                  # App layout components
 │   └── features/                # Feature-specific components
-├── hooks/                        # Application (React integration)
+├── hooks/                        # Application (React integration, use case orchestration)
 ├── stores/                       # Application (state management)
-├── services/                     # Application (API clients)
 ├── domain/                       # Domain (business logic)
-│   ├── daily-ritual/            # Feature-based
-│   ├── todo-system/             # Feature-based
+│   ├── dailyRitual/             # Feature-based
+│   ├── todoSystem/              # Feature-based
 │   └── shared/
 ├── infrastructure/              # Data Access
-│   ├── database/
-│   └── repositories/
+│   ├── database/                # Dexie schema, IndexedDB setup
+│   └── repositories/            # Repository implementations
 ├── shared/                      # Cross-cutting utilities
 └── styles/                      # Design tokens and theming
     ├── theme.ts                 # Single source of truth
@@ -147,17 +130,17 @@ src/
 ## Type Boundaries
 
 ### DTOs (Data Transfer Objects)
-Used at layer boundaries, especially between frontend and backend.
+Used at layer boundaries, especially between UI and domain.
 
-**Purpose:** Define clear contracts. Frontend and backend agree on shape of data being exchanged.
+**Purpose:** Define clear contracts. Simple data shapes for passing information between layers.
 
 **Characteristics:**
 - Simple, serializable objects
 - No methods, no behavior
-- Used for API requests/responses
-- Frontend sends DTOs, receives DTOs
+- Used for passing data from hooks to components
+- UI components receive DTOs
 
-**Location:** `services/types/dtos.ts`
+**Location:** `shared/types/dtos.ts`
 
 ---
 
@@ -170,18 +153,18 @@ Used within the domain layer.
 - May contain methods (business logic)
 - May have computed properties
 - Represent core business concepts
-- Not directly serialized over HTTP
+- Not directly exposed to UI
 
 **Location:** `domain/{feature}/entities/`
 
 ---
 
 ### Mapping Between Types
-The Application Layer and API Routes handle conversion:
-- DTO → Domain Entity (when calling domain)
-- Domain Entity → DTO (when returning to frontend)
+The Application Layer (hooks) handles conversion:
+- DTO → Domain Entity (when calling use cases)
+- Domain Entity → DTO (when returning to UI components)
 
-This keeps the domain layer pure and the frontend simple.
+This keeps the domain layer pure and the UI simple.
 
 ---
 
@@ -200,14 +183,14 @@ This keeps the domain layer pure and the frontend simple.
 
 - Add new use cases without changing existing ones
 - Add new repository implementations without changing domain logic
-- Add new API endpoints without touching business rules
+- Add new UI components without touching business rules
 
 ### Liskov Substitution Principle
 **Implementations can be swapped without breaking contracts.**
 
 - Any implementation of `IPowerListRepository` works
-- Mock repositories for tests, SQLite repositories for production
-- Could swap LocalStorage for Cookies without changing domain logic
+- Mock repositories for tests, IndexedDB repositories for production
+- Could swap IndexedDB for cloud storage without changing domain logic
 
 ### Interface Segregation Principle
 **Many specific interfaces, not one giant interface.**
@@ -222,7 +205,7 @@ This keeps the domain layer pure and the frontend simple.
 
 - Domain layer depends on repository **interfaces**
 - Concrete implementations are injected at runtime
-- Business logic never imports `SQLite` or `localStorage` directly
+- Business logic never imports `IndexedDB`, `Dexie`, or `localStorage` directly
 
 ---
 
@@ -519,48 +502,42 @@ src/
 
 ---
 
-## API Route Organization
-
-**Structure:** Mirror domain structure in API routes.
-
-```
-app/api/
-├── daily-ritual/
-│   ├── power-list/
-│   └── standards/
-├── todo-system/
-│   ├── nodes/
-│   ├── relationships/
-│   └── comments/
-└── settings/
-```
-
-**Each route:**
-- Validates incoming request
-- Calls appropriate use case
-- Returns DTO response
-
-**Benefits:**
-- Predictable URL structure
-- Easy to find: "Where's the API for X?" → `api/{feature}/`
-- RESTful conventions
-
----
-
 ## Database Connection Pattern
 
-**Single SQLite client instance**, initialized on server startup.
+**Single Dexie database instance**, initialized on application load.
 
-**Location:** `infrastructure/database/client.ts`
+**Location:** `infrastructure/database/schema.ts`
 
-**Usage:** Repositories receive the database client via dependency injection.
+**Usage:** Repositories import and use the database instance directly.
 
-**Migration Strategy:** Separate migration files, run on startup or via CLI command.
+**Version Management:** Dexie handles schema versioning with `.version()` API.
+
+```typescript
+class ControlCenterDB extends Dexie {
+  powerListTasks!: Dexie.Table<PowerListTask, string>;
+  
+  constructor() {
+    super('ControlCenter');
+    
+    this.version(1).stores({
+      powerListTasks: 'id, userId, [userId+createdAt]'
+    });
+    
+    // Future versions
+    this.version(2).stores({
+      powerListTasks: 'id, userId, [userId+createdAt], [userId+date]'
+    });
+  }
+}
+
+export const db = new ControlCenterDB();
+```
 
 **Benefits:**
-- Connection pooling handled centrally
-- Easy to swap for different database (Postgres, etc.)
-- Migrations version-controlled
+- Persistent storage in browser (IndexedDB)
+- Easy schema evolution with versioning
+- TypeScript support for type safety
+- No server required
 
 ---
 
@@ -569,19 +546,19 @@ app/api/
 ### Unit Tests
 - Test domain use cases in isolation (mock repositories)
 - Test computations as pure functions
-- Test repositories with in-memory SQLite
+- Test repositories with in-memory Dexie instance
 
 ### Integration Tests
-- Test API routes with test database
-- Test full use case → repository → database flow
+- Test hooks calling use cases with test database
+- Test full use case → repository → IndexedDB flow
 
 ### Component Tests
-- Test components with mocked hooks/services
-- Test UI logic without hitting real APIs
+- Test components with mocked hooks
+- Test UI logic without hitting real database
 
 ### E2E Tests (Playwright)
 - Test full user workflows
-- Test against real (test) database
+- Test against real (test) IndexedDB database
 
 **Key Insight:** Layered architecture makes each level independently testable.
 
@@ -591,9 +568,9 @@ app/api/
 
 ### Computation Caching
 Progress, WIN/LOSS, and health calculations are expensive. Cache results in:
-- Zustand stores (frontend)
-- Memoized selectors
-- API response headers (cache control)
+- Zustand stores
+- Memoized selectors (useMemo, React.memo)
+- IndexedDB query results cached in memory
 
 **WIN/LOSS Retroactive Computation:**
 - Changing WIN/LOSS configuration recalculates all historical days on-demand
@@ -626,24 +603,27 @@ Repositories should:
 This architecture enables future changes:
 
 **Move to cloud/server:**
-- Swap SQLite repositories for Postgres repositories
-- Swap LocalStorageUserRepository for API-based auth
+- Add API layer (Phase 4 reintroduced)
+- Swap IndexedDB repositories for cloud database repositories (Supabase, Firebase, Postgres)
+- Hooks call API endpoints instead of use cases directly
 - Domain layer unchanged
 
 **Add mobile app:**
 - Domain layer can be shared (compile to native)
 - New presentation layer (React Native)
-- Same API routes
+- Can reuse IndexedDB on mobile or connect to cloud API
 
 **Add real-time sync:**
-- Add WebSocket layer above API routes
-- Zustand stores subscribe to updates
+- Add sync layer using CRDTs or operational transforms
+- Zustand stores subscribe to sync events
+- IndexedDB remains local cache, syncs to cloud
 - Domain layer unchanged
 
 **Add multi-user:**
-- Add authentication middleware to API routes
+- Add authentication layer
 - Repositories already filter by userId
 - Domain logic already multi-user ready
+- Cloud backend handles authorization
 
 ---
 

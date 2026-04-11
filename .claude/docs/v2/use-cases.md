@@ -32,7 +32,7 @@ app_settings: id, userId, settingType, value
 
 **Note:** `todo_relationships` does NOT need `userId` - it only references `todo_nodes`, which already have `userId`. Querying nodes by userId inherently filters their relationships.
 
-**All queries filter by userId** - standard SQL pattern for user-owned data.
+**All queries filter by userId** - standard pattern for user-owned data.
 
 ### First Launch Flow
 
@@ -85,7 +85,7 @@ The Daily Ritual module consists of two sections: **PowerList** and **Standards*
 **Behavior:**
 - Each task has its own configurable completion timeframe and miss limit
 - Progress is **computed** from completion history across dates (not stored on the task)
-- A computed progress function scans SQLite history to derive: completedCount, losingStreak, and resetDates
+- A computed progress function scans IndexedDB completion history to derive: completedCount, losingStreak, and resetDates
 - When consecutive misses hit the task's `missLimit`, progress resets to zero and the reset date is recorded
 - When a task reaches its `daysRequired` completion count, the user can convert it to a Standard
 - Tasks carry forward from the most recent PowerList by default (completion reset to false)
@@ -590,11 +590,11 @@ A single input that sets the X days threshold used by:
 
 ### Settings Persistence
 
-All user settings are stored in a single SQLite table:
+All user settings are stored in a single IndexedDB object store:
 
 ```
-app_settings:
-  id, settingType, value (JSON)
+appSettings object store:
+  id, userId, settingType, value (JSON object)
 ```
 
 **Widget Configuration** (`settingType: "widget_config"`):
@@ -676,7 +676,7 @@ _All outstanding design questions have been resolved._
 - Centralized date/time system design
 - State management strategy (Zustand structure)
 - API route organization for Next.js backend
-- SQLite database connection and query patterns
+- IndexedDB/Dexie query patterns and schema versioning
 - Computation layer design (WIN/LOSS, progress, health status)
 - Performance considerations for large datasets
 
