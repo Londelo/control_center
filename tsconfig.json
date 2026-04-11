@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "jsx": "preserve",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -10,7 +14,6 @@
     "noEmit": true,
     "isolatedModules": true,
     "incremental": true,
-
     // Strict mode
     "strict": true,
     "noUnusedLocals": true,
@@ -20,26 +23,40 @@
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-
     // Path aliases
-    "baseUrl": ".",
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/domain/*": ["src/domain/*"],
-      "@/infrastructure/*": ["src/infrastructure/*"],
-      "@/hooks/*": ["src/hooks/*"],
-      "@/stores/*": ["src/stores/*"],
-      "@/styles/*": ["src/styles/*"],
-      "@/shared/*": ["src/shared/*"],
-      "@/app/*": ["src/app/*"]
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/domain/*": [
+        "./src/domain/*"
+      ],
+      "@/infrastructure/*": [
+        "./src/infrastructure/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/stores/*": [
+        "./src/stores/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "@/shared/*": [
+        "./src/shared/*"
+      ],
+      "@/app/*": [
+        "./src/app/*"
+      ]
     },
-
     // Next.js specific
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",
