@@ -3,7 +3,7 @@
 ## Framework
 - **Next.js** - React framework (client-side rendering, static export)
 - **TypeScript** - Type safety throughout
-- **Styled Components** - CSS-in-JS styling
+- **Styled Components** - CSS-in-JS styling for all components. HTML mockups are auto-generated references only — extract visual design patterns and translate them to Styled Components using the centralized theme tokens from `styles/theme.ts`.
 - **Zustand** - State management
 
 ## Visualization

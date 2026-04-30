@@ -15,7 +15,7 @@
 - Use cases (business logic)
 - Hooks (application logic)
 - API routes (request/response handling)
-- Repositories (with test SQLite)
+- Repositories (with mock Dexie)
 - React components (with Testing Library)
 
 **Focus:** Does each piece work correctly in isolation?
@@ -50,5 +50,5 @@
 | Application | Jest | Hooks, stores, services |
 | API Routes | Jest | Request validation, response format |
 | Domain | Jest | Use cases, computations, pure functions |
-| Data Access | Jest + test SQLite | Repository CRUD operations |
+| Data Access | Jest + mock Dexie | Repository CRUD operations |
 | Full Workflows | Playwright | User journeys, cross-feature flows |

@@ -57,10 +57,9 @@ app_settings: id, userId, settingType, value
        - Daily Ritual: PowerList completion required
        - Standards: NOT required
        - Active Tasks: NOT required
-   - **Navigate to Map page** - User starts their journey viewing Serve God + 5 cornerstones
+   - Onboarding completes — app loads with default data
 3. **If found:**
-   - Load app, query all data filtered by `userId`
-   - Navigate to dashboard (default view)
+   - Load app and query all data filtered by `userId`
 
 ### User Profile Page
 
@@ -502,11 +501,11 @@ A dashboard component showing todo nodes the user has chosen to actively focus o
   - Navigation to full pages: Map, Priorities, History & Stats
   - User profile button (account details)
   - Settings button (dashboard configuration)
-- **Main area:** Draggable, resizable widget grid
-  - Widgets can be moved, reshaped, resized
+- **Main area:** Draggable widget grid
+  - Widgets can be moved (drag handle reorders)
   - Layout (size + position) persists across sessions
   - One instance of each widget max
-  - **Default: No widgets.** Dashboard starts empty. User adds widgets through settings.
+  - **Default: Daily Ritual and Active Tasks enabled.** Dashboard starts with default widgets. User can add/remove via settings.
 
 ### Date Navigation
 

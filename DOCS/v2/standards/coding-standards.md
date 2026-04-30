@@ -30,7 +30,7 @@ import { pipeWith, andThen } from 'ramda';
 export const pipeP = (...fns) => pipeWith(andThen)([...fns]);
 ```
 
-**Import everywhere as:**
+**Import in domain layer and data transformation code as:**
 ```typescript
 import * as R from '@/shared/utils/ramda';
 ```
