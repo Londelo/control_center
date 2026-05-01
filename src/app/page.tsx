@@ -1,28 +1,12 @@
-"use client";
+/**
+ * Home page / Dashboard
+ */
 
-import Link from "next/link";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center p-8">
-      <div className="w-full max-w-2xl text-center">
-        <header className="mb-8">
-          <h1 className="text-lg font-mono font-bold">Home</h1>
-        </header>
-
-        <div>
-          <Link href="/daily">
-            <button className="btn-outline">
-              Daily
-            </button>
-          </Link>
-          <Link href="/map">
-            <button className="btn-outline">
-              Map
-            </button>
-          </Link>
-        </div>
-      </div>
+    <main>
+      <h1>Control Center V2</h1>
+      <p>Dashboard coming soon...</p>
     </main>
   );
 }

@@ -1,13 +1,9 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-  output: 'standalone',
-  eslint: {
-    ignoreDuringBuilds: true,
+  reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

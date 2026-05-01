@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CELESTIAL_CMD // HISTORY_STATS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#1c1b1b",
+                        "error": "#ffb4ab",
+                        "on-primary": "#313030",
+                        "on-tertiary-container": "#4f3e00",
+                        "on-primary-fixed-variant": "#474646",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#c4c7c7",
+                        "tertiary-fixed": "#ffe088",
+                        "surface-container": "#20201f",
+                        "surface-dim": "#131313",
+                        "surface-bright": "#393939",
+                        "on-tertiary": "#3c2f00",
+                        "surface-container-highest": "#353535",
+                        "surface": "#131313",
+                        "primary-fixed-dim": "#c9c6c5",
+                        "tertiary-fixed-dim": "#e9c349",
+                        "surface-container-high": "#2a2a2a",
+                        "on-surface": "#e5e2e1",
+                        "secondary-fixed-dim": "#b8c3ff",
+                        "secondary-fixed": "#dde1ff",
+                        "secondary-container": "#0043eb",
+                        "background": "#131313",
+                        "tertiary-container": "#cca730",
+                        "on-error": "#690005",
+                        "on-background": "#e5e2e1",
+                        "secondary": "#b8c3ff",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "tertiary": "#e9c349",
+                        "on-secondary-fixed": "#001356",
+                        "inverse-on-surface": "#313030",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "surface-variant": "#353535",
+                        "surface-container-low": "#1c1b1b",
+                        "on-secondary-fixed-variant": "#0035be",
+                        "primary-fixed": "#e5e2e1",
+                        "on-secondary": "#002388",
+                        "outline-variant": "#444748",
+                        "outline": "#8e9192",
+                        "primary": "#c9c6c5",
+                        "on-primary-container": "#848282",
+                        "on-secondary-container": "#c6ceff",
+                        "surface-tint": "#c9c6c5",
+                        "primary-container": "#1a1a1a",
+                        "on-tertiary-fixed": "#241a00",
+                        "inverse-surface": "#e5e2e1",
+                        "inverse-primary": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+        .mono { font-family: 'Space Grotesk', monospace; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #131313; }
+        ::-webkit-scrollbar-thumb { background: #353535; }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#131313] bg-gradient-to-b from-[#1A1A1A] to-[#131313]">
+<div class="flex items-center space-x-8">
+<span class="text-xl font-bold tracking-tighter text-[#e9c349] dark:text-[#e9c349] font-headline">CELESTIAL_CMD</span>
+<nav class="hidden md:flex items-center space-x-6">
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-[#b8c3ff] opacity-60 hover:text-[#e9c349] transition-colors duration-300" href="#">DASHBOARD</a>
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-[#e9c349] border-b-2 border-[#e9c349] pb-1" href="#">REPORTS</a>
+<a class="font-['Space_Grotesk'] tracking-widest uppercase text-xs text-[#b8c3ff] opacity-60 hover:text-[#e9c349] transition-colors duration-300" href="#">SYSTEM_LOGS</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-[#b8c3ff] opacity-60 hover:text-[#e9c349] transition-all"><span class="material-symbols-outlined">settings</span></button>
+<button class="text-[#b8c3ff] opacity-60 hover:text-[#e9c349] transition-all"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 flex flex-col py-8 bg-[#131313] tonal-transition bg-[#1A1A1A]">
+<div class="px-6 mb-10">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">shield_person</span>
+</div>
+<div>
+<p class="text-lg font-black text-[#e9c349] font-headline leading-none">STATION_09X</p>
+<p class="font-['Space_Grotesk'] text-[10px] tracking-widest text-secondary opacity-60 uppercase">OPERATOR_ACTIVE</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center space-x-4 text-[#b8c3ff] opacity-40 px-4 py-3 hover:bg-[#b8c3ff]/5 hover:opacity-100 transition-all font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span>TERMINAL</span>
+</a>
+<a class="flex items-center space-x-4 bg-[#b8c3ff]/10 text-[#e9c349] border-r-4 border-[#e9c349] px-4 py-3 font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">history</span>
+<span>HISTORY</span>
+</a>
+<a class="flex items-center space-x-4 text-[#b8c3ff] opacity-40 px-4 py-3 hover:bg-[#b8c3ff]/5 hover:opacity-100 transition-all font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span>MAP</span>
+</a>
+<a class="flex items-center space-x-4 text-[#b8c3ff] opacity-40 px-4 py-3 hover:bg-[#b8c3ff]/5 hover:opacity-100 transition-all font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span>SENSORS</span>
+</a>
+<a class="flex items-center space-x-4 text-[#b8c3ff] opacity-40 px-4 py-3 hover:bg-[#b8c3ff]/5 hover:opacity-100 transition-all font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span>ARCHIVE</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-6 border-t border-outline-variant/10">
+<a class="flex items-center space-x-4 text-[#b8c3ff] opacity-40 px-4 py-3 hover:bg-[#b8c3ff]/5 hover:opacity-100 transition-all font-label tracking-widest text-[10px]" href="#">
+<span class="material-symbols-outlined">power_settings_new</span>
+<span>LOGOUT</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 h-screen overflow-y-auto bg-surface-dim">
+<div class="p-8 max-w-[1600px] mx-auto space-y-8">
+<!-- Section 1: Stats Grid -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="mono text-[10px] tracking-[0.3em] text-on-surface-variant uppercase">METRIC_ARRAY // TELEMETRY_CORE</h2>
+<div class="flex space-x-2">
+<div class="w-2 h-2 bg-tertiary"></div>
+<div class="w-2 h-2 bg-secondary opacity-20"></div>
+<div class="w-2 h-2 bg-secondary opacity-20"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Total Wins -->
+<div class="bg-[#1a2e1a] border-l-2 border-green-500 p-6 relative overflow-hidden group">
+<span class="mono text-[10px] tracking-widest text-green-400 opacity-60 uppercase mb-4 block">TOTAL_WINS</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-green-500 tracking-tighter">711</span>
+<span class="material-symbols-outlined text-green-500/20 text-5xl absolute -right-2 -bottom-2">trophy</span>
+</div>
+</div>
+<!-- Total Losses -->
+<div class="bg-[#2e1a1a] border-l-2 border-error p-6 relative overflow-hidden group">
+<span class="mono text-[10px] tracking-widest text-error opacity-60 uppercase mb-4 block">TOTAL_LOSSES</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-error tracking-tighter">181</span>
+<span class="material-symbols-outlined text-error/20 text-5xl absolute -right-2 -bottom-2">skull</span>
+</div>
+</div>
+<!-- Win Rate -->
+<div class="bg-surface-container-high p-6 relative overflow-hidden border-l-2 border-secondary">
+<span class="mono text-[10px] tracking-widest text-secondary opacity-60 uppercase mb-4 block">WIN_RATE</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-secondary tracking-tighter">79.7%</span>
+<span class="material-symbols-outlined text-secondary/10 text-5xl absolute -right-2 -bottom-2">analytics</span>
+</div>
+</div>
+<!-- Current Win Streak -->
+<div class="bg-surface-container-high p-6 relative overflow-hidden border-l-2 border-tertiary">
+<span class="mono text-[10px] tracking-widest text-tertiary opacity-60 uppercase mb-4 block">CURRENT_STREAK</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-tertiary tracking-tighter">05</span>
+<span class="material-symbols-outlined text-tertiary/10 text-5xl absolute -right-2 -bottom-2">bolt</span>
+</div>
+</div>
+<!-- Best Win Streak -->
+<div class="bg-surface-container p-6 relative overflow-hidden border-l border-outline-variant">
+<span class="mono text-[10px] tracking-widest text-on-surface-variant opacity-60 uppercase mb-4 block">PEAK_STREAK</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-on-surface tracking-tighter">14</span>
+<span class="material-symbols-outlined text-on-surface/5 text-5xl absolute -right-2 -bottom-2">trending_up</span>
+</div>
+</div>
+<!-- Total Tasks -->
+<div class="bg-surface-container p-6 relative overflow-hidden border-l border-outline-variant">
+<span class="mono text-[10px] tracking-widest text-on-surface-variant opacity-60 uppercase mb-4 block">TASKS_COMPLETED</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-on-surface tracking-tighter">892</span>
+<span class="material-symbols-outlined text-on-surface/5 text-5xl absolute -right-2 -bottom-2">task_alt</span>
+</div>
+</div>
+<!-- Highest in Day -->
+<div class="bg-surface-container p-6 relative overflow-hidden border-l border-outline-variant">
+<span class="mono text-[10px] tracking-widest text-on-surface-variant opacity-60 uppercase mb-4 block">PEAK_DAILY_LOAD</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-on-surface tracking-tighter">23</span>
+<span class="material-symbols-outlined text-on-surface/5 text-5xl absolute -right-2 -bottom-2">history_edu</span>
+</div>
+</div>
+<!-- Avg Tasks Per Day -->
+<div class="bg-surface-container p-6 relative overflow-hidden border-l border-outline-variant">
+<span class="mono text-[10px] tracking-widest text-on-surface-variant opacity-60 uppercase mb-4 block">AVERAGE_THROUGHPUT</span>
+<div class="flex items-baseline justify-between">
+<span class="mono text-4xl font-bold text-on-surface tracking-tighter">8.2</span>
+<span class="material-symbols-outlined text-on-surface/5 text-5xl absolute -right-2 -bottom-2">equalizer</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: History Timeline -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="mono text-[10px] tracking-[0.3em] text-on-surface-variant uppercase">CHRONOLOGICAL_LOAD // JAN-JUL_CYCLE</h2>
+<div class="flex items-center space-x-6">
+<div class="flex items-center space-x-2 bg-surface-container p-1 px-3 border border-outline-variant">
+<span class="mono text-[9px] text-tertiary">ZOOM:</span>
+<span class="mono text-[10px] text-on-surface">MONTH_VIEW</span>
+<div class="flex border-l border-outline-variant ml-2 pl-2 space-x-1">
+<button class="hover:text-tertiary transition-colors"><span class="material-symbols-outlined text-[16px]">zoom_in</span></button>
+<button class="hover:text-tertiary transition-colors"><span class="material-symbols-outlined text-[16px]">zoom_out</span></button>
+</div>
+</div>
+<div class="flex items-center space-x-1">
+<span class="mono text-[10px] text-on-surface-variant">SCROLL:</span>
+<button class="w-6 h-6 flex items-center justify-center border border-outline-variant hover:bg-surface-container-highest transition-colors"><span class="material-symbols-outlined text-[14px]">arrow_back_ios_new</span></button>
+<button class="w-6 h-6 flex items-center justify-center border border-outline-variant hover:bg-surface-container-highest transition-colors"><span class="material-symbols-outlined text-[14px]">arrow_forward_ios</span></button>
+</div>
+</div>
+</div>
+<!-- Timeline Bar Chart Container -->
+<div class="bg-surface-container-low p-8 border border-outline-variant/10 relative">
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#e5e2e1 0.5px, transparent 0.5px); background-size: 20px 20px;"></div>
+<!-- Chart Legend/Y-Axis -->
+<div class="flex h-[300px] gap-2">
+<div class="flex flex-col justify-between mono text-[9px] text-on-surface-variant py-2 opacity-50 pr-4">
+<span>25</span>
+<span>20</span>
+<span>15</span>
+<span>10</span>
+<span>05</span>
+<span>00</span>
+</div>
+<!-- Scrollable Bars Area -->
+<div class="flex-1 overflow-x-auto pb-6 relative group">
+<div class="flex items-end h-full gap-[4px] min-w-max px-4">
+<!-- Dummy bars for demonstration -->
+<!-- Generating a series of bars for Jan - Jul -->
+<!-- JAN -->
+<div class="flex flex-col items-center h-full group/bar">
+<div class="w-3 bg-secondary/40 h-[60%] hover:bg-secondary transition-all"></div>
+<span class="mono text-[8px] mt-4 opacity-30 group-hover/bar:opacity-100">J01</span>
+</div>
+<div class="w-3 bg-secondary/40 h-[45%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[70%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[30%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[55%] hover:bg-secondary"></div>
+<!-- FEB -->
+<div class="w-3 bg-secondary/40 h-[80%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[65%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[90%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[40%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[75%] hover:bg-secondary"></div>
+<!-- MAR -->
+<div class="w-3 bg-secondary/40 h-[50%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[35%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[60%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[85%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[70%] hover:bg-secondary"></div>
+<!-- TODAY MARKER - APR 10 -->
+<div class="relative h-full flex items-end">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 mono text-[8px] text-tertiary bg-surface px-1 border border-tertiary/30 whitespace-nowrap z-10">TODAY_MARKER // APR 10</div>
+<div class="w-px h-full bg-tertiary absolute left-1/2 -translate-x-1/2 z-0 opacity-50 border-dashed border-l"></div>
+<div class="w-3 bg-tertiary h-[95%] z-10"></div>
+</div>
+<div class="w-3 bg-secondary/40 h-[65%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[40%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[55%] hover:bg-secondary"></div>
+<!-- MAY -->
+<div class="w-3 bg-secondary/40 h-[30%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[75%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[60%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[85%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[40%] hover:bg-secondary"></div>
+<!-- JUN -->
+<div class="w-3 bg-secondary/40 h-[50%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[35%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[60%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[25%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[70%] hover:bg-secondary"></div>
+<!-- JUL -->
+<div class="w-3 bg-secondary/40 h-[45%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[80%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[65%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[90%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[40%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[75%] hover:bg-secondary"></div>
+<div class="w-3 bg-secondary/40 h-[50%] hover:bg-secondary"></div>
+</div>
+</div>
+</div>
+<!-- Month Labels -->
+<div class="flex justify-between mt-4 px-12 border-t border-outline-variant/30 pt-4 mono text-[10px] text-secondary opacity-40">
+<span>JAN</span>
+<span>FEB</span>
+<span>MAR</span>
+<span class="text-tertiary opacity-100 font-bold">APR</span>
+<span>MAY</span>
+<span>JUN</span>
+<span>JUL</span>
+</div>
+</div>
+</section>
+<!-- Decorative Data Footer -->
+<div class="flex justify-between items-center pt-8 border-t border-outline-variant/10 opacity-30 mono text-[9px] tracking-widest">
+<div class="flex space-x-8">
+<span>COORD // 42.3601° N, 71.0589° W</span>
+<span>SIGNAL // 100%_SECURE</span>
+<span>BUFFER // 0.002MS</span>
+</div>
+<div>CELESTIAL_OS_V2.0.4</div>
+</div>
+</div>
+</main>
+<!-- Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-[-1] opacity-20">
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/10 blur-[150px] rounded-full"></div>
+<div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-tertiary/10 blur-[150px] rounded-full"></div>
+</div>
+</body></html>

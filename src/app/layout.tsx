@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import './globals.css'
+/**
+ * Root layout for Next.js app
+ */
 
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "PowerList - Win Every Day",
-  description: "A minimal productivity app implementing Andy Frisella's Power List concept",
+  title: 'Control Center V2',
+  description: 'Personal productivity system with Daily Rituals and Todo System',
 };
 
 export default function RootLayout({
@@ -15,10 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        {children}
-      </body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
   );
 }
