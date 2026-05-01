@@ -54,9 +54,7 @@ app_settings: id, userId, settingType, value
        - Both widgets enabled: Daily Ritual (order: 1), Active Tasks (order: 2)
        - Set default dimensions
      - Create WIN/LOSS config in `app_settings`:
-       - Daily Ritual: PowerList completion required
-       - Standards: NOT required
-       - Active Tasks: NOT required
+       - WIN/LOSS: PowerList completion required
    - Onboarding completes — app loads with default data
 3. **If found:**
    - Load app and query all data filtered by `userId`
@@ -247,7 +245,7 @@ One `todo_nodes` table with a `type` discriminator column. Relationships use a *
 - When a node is set active: store the date it was activated
 - When removed from active: set `activatedAt` to null
 - To query active tasks: `WHERE activatedAt IS NOT NULL AND activatedAt <= currentDate AND completedAt IS NULL`
-- **Dual tracking (intentional):** Active todo completions also recorded in `daily_completions.activeTodosCompletedIds` for WIN/LOSS calculations
+- **Dual tracking (intentional):** Active todo completions also recorded in `daily_completions.activeTodosCompletedIds`
   - `activatedAt`: Current state (which tasks are active now?)
   - `activeTodosCompletedIds`: Historical record (which active tasks were completed on date X?)
   - Different purposes: state vs. history
@@ -557,24 +555,13 @@ A single input that sets the X days threshold used by:
 - The todo node deadline color system (green → yellow transition)
 - The Priorities component "Due soon" tier
 
-### Section: WIN/LOSS Configuration
+### WIN/LOSS Configuration
 
 **Completely separate section** from other settings. The WIN/LOSS system is an independent computation layer - it reads data from the database and computes results. It does not own or modify any component data.
 
-**Structure:**
-- Checkboxes to select which components participate in WIN/LOSS (Priorities is excluded, never participates)
-- Tab-like interface where each participating component has its own configuration panel
-
-**Daily Ritual tab:**
-- Checkbox options:
-  - All PowerList items completed
-  - All Standards completed
-  - Both all PowerList AND all Standards completed
-
-**Active Tasks tab:**
-- Number input: How many active tasks must be completed per day? (0, 1, 2, etc.)
-
-**Default configuration:** All PowerList items completed (Daily Ritual only).
+**Configuration:**
+- Single checkbox: "All PowerList items completed" — when enabled, WIN/LOSS is determined by whether all active PowerList tasks are completed for that day.
+- Default: checkbox enabled.
 
 **Computation rules:**
 - WIN/LOSS is **always computed**, never stored

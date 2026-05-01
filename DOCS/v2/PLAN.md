@@ -2,7 +2,7 @@
 
 ## OVERVIEW: What You're Building
 
-This is the **step-by-step implementation guide** for building Control Center V2 from the ground up using **Test-Driven Development (TDD)**. This plan consists of **39 sequential commits**, each representing a complete, tested milestone. Every commit includes all modified files together with a detailed commit message documenting what was tested and what was built.
+This is the **step-by-step implementation guide** for building Control Center V2 from the ground up using **Test-Driven Development (TDD)**. This plan consists of **40 sequential commits**, each representing a complete, tested milestone. Every commit includes all modified files together with a detailed commit message documenting what was tested and what was built.
 
 ---
 
@@ -74,7 +74,7 @@ The commit sequence below is your **step-by-step instruction guide**. Each commi
 - **Verification that all tests pass**
 - **One commit containing all modified files**
 
-**Work through commits 1-39 in order.** Each commit builds on the previous ones. Do not proceed to the next commit until the current commit is complete and all tests are passing.
+**Work through commits 1-40 in order.** Each commit builds on the previous ones. Do not proceed to the next commit until the current commit is complete and all tests are passing.
 
 ---
 
@@ -155,13 +155,13 @@ By following this plan, you will deliver:
 - Configured Playwright for E2E tests
 - Added ESLint and Prettier configs aligned with coding standards
 
-### Commit 2: V2-FOUNDATION: Directory structure and core types
+### Commit 1: V2-FOUNDATION: Directory structure and core types
 - Created complete src/ folder structure (app/, components/, domain/, infrastructure/, etc.)
 - Built shared/types/ with base type definitions
 - Created domain feature folders (dailyRitual/, todoSystem/, shared/)
 - Set up infrastructure folders (database/, repositories/)
 
-### Commit 3: V2-FOUNDATION: Design system and theme
+### Commit 1: V2-FOUNDATION: Design system and theme
 - Implemented styles/theme.ts with complete design tokens (colors, spacing, typography, sizing)
 - Created GlobalStyles.tsx with CSS reset and base styles
 - Built styles/animations.ts with shared keyframe definitions
@@ -171,21 +171,21 @@ By following this plan, you will deliver:
 
 ## Phase 2: Data Layer
 
-### Commit 4: V2-DATA: Database schema and versioning
+### Commit 1: V2-DATA: Database schema and versioning
 - Tests: Database connection test, schema initialization test, version upgrade test
 - Implementation: Created Dexie schema with all object stores (powerListTasks, standardsTasks, dailyCompletions, todoNodes, todoRelationships, todoComments, appSettings)
 - Defined indexes for efficient queries (compound indexes for userId+date, userId+type, etc.)
 - Built Dexie database class in infrastructure/database/schema.ts
 - All tests passing
 
-### Commit 5: V2-DATA: Repository interfaces
+### Commit 1: V2-DATA: Repository interfaces
 - Tests: Interface contract tests (mock implementations verify interfaces work)
 - Implementation: Defined all repository interfaces in domain layer (IPowerListRepository, IStandardsRepository, ITodoNodeRepository, IAppSettingsRepository)
 - Each interface declares CRUD operations needed by domain layer
 - No concrete implementations yet - pure contracts
 - All tests passing
 
-### Commit 6: V2-DATA: Repository implementations - Daily Ritual
+### Commit 1: V2-DATA: Repository implementations - Daily Ritual
 - Tests: PowerListRepository tests (create, read, update, delete, query by date), StandardsRepository tests
 - Implementation: Concrete repository classes in infrastructure/repositories/
 - PowerListRepository implementation with Dexie queries
@@ -193,7 +193,7 @@ By following this plan, you will deliver:
 - Uses Dexie database instance from Commit 4
 - All tests passing (18 tests)
 
-### Commit 7: V2-DATA: Repository implementations - Todo System
+### Commit 1: V2-DATA: Repository implementations - Todo System
 - Tests: TodoNodeRepository tests (CRUD, relationships, multi-parent queries), TodoRelationshipRepository tests
 - Implementation: TodoNodeRepository with discriminated union handling (serve_god, cornerstone, todo types)
 - TodoRelationshipRepository with order field handling
@@ -204,7 +204,7 @@ By following this plan, you will deliver:
 
 ## Phase 3: Domain Layer
 
-### Commit 8: V2-DOMAIN: Daily Ritual computations
+### Commit 1: V2-DOMAIN: Daily Ritual computations
 - Tests: PowerList progress computation tests (completedCount, losingStreak, resetDates), WIN/LOSS calculation tests for Daily Ritual
 - Implementation: Pure functions in domain/dailyRitual/computations/
 - calculatePowerListProgress() function
@@ -212,7 +212,7 @@ By following this plan, you will deliver:
 - Edge cases: task active periods, miss limits, reset date recording
 - All tests passing (32 tests)
 
-### Commit 9: V2-DOMAIN: Daily Ritual use cases
+### Commit 1: V2-DOMAIN: Daily Ritual use cases
 - Tests: Use case tests with mock repositories (complete task, add task, convert to standard)
 - Implementation: Use cases in domain/dailyRitual/useCases/
 - CompletePowerListTask use case
@@ -221,7 +221,7 @@ By following this plan, you will deliver:
 - Dependency injection pattern - repositories passed as constructor args
 - All tests passing (16 tests)
 
-### Commit 10: V2-DOMAIN: Todo System computations
+### Commit 1: V2-DOMAIN: Todo System computations
 - Tests: Cornerstone health calculation tests (Thriving/Stale/Neglected), todo node deadline color tests, descendant count tests
 - Implementation: Pure functions in domain/todoSystem/computations/
 - calculateCornerstoneHealth() - scans full subtree depth
@@ -229,7 +229,7 @@ By following this plan, you will deliver:
 - calculateDescendantCount() - for Magnitude View ring assignment
 - All tests passing (28 tests)
 
-### Commit 11: V2-DOMAIN: Todo System use cases
+### Commit 1: V2-DOMAIN: Todo System use cases
 - Tests: Use case tests (create node, complete node, connect nodes, set active)
 - Implementation: Use cases in domain/todoSystem/useCases/
 - CreateTodoNode, CompleteTodoNode, ConnectNodes, SetNodeActive
@@ -241,7 +241,7 @@ By following this plan, you will deliver:
 
 ## Phase 4: Application Layer
 
-### Commit 12: V2-APP: State management stores
+### Commit 1: V2-APP: State management stores
 - Tests: Zustand store tests (actions update state correctly)
 - Implementation: stores/ folder with all Zustand stores
 - dateStore (current date, navigation)
@@ -249,7 +249,7 @@ By following this plan, you will deliver:
 - dashboardStore (widget config, layout)
 - All tests passing (12 tests)
 
-### Commit 13: V2-APP: Custom hooks - Daily Ritual
+### Commit 1: V2-APP: Custom hooks - Daily Ritual
 - Tests: Hook tests with React Testing Library
 - Implementation: hooks/usePowerList.ts, hooks/useStandards.ts
 - Hooks directly instantiate and call domain use cases with dependency injection
@@ -257,7 +257,7 @@ By following this plan, you will deliver:
 - Optimistic updates for task completion
 - All tests passing (10 tests)
 
-### Commit 14: V2-APP: Custom hooks - Todo System
+### Commit 1: V2-APP: Custom hooks - Todo System
 - Tests: Hook tests for todo nodes and map data
 - Implementation: hooks/useTodoNode.ts, hooks/useMapData.ts
 - Hooks call use cases directly (CreateTodoNode, GetTodoNode, etc.)
@@ -265,11 +265,18 @@ By following this plan, you will deliver:
 - Map view data transformation (prepare for D3)
 - All tests passing (14 tests)
 
+### Commit 1: V2-TYPES: Data Transfer Objects (DTOs)
+- Tests: DTO shape tests (PowerListCardDto, TodoNodeCardDto, CornerstoneHealthDto, WinLossStatusDto, HistoryStatsDto match expected structure)
+- Implementation: shared/types/dtos.ts
+- Export interfaces: PowerListCardDto, TodoNodeCardDto, CornerstoneHealthDto, NodeDetailDto, PrioritiesTierDto, HistoryStatsDto, MapViewDto, SettingsDto
+- All hooks map domain entities to DTOs before passing to presentation layer
+- All tests passing (14 tests)
+
 ---
 
 ## Phase 5: Presentation Layer - Shared Components
 
-### Commit 15: V2-UI: Shared component library - Buttons
+### Commit 1: V2-UI: Shared component library - Buttons
 - Tests: Component tests for all button variants and sizes
 - Implementation: components/shared/Button.tsx
 - Variants: primary, secondary, tertiary, ghost
@@ -277,7 +284,7 @@ By following this plan, you will deliver:
 - Uses theme tokens exclusively
 - All tests passing (16 tests)
 
-### Commit 16: V2-UI: Shared component library - Inputs and Panels
+### Commit 1: V2-UI: Shared component library - Inputs and Panels
 - Tests: Input and Panel component tests
 - Implementation: components/shared/Input.tsx, Panel.tsx, Badge.tsx
 - Glass morphism panel with backdrop blur
@@ -288,7 +295,7 @@ By following this plan, you will deliver:
 
 ## Phase 6: Presentation Layer - Features
 
-### Commit 17: V2-UI: Dashboard page and layout
+### Commit 1: V2-UI: Dashboard page and layout
 - Tests: Dashboard page tests (date navigation, widget rendering)
 - Implementation: app/dashboard/page.tsx, components/layout/NavBar.tsx, components/layout/Sidebar.tsx
 - Date navigation with chevrons
@@ -296,7 +303,7 @@ By following this plan, you will deliver:
 - Sidebar with navigation links
 - All tests passing (8 tests)
 
-### Commit 18: V2-UI: Dashboard grid system
+### Commit 1: V2-UI: Dashboard grid system
 
 - Tests: Widget drag tests (drag to reorder changes persisted order), grid rendering tests (widgets render in order), persistence tests (layout survives reload)
 - Implementation: components/features/Dashboard/DashboardGrid.tsx
@@ -308,7 +315,7 @@ By following this plan, you will deliver:
 - All tests passing (10 tests)
 
 
-### Commit 19: V2-UI: Daily Ritual widget - PowerList
+### Commit 1: V2-UI: Daily Ritual widget - PowerList
 - Tests: PowerList component tests (task list, completion, progress display)
 - Implementation: components/features/Dashboard/PowerListWidget.tsx
 - Task list with checkboxes
@@ -316,14 +323,14 @@ By following this plan, you will deliver:
 - Completion triggers optimistic update + use case call via hook
 - All tests passing (14 tests)
 
-### Commit 20: V2-UI: Daily Ritual widget - Standards
+### Commit 1: V2-UI: Daily Ritual widget - Standards
 - Tests: Standards component tests (simple checklist, drag-drop)
 - Implementation: components/features/Dashboard/StandardsWidget.tsx
 - Simple checklist with completion tracking
 - Drag-and-drop reordering (order field updated)
 - All tests passing (10 tests)
 
-### Commit 21: V2-UI: Active Tasks widget
+### Commit 1: V2-UI: Active Tasks widget
 - Tests: Active Tasks component tests (quick capture, completion, navigation)
 - Implementation: components/features/Dashboard/ActiveTasksWidget.tsx
 - Quick capture creates orphan todo nodes
@@ -331,7 +338,7 @@ By following this plan, you will deliver:
 - Click text navigates to detail page
 - All tests passing (12 tests)
 
-### Commit 22: V2-UI: Node detail page - base layout
+### Commit 1: V2-UI: Node detail page - base layout
 - Tests: Node detail page tests (breadcrumbs, parent links, title, description)
 - Implementation: app/node/[id]/page.tsx, components/features/NodeDetails/NodeDetailLayout.tsx
 - Dynamic routing based on node ID
@@ -339,7 +346,7 @@ By following this plan, you will deliver:
 - Edit mode toggle
 - All tests passing (10 tests)
 
-### Commit 23: V2-UI: Node detail page - child list and comments
+### Commit 1: V2-UI: Node detail page - child list and comments
 - Tests: Child list tests (add child, reorder, navigate), comments tests
 - Implementation: components/features/NodeDetails/ChildList.tsx, CommentSection.tsx
 - Add child modal
@@ -347,14 +354,14 @@ By following this plan, you will deliver:
 - Jira-style comments with edit/delete
 - All tests passing (16 tests)
 
-### Commit 24: V2-UI: Priorities page
+### Commit 1: V2-UI: Priorities page
 - Tests: Priorities page tests (priority tiers, sorting, actions)
 - Implementation: app/priorities/page.tsx, components/features/Priorities/PriorityList.tsx
 - Automatic priority calculation (Ready to close, Behind schedule, Due soon, Stagnant)
 - Dropdown actions per item
 - All tests passing (12 tests)
 
-### Commit 25: V2-UI: History & Stats page
+### Commit 1: V2-UI: History & Stats page
 - Tests: Stats component tests (computed metrics), Timeline component tests (bar chart zoom)
 - Implementation: app/history/page.tsx, components/features/History/StatsGrid.tsx, TimelineChart.tsx
 - Stats computed from database (wins, losses, streaks, averages)
@@ -365,7 +372,7 @@ By following this plan, you will deliver:
 
 ## Phase 7: Map View (Complex Feature)
 
-### Commit 26: V2-MAP: D3 data transformation layer
+### Commit 1: V2-MAP: D3 data transformation layer
 - Tests: Data transformer tests (nodes to D3 format, ring assignment, position calculation)
 - Implementation: components/features/MapView/utils/dataTransformer.ts
 - Transform graph to Tree View layout (hierarchy rings)
@@ -373,7 +380,7 @@ By following this plan, you will deliver:
 - Multi-parent fractional ring calculation
 - All tests passing (18 tests)
 
-### Commit 27: V2-MAP: Tree View renderer
+### Commit 1: V2-MAP: Tree View renderer
 - Tests: Tree View rendering tests (nodes at correct positions, connector lines, ring spacing)
 - Implementation: components/features/MapView/TreeView.tsx
 - D3 SVG rendering
@@ -381,7 +388,7 @@ By following this plan, you will deliver:
 - Ring-based hierarchy display
 - All tests passing (12 tests)
 
-### Commit 28: V2-MAP: Magnitude View renderer with orbital motion
+### Commit 1: V2-MAP: Magnitude View renderer with orbital motion
 - Tests: Magnitude View tests (orbital motion, ring transitions, percentile bucketing)
 - Implementation: components/features/MapView/MagnitudeView.tsx
 - D3 with RequestAnimationFrame loop
@@ -389,7 +396,7 @@ By following this plan, you will deliver:
 - Smooth ring transitions when descendant count changes
 - All tests passing (14 tests)
 
-### Commit 29: V2-MAP: Interaction system (focus, selection, navigation)
+### Commit 1: V2-MAP: Interaction system (focus, selection, navigation)
 - Tests: Interaction tests (ring focus, node selection, pan, view toggle)
 - Implementation: components/features/MapView/InteractionLayer.tsx
 - Focus system (click ring to enlarge)
@@ -397,7 +404,7 @@ By following this plan, you will deliver:
 - Middle-mouse pan
 - All tests passing (16 tests)
 
-### Commit 30: V2-MAP: Search and filter UI
+### Commit 1: V2-MAP: Search and filter UI
 - Tests: Search component tests (filter results, camera fly-to)
 - Implementation: components/features/MapView/SearchPanel.tsx
 - Search input with dropdown results
@@ -405,7 +412,7 @@ By following this plan, you will deliver:
 - Camera animation to selected node
 - All tests passing (8 tests)
 
-### Commit 31: V2-MAP: Map page integration
+### Commit 1: V2-MAP: Map page integration
 - Tests: Full map page integration tests
 - Implementation: app/map/page.tsx
 - Combines all map components
@@ -417,14 +424,14 @@ By following this plan, you will deliver:
 
 ## Phase 8: Settings & First Launch
 
-### Commit 32: V2-SETTINGS: Settings page and widget management
+### Commit 1: V2-SETTINGS: Settings page and widget management
 - Tests: Settings page tests (widget toggle, deadline threshold)
 - Implementation: app/settings/page.tsx, components/features/Settings/WidgetManagement.tsx
 - Widget enable/disable toggles
 - Deadline proximity threshold input
 - All tests passing (8 tests)
 
-### Commit 33: V2-SETTINGS: WIN/LOSS configuration
+### Commit 1: V2-SETTINGS: WIN/LOSS configuration
 - Tests: WIN/LOSS config tests (component selection, criteria setting)
 - Implementation: components/features/Settings/WinLossConfig.tsx
 - Tabbed interface for each component
@@ -432,7 +439,12 @@ By following this plan, you will deliver:
 - Active Tasks criteria (count threshold)
 - All tests passing (10 tests)
 
-### Commit 34: V2-ONBOARDING: First launch flow
+### Commit 1: V2-ONBOARDING: First launch flow
+- Tests: First launch tests (userId generation, welcome modal, default data creation)
+- Implementation: components/FirstLaunchModal.tsx, domain/onboarding/useCases/InitializeUser.ts
+- Check localStorage for userId
+- Welcome modal asks for username
+### Commit 1: V2-ONBOARDING: First launch flow
 - Tests: First launch tests (userId generation, welcome modal, default data creation)
 - Implementation: components/FirstLaunchModal.tsx, domain/onboarding/useCases/InitializeUser.ts
 - Check localStorage for userId
@@ -441,39 +453,47 @@ By following this plan, you will deliver:
 - Initialize default settings
 - All tests passing (12 tests)
 
----
-
-## Phase 9: E2E Testing & Polish
-
-### Commit 35: V2-E2E: End-to-end test suite - Core workflows
-- Tests: Playwright E2E tests (first launch → dashboard → complete tasks → WIN/LOSS)
+### Commit 1: V2-E2E: End-to-end test suite - Core workflows
+- Tests: Playwright E2E tests (first launch -> dashboard -> complete tasks -> WIN/LOSS)
 - Implementation: e2e/core-workflows.spec.ts
 - Full user journey tests
 - Tests passing (6 scenarios)
 
-### Commit 36: V2-E2E: End-to-end test suite - Map workflows
+### Commit 1: V2-E2E: End-to-end test suite - Map workflows
 - Tests: Playwright E2E tests (map navigation, node creation, view toggle)
 - Implementation: e2e/map-workflows.spec.ts
 - Map interaction tests
 - Tests passing (5 scenarios)
 
-### Commit 37: V2-POLISH: Responsive design and mobile optimization
+### Commit 1: V2-POLISH: Responsive design and mobile optimization
 - Tests: Mobile viewport tests
 - Implementation: Mobile-specific styles, touch gesture handlers
 - Bottom sheet for map filters on mobile
 - Touch gestures for map interactions
 - All tests passing (8 tests)
 
-### Commit 38: V2-POLISH: Animations and transitions
+### Commit 1: V2-POLISH: Animations and transitions
 - Tests: Animation tests (timing, easing, completion)
 - Implementation: Transition effects, loading states, skeleton screens
 - Smooth page transitions
 - Map view animations (ring transitions, camera fly-to)
 - All tests passing (6 tests)
 
-### Commit 39: V2-COMPLETE: Final integration, documentation, and cleanup
+### Commit 1: V2-COMPLETE: Final integration, documentation, and cleanup
 - Final integration tests across all features
 - Updated README with V2 setup instructions
 - Removed unused code and dependencies
-- All tests passing (Total: 396 tests)
+- All tests passing (Total: 474 tests)
 
+---
+
+## All Commits Complete
+
+You have built the complete V2 application from scratch. Every commit represents a **shippable milestone** where all code was built with tests first, all tests passed, and the result was committed as a single atomic change.
+
+**Final state achieved:**
+- **40 commits representing 40 complete milestones
+- **474+ tests** covering unit, integration, component, and E2E scenarios
+- **90%+ code coverage** across all layers
+- **Production-ready codebase** following SOLID principles and clean architecture
+- **Comprehensive git history** documenting the entire build process

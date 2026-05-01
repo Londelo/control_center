@@ -567,12 +567,12 @@ export const db = new ControlCenterDB();
 ## Performance Considerations
 
 ### Computation Caching
-Progress, WIN/LOSS, and health calculations are expensive. Cache results in:
+Progress, PowerList WIN/LOSS, and health calculations are expensive. Cache results in:
 - Zustand stores
 - Memoized selectors (useMemo, React.memo)
 - IndexedDB query results cached in memory
 
-**WIN/LOSS Retroactive Computation:**
+**PowerList WIN/LOSS Retroactive Computation:**
 - Changing WIN/LOSS configuration recalculates all historical days on-demand
 - Computation is expensive for large date ranges
 - Strategy: Compute only visible date range (e.g., current month view in History page)
